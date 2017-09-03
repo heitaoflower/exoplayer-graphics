@@ -11,5 +11,7 @@ public class NativeLibrary {
         System.loadLibrary("exogfx_jni");
     }
 
-    public static native void init();
+    public static native void init(int width, int height);
+
+    public static native void setup();
 }
