@@ -12,6 +12,12 @@ android {
     buildTypes {
 
     }
+
+    externalNativeBuild {
+        cmake {
+            path 'CMakeLists.txt'
+        }
+    }
 }
 
 dependencies {
