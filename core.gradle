@@ -1,0 +1,11 @@
+def rootDir = gradle.ext.exogfxRoot
+def modulePrefix = ':'
+if (gradle.ext.has('exogfxModulePrefix'))
+{
+    modulePrefix += gradle.ext.exogfxModulePrefix
+}
+
+include modulePrefix + 'library-core'
+
+project(modulePrefix + 'library-core').projectDir = new File(rootDir, 'library/core')
+

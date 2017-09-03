@@ -1,0 +1,12 @@
+gradle.ext.exogfxRoot = settingsDir
+
+def modulePrefix = ':'
+if (gradle.ext.has('exogfxModulePrefix'))
+{
+    modulePrefix += gradle.ext.exogfxModulePrefx
+}
+
+include modulePrefix + 'demo'
+project(modulePrefix + 'demo').projectDir = new File(rootDir, 'demo')
+
+apply from: 'core.gradle'

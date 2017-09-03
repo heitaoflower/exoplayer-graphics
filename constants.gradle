@@ -1,0 +1,15 @@
+project.ext {
+
+    minSdkVersion = 9
+    compileSdkVersion = 25
+    targetSdkVersion = 25
+    buildToolsVersion = '25'
+    testSupportLibraryVersion = '0.5'
+    supportLibraryVersion = '25.4.0'
+    exoplayLibraryVersion = 'r2.5.1'
+    releaseVersion = 'r0.1.0'
+    modulePrefix = ':'
+    if (gradle.ext.has('exogfxModulePrefix')) {
+        modulePrefix += gradle.ext.exogfxModulePrefix
+    }
+}
