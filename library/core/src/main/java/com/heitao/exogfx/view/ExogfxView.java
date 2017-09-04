@@ -2,54 +2,96 @@ package com.heitao.exogfx.view;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
+import android.util.AttributeSet;
 
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.heitao.exogfx.core.NativeLibrary;
 import com.heitao.exogfx.egl.DefaultEGLConfigChooser;
+import com.heitao.exogfx.egl.DefaultEGLContextFactory;
 
-import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.egl.EGLContext;
-import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Created by showtime on 9/3/2017.
  */
 
-public class ExogfxView extends GLSurfaceView {
+public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoListener {
 
-    protected int[] value = new int[1];
+    private final static String TAG = ExogfxView.class.getSimpleName();
 
-    public ExogfxView(Context context) {
-        super(context);
+    private SimpleExoPlayer player;
 
-        setEGLContextFactory(new ContextFactory());
+    private float videoAspect = 1.0f;
+
+    private PlayerScaleType playerScaleType = PlayerScaleType.RESIZE_FIT_WIDTH;
+
+    public ExogfxView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+        setEGLContextFactory(new DefaultEGLContextFactory());
 
         setEGLConfigChooser(new DefaultEGLConfigChooser());
 
         setRenderer(new Renderer());
     }
 
-    private static class ContextFactory implements GLSurfaceView.EGLContextFactory
+    public ExogfxView setSimpleExoPlayer(final SimpleExoPlayer player)
     {
-        @Override
-        public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig eglConfig) {
-            final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
-
-            int[] attrib_list = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE};
-
-            EGLContext context = egl.eglCreateContext(display, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list);
-
-            return context;
+        if (this.player != null)
+        {
+            this.player.release();
+            this.player = null;
         }
 
-        @Override
-        public void destroyContext(EGL10 egl, EGLDisplay display, EGLContext context) {
-            egl.eglDestroyContext(display, context);
-        }
+        this.player = player;
+        this.player.setVideoListener(this);
+
+        return this;
     }
 
+    public void setFilter()
+    {
+
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+    {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int measuredWidth = getMeasuredWidth();
+        int measuredHeight = getMeasuredHeight();
+
+        int viewWidth = measuredWidth;
+        int viewHeight = measuredHeight;
+
+        switch (playerScaleType)
+        {
+            case RESIZE_FIT_WIDTH:
+            {
+                viewHeight = (int)(measuredWidth / videoAspect);
+                break;
+            }
+            case RESIZE_FIT_HEIGHT:
+            {
+                viewWidth = (int)(measuredHeight * videoAspect);
+                break;
+            }
+        }
+
+        setMeasuredDimension(viewWidth, viewHeight);
+    }
+
+    @Override
+    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+
+    }
+
+    @Override
+    public void onRenderedFirstFrame() {
+
+    }
 
     private static class Renderer implements GLSurfaceView.Renderer
     {

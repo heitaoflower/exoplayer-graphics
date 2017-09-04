@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         Log.i(TAG, "Create New Demo View");
-        graphicsView = new ExogfxView(getApplication());
+        graphicsView = new ExogfxView(getApplication(), null);
         setContentView(graphicsView);
     }
 

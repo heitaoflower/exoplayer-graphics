@@ -3,8 +3,6 @@ package com.heitao.exogfx.egl;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 
-import java.util.ArrayList;
-
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
@@ -23,6 +21,8 @@ import static javax.microedition.khronos.egl.EGL10.EGL_STENCIL_SIZE;
  */
 
 public class DefaultEGLConfigChooser implements GLSurfaceView.EGLConfigChooser {
+
+    private static final String TAG = DefaultEGLConfigChooser.class.getSimpleName();
 
     private final int[] configAttributes;
     private final int redSize;
