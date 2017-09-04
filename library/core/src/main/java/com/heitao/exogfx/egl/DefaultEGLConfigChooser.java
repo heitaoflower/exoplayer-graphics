@@ -38,32 +38,11 @@ public class DefaultEGLConfigChooser implements GLSurfaceView.EGLConfigChooser {
 
     public DefaultEGLConfigChooser() {
 
-        this(
-                USE_RGB_888 ? 8 : 5,
-                USE_RGB_888 ? 8 : 6,
-                USE_RGB_888 ? 8 : 5,
-                0,
-                0,
-                0,
-                EGL_CONTEXT_CLIENT_VERSION );
+        this(USE_RGB_888 ? 8 : 5, USE_RGB_888 ? 8 : 6, USE_RGB_888 ? 8 : 5, 0, 0, 0, EGL_CONTEXT_CLIENT_VERSION);
     }
 
-    public DefaultEGLConfigChooser(final int redSize,
-                                   final int greenSize,
-                                   final int blueSize,
-                                   final int alphaSize,
-                                   final int depthSize,
-                                   final int stencilSize,
-                                   final int version)
-    {
-        configAttributes = filterConfigAttributes(new int[]{
-                EGL_RED_SIZE, redSize,
-                EGL_GREEN_SIZE, greenSize,
-                EGL_BLUE_SIZE, blueSize,
-                EGL_ALPHA_SIZE, alphaSize,
-                EGL_DEPTH_SIZE, depthSize,
-                EGL_STENCIL_SIZE, stencilSize,
-                EGL_NONE }, version);
+    public DefaultEGLConfigChooser(final int redSize, final int greenSize, final int blueSize, final int alphaSize, final int depthSize, final int stencilSize, final int version) {
+        configAttributes = filterConfigAttributes(new int[]{EGL_RED_SIZE, redSize, EGL_GREEN_SIZE, greenSize, EGL_BLUE_SIZE, blueSize, EGL_ALPHA_SIZE, alphaSize, EGL_DEPTH_SIZE, depthSize, EGL_STENCIL_SIZE, stencilSize, EGL_NONE}, version);
 
         this.redSize = redSize;
         this.greenSize = greenSize;
@@ -75,10 +54,8 @@ public class DefaultEGLConfigChooser implements GLSurfaceView.EGLConfigChooser {
 
     private static final int EGL_OPENGL_ES2_BIT = 4;
 
-    private int[] filterConfigAttributes(final int[] configAttributes, final int version)
-    {
-        if (version != 2)
-        {
+    private int[] filterConfigAttributes(final int[] configAttributes, final int version) {
+        if (version != 2) {
             return configAttributes;
         }
 
@@ -92,53 +69,44 @@ public class DefaultEGLConfigChooser implements GLSurfaceView.EGLConfigChooser {
     }
 
     @Override
-    public EGLConfig chooseConfig(final EGL10 egl, final EGLDisplay display)
-    {
+    public EGLConfig chooseConfig(final EGL10 egl, final EGLDisplay display) {
         final int[] numConfig = new int[1];
-        if (!egl.eglChooseConfig(display, configAttributes, null, 0, numConfig))
-        {
+        if (!egl.eglChooseConfig(display, configAttributes, null, 0, numConfig)) {
             throw new IllegalArgumentException("eglChooseConfig#1 failed.");
         }
 
         final int configSize = numConfig[0];
 
-        if (configSize <= 0)
-        {
+        if (configSize <= 0) {
             throw new IllegalArgumentException("No configs match configSpec.");
         }
 
         final EGLConfig[] configs = new EGLConfig[configSize];
-        if (!egl.eglChooseConfig(display, configAttributes, configs, configSize, numConfig))
-        {
+        if (!egl.eglChooseConfig(display, configAttributes, configs, configSize, numConfig)) {
             throw new IllegalArgumentException("eglChooseConfig#2 failed.");
         }
 
         final EGLConfig config = chooseConfig(egl, display, configs);
 
-        if (config == null)
-        {
+        if (config == null) {
             throw new IllegalArgumentException("No config chosen");
         }
 
         return config;
     }
 
-    private EGLConfig chooseConfig(final EGL10 egl, final EGLDisplay display, final EGLConfig[] configs)
-    {
-        for (final EGLConfig config : configs)
-        {
+    private EGLConfig chooseConfig(final EGL10 egl, final EGLDisplay display, final EGLConfig[] configs) {
+        for (final EGLConfig config : configs) {
             final int d = findConfigAttrib(egl, display, config, EGL_DEPTH_SIZE, 0);
             final int s = findConfigAttrib(egl, display, config, EGL_STENCIL_SIZE, 0);
 
-            if ((d >= depthSize) && (s >= stencilSize))
-            {
+            if ((d >= depthSize) && (s >= stencilSize)) {
                 final int r = findConfigAttrib(egl, display, config, EGL_RED_SIZE, 0);
                 final int g = findConfigAttrib(egl, display, config, EGL_GREEN_SIZE, 0);
                 final int b = findConfigAttrib(egl, display, config, EGL_BLUE_SIZE, 0);
                 final int a = findConfigAttrib(egl, display, config, EGL_ALPHA_SIZE, 0);
 
-                if ((r == redSize) && (g == greenSize) && (b == blueSize) && (a == alphaSize))
-                {
+                if ((r == redSize) && (g == greenSize) && (b == blueSize) && (a == alphaSize)) {
                     return config;
                 }
             }
@@ -146,12 +114,10 @@ public class DefaultEGLConfigChooser implements GLSurfaceView.EGLConfigChooser {
         return null;
     }
 
-    private int findConfigAttrib(final EGL10 egl, final EGLDisplay display, final EGLConfig config, final int attribute, final int defaultValue)
-    {
+    private int findConfigAttrib(final EGL10 egl, final EGLDisplay display, final EGLConfig config, final int attribute, final int defaultValue) {
         final int[] value = new int[1];
 
-        if (egl.eglGetConfigAttrib(display, config, attribute, value))
-        {
+        if (egl.eglGetConfigAttrib(display, config, attribute, value)) {
             return value[0];
         }
 

@@ -26,6 +26,10 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
 
     private PlayerScaleType playerScaleType = PlayerScaleType.RESIZE_FIT_WIDTH;
 
+    public ExogfxView(Context context) {
+        this(context, null);
+    }
+
     public ExogfxView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -36,10 +40,8 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
         setRenderer(new Renderer());
     }
 
-    public ExogfxView setSimpleExoPlayer(final SimpleExoPlayer player)
-    {
-        if (this.player != null)
-        {
+    public ExogfxView setSimpleExoPlayer(final SimpleExoPlayer player) {
+        if (this.player != null) {
             this.player.release();
             this.player = null;
         }
@@ -50,14 +52,12 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
         return this;
     }
 
-    public void setFilter()
-    {
+    public void setFilter() {
 
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         int measuredWidth = getMeasuredWidth();
@@ -66,16 +66,13 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
         int viewWidth = measuredWidth;
         int viewHeight = measuredHeight;
 
-        switch (playerScaleType)
-        {
-            case RESIZE_FIT_WIDTH:
-            {
-                viewHeight = (int)(measuredWidth / videoAspect);
+        switch (playerScaleType) {
+            case RESIZE_FIT_WIDTH: {
+                viewHeight = (int) (measuredWidth / videoAspect);
                 break;
             }
-            case RESIZE_FIT_HEIGHT:
-            {
-                viewWidth = (int)(measuredHeight * videoAspect);
+            case RESIZE_FIT_HEIGHT: {
+                viewWidth = (int) (measuredHeight * videoAspect);
                 break;
             }
         }
@@ -93,20 +90,16 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
 
     }
 
-    private static class Renderer implements GLSurfaceView.Renderer
-    {
-        public void onDrawFrame(GL10 gl)
-        {
+    private static class Renderer implements GLSurfaceView.Renderer {
+        public void onDrawFrame(GL10 gl) {
             NativeLibrary.nativeDrawFrame();
         }
 
-        public void onSurfaceChanged(GL10 gl, int width, int height)
-        {
-            NativeLibrary.nativeInitializeGfx(width,height);
+        public void onSurfaceChanged(GL10 gl, int width, int height) {
+            NativeLibrary.nativeInitializeGfx(width, height);
         }
 
-        public void onSurfaceCreated(GL10 gl, EGLConfig config)
-        {
+        public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
         }
     }

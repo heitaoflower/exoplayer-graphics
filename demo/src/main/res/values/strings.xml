@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">exoplayer-graphics</string>
+<string name="app_name">ExoPlayerGraphics</string>
+<string name="play">play</string>
+<string name="pause">pause</string>
 </resources>
