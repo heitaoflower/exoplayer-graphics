@@ -21,7 +21,7 @@
  */
 
 #include "graphics/gfx.h"
-#include "graphics/log.h"
+#include "utils/log.h"
 
 #include <jni.h>
 #include <stdlib.h>
@@ -174,18 +174,19 @@ void renderFrame()
 }
 /* [renderFrame] */
 
-JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_init(JNIEnv *env, jobject obj, jint width, jint height);
+JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_nativeInitializeGfx(JNIEnv *env, jobject obj, jint width, jint height);
 
-JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_setup(JNIEnv *env, jobject obj);
+JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_nativeDrawFrame(JNIEnv *env, jobject obj);
 
-JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_init(JNIEnv *env, jobject obj, jint width, jint height)
+JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_nativeInitializeGfx(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    load_gl_library();
-
-    setupGraphics(width, height);
+    if (init_gfx())
+    {
+        setupGraphics(width, height);
+    }
 }
 
-JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_setup(JNIEnv *env, jobject obj)
+JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_nativeDrawFrame(JNIEnv *env, jobject obj)
 {
     renderFrame();
 }

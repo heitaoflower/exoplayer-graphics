@@ -4,7 +4,6 @@
 
 #include "gfx.h"
 #include "load_lib.h"
-#include "log.h"
 
 #include <assert.h>
 
@@ -12,7 +11,7 @@
 #include "gl_func.h"
 #undef FNSYM
 
-bool load_gl_library(void)
+static bool load_ogles_library(void)
 {
     static bool loaded = false;
 
@@ -41,3 +40,7 @@ bool load_gl_library(void)
     return true;
 }
 
+bool init_gfx(void)
+{
+    return load_ogles_library();
+}

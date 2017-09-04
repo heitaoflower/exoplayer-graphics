@@ -9,6 +9,6 @@
 
 #include <stdbool.h>
 
-bool load_gl_library(void);
+bool init_gfx(void);
 
 #endif //EXOPLAYER_GRAPHICS_GFX_H

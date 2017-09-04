@@ -12,12 +12,31 @@ cmake_minimum_required(VERSION 3.4.1)
 
 set (SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/main/c")
 set (GRAPHICS_SOURCE_DIR "${SOURCE_DIR}/graphics")
+set (UTILS_SOURCE_DIR "${SOURCE_DIR}/utils")
 
 SET( SOURCES
-    ${SOURCE_DIR}/exogfx_jni.c ${GRAPHICS_SOURCE_DIR}/gfx.c ${GRAPHICS_SOURCE_DIR}/load_lib.c )
+
+    # Root source dir.
+    ${SOURCE_DIR}/exogfx_jni.c
+
+    # Graphics source dir.
+    ${GRAPHICS_SOURCE_DIR}/gfx.c
+    ${GRAPHICS_SOURCE_DIR}/load_lib.c )
 
 SET( HEADERS
-     ${GRAPHICS_SOURCE_DIR}/gfx.h ${GRAPHICS_SOURCE_DIR}/gl.h ${GRAPHICS_SOURCE_DIR}/gl_func.h ${GRAPHICS_SOURCE_DIR}/load_lib.h )
+
+     # Utils source dir.
+     ${UTILS_SOURCE_DIR}/log.h
+
+     # Graphics source dir.
+     ${GRAPHICS_SOURCE_DIR}/gfx.h
+     ${GRAPHICS_SOURCE_DIR}/gl.h
+     ${GRAPHICS_SOURCE_DIR}/gl_func.h
+     ${GRAPHICS_SOURCE_DIR}/load_lib.h )
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+
+list(APPEND CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
 add_library( # Sets the name of the library.
              exogfx_jni
