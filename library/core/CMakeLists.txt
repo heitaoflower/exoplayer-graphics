@@ -21,12 +21,16 @@ SET( SOURCES
 
     # Graphics source dir.
     ${GRAPHICS_SOURCE_DIR}/gfx.c
-    ${GRAPHICS_SOURCE_DIR}/load_lib.c )
+    ${GRAPHICS_SOURCE_DIR}/load_lib.c
+
+    # Utils source dir.
+    ${UTILS_SOURCE_DIR}/glUtil.c )
 
 SET( HEADERS
 
      # Utils source dir.
-     ${UTILS_SOURCE_DIR}/log.h
+     ${UTILS_SOURCE_DIR}/logUtil.h
+     ${UTILS_SOURCE_DIR}/glUtil.h
 
      # Graphics source dir.
      ${GRAPHICS_SOURCE_DIR}/gfx.h

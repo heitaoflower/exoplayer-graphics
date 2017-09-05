@@ -21,10 +21,15 @@
  */
 
 #include "graphics/gfx.h"
-#include "utils/log.h"
+#include "utils/logUtil.h"
+#include "utils/glUtil.h"
 
 #include <jni.h>
 #include <stdlib.h>
+
+#define JNI_METHOD(return_type, method_name) \
+    JNIEXPORT return_type JNICALL            \
+        Java_com_heitao_exogfx_core_NativeLibrary_##method_name
 
 /* [Vertex source] */
 static const char glVertexShader[] =
@@ -174,19 +179,69 @@ void renderFrame()
 }
 /* [renderFrame] */
 
-JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_nativeInitializeGfx(JNIEnv *env, jobject obj, jint width, jint height);
-
-JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_nativeDrawFrame(JNIEnv *env, jobject obj);
-
 JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_nativeInitializeGfx(JNIEnv *env, jobject obj, jint width, jint height)
 {
-    if (init_gfx())
+    setupGraphics(width, height);
+}
+
+JNI_METHOD(void, nativeInitializeContext)
+(JNIEnv *evn, jobject obj)
+{
+    if (!init_gfx())
     {
-        setupGraphics(width, height);
+        LOGE("initialized graphics failed.");
     }
 }
 
-JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_nativeDrawFrame(JNIEnv *env, jobject obj)
+JNI_METHOD(void, nativeCreateRenderer)
+(JNIEnv *env, jobject obj)
+{
+
+}
+
+JNI_METHOD(void, nativeOnSurfaceCreated)
+(JNIEnv *env, jobject obj)
+{
+
+}
+
+JNI_METHOD(void, nativeOnSurfaceChanged)
+(JNIEnv *env, jobject obj, jint width, jint height)
+{
+
+}
+
+JNI_METHOD(void, nativeDrawFrame)
+(JNIEnv *env, jobject obj)
 {
     renderFrame();
+}
+
+JNI_METHOD(void, nativeGlClearColor)
+(JNIEnv *env, jobject obj, jfloat red, jfloat green, jfloat blue, jfloat alpha)
+{
+    glClearColor(red, green, blue, alpha);
+}
+
+JNI_METHOD(void, nativeGlGenTextures)
+(JNIEnv *env, jobject obj, jintArray textures)
+{
+    GLsizei size = (*env)->GetArrayLength(env, textures);
+    GLuint native_textures[size];
+
+    glGenTextures(size, native_textures);
+
+    (*env)->SetIntArrayRegion(env, textures, 0, size, (const jint*)native_textures);
+}
+
+JNI_METHOD(void, nativeGlBindTexture)
+(JNIEnv *env, jobject obj, jint target, jint texture)
+{
+    glBindTexture((GLenum)target, (GLuint)texture);
+}
+
+JNI_METHOD(void, nativeSetupSampler)
+(JNIEnv *env, jobject obj, jint target, jfloat mag, jfloat min)
+{
+    setupSampler((GLenum)target, (GLfloat)mag, (GLfloat)min);
 }

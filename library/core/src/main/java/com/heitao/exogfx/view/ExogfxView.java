@@ -5,12 +5,9 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.heitao.exogfx.core.NativeLibrary;
+import com.heitao.exogfx.core.ExogfxRenderer;
 import com.heitao.exogfx.egl.DefaultEGLConfigChooser;
 import com.heitao.exogfx.egl.DefaultEGLContextFactory;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Created by showtime on 9/3/2017.
@@ -37,7 +34,7 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
 
         setEGLConfigChooser(new DefaultEGLConfigChooser());
 
-        setRenderer(new Renderer());
+        setRenderer(new ExogfxRenderer());
     }
 
     public ExogfxView setSimpleExoPlayer(final SimpleExoPlayer player) {
@@ -82,25 +79,13 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
 
     @Override
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+        videoAspect = ((float) width / height) * pixelWidthHeightRatio;
 
+        requestLayout();
     }
 
     @Override
     public void onRenderedFirstFrame() {
 
-    }
-
-    private static class Renderer implements GLSurfaceView.Renderer {
-        public void onDrawFrame(GL10 gl) {
-            NativeLibrary.nativeDrawFrame();
-        }
-
-        public void onSurfaceChanged(GL10 gl, int width, int height) {
-            NativeLibrary.nativeInitializeGfx(width, height);
-        }
-
-        public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
-        }
     }
 }
