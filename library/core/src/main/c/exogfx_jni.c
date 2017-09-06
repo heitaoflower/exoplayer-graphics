@@ -217,6 +217,12 @@ JNI_METHOD(void, nativeDrawFrame)
     renderFrame();
 }
 
+JNI_METHOD(jboolean, nativeGlCheckFramebufferStatus)
+(JNIEnv *env, jobject obj, jint target)
+{
+    return glCheckFramebufferStatus((GLenum)target);
+}
+
 JNI_METHOD(void, nativeGlClearColor)
 (JNIEnv *env, jobject obj, jfloat red, jfloat green, jfloat blue, jfloat alpha)
 {
@@ -239,6 +245,102 @@ JNI_METHOD(void, nativeGlBindTexture)
 {
     glBindTexture((GLenum)target, (GLuint)texture);
 }
+
+JNI_METHOD(void, nativeGlTexImage2D)
+(JNIEnv *env, jobject obj, jint target, jint level, jint internalformat, jint width, jint height, jint border, jint format, jint type, jbyteArray pixels)
+{
+    const void *native_pixels = (*env)->GetByteArrayElements(env, pixels, JNI_FALSE);
+    glTexImage2D((GLenum)target, (GLint)level, (GLint)internalformat, (GLsizei)width, (GLsizei)height, (GLint)border, (GLenum)format, (GLenum)type, native_pixels);
+}
+
+JNI_METHOD(void, nativeGlGetIntegerv)
+(JNIEnv *env, jobject obj, jint pname, jintArray data)
+{
+    GLint *pdata = (*env)->GetIntArrayElements(env, data, JNI_FALSE);
+
+    glGetIntegerv((GLenum)pname, pdata);
+}
+
+JNI_METHOD(void, nativeGlDeleteFramebuffers)
+(JNIEnv *env, jobject obj, jintArray framebuffers)
+{
+    GLsizei size = (*env)->GetArrayLength(env, framebuffers);
+
+    const GLuint *native_framebuffers = (const GLuint *)(*env)->GetIntArrayElements(env, framebuffers, JNI_FALSE);
+
+    glDeleteFramebuffers(size, native_framebuffers);
+}
+
+JNI_METHOD(void, nativeGlDeleteRenderbuffers)
+(JNIEnv *env, jobject obj, jintArray renderbuffers)
+{
+    GLsizei size = (*env)->GetArrayLength(env, renderbuffers);
+
+    const GLuint *native_renderbuffers = (const GLuint *)(*env)->GetIntArrayElements(env, renderbuffers, JNI_FALSE);
+
+    glDeleteRenderbuffers(size, native_renderbuffers);
+}
+
+JNI_METHOD(void, nativeGlDeleteTextures)
+(JNIEnv *env, jobject obj, jintArray textures)
+{
+    GLsizei size = (*env)->GetArrayLength(env, textures);
+
+    const GLuint *native_textures = (const GLuint *)(*env)->GetIntArrayElements(env, textures, JNI_FALSE);
+
+    glDeleteTextures(size, native_textures);
+}
+
+JNI_METHOD(void, nativeGlFramebufferRenderbuffer)
+(JNIEnv *env, jobject obj, jint target, jint attachment, jint renderbuffertarget, jint renderbuffer)
+{
+    glFramebufferRenderbuffer((GLenum)target, (GLenum)attachment, (GLenum)renderbuffertarget, (GLuint)renderbuffer);
+}
+
+JNI_METHOD(void, nativeGlFramebufferTexture2D)
+(JNIEnv *env, jobject obj, jint target, jint attachment, jint textarget, jint texture, jint level)
+{
+    glFramebufferTexture2D((GLenum)target, (GLenum)attachment, (GLenum)textarget, (GLuint)textarget, (GLenum)level);
+}
+
+JNI_METHOD(void, nativeGlGenFramebuffers)
+(JNIEnv *env, jobject obj, jintArray framebuffers)
+{
+    GLsizei size = (*env)->GetArrayLength(env, framebuffers);
+    GLuint native_framebuffers[size];
+
+    glGenFramebuffers(size, native_framebuffers);
+    (*env)->SetIntArrayRegion(env, framebuffers, 0, size, (const jint*)native_framebuffers);
+}
+
+JNI_METHOD(void, nativeGlBindRenderbuffer)
+(JNIEnv *env, jobject obj, jint target, jint renderbuffer)
+{
+    glBindRenderbuffer((GLenum)target, (GLuint)renderbuffer);
+}
+
+JNI_METHOD(void, nativeGlBindFramebuffer)
+(JNIEnv *env, jobject obj, jint target, jint framebuffer)
+{
+    glBindFramebuffer((GLenum)target, (GLuint)framebuffer);
+}
+
+JNI_METHOD(void, nativeGlRenderbufferStorage)
+(JNIEnv *env, jobject obj, jint target, jint internalformat, jint width, jint height)
+{
+    glRenderbufferStorage((GLenum)target, (GLenum)internalformat, (GLsizei)width, (GLsizei)height);
+}
+
+JNI_METHOD(void, nativeGlGenRenderbuffers)
+(JNIEnv *env, jobject obj, jintArray renderbuffers)
+{
+    GLsizei  size = (*env)->GetArrayLength(env, renderbuffers);
+    GLuint native_renderbuffers[size];
+
+    glGenRenderbuffers(size, native_renderbuffers);
+    (*env)->SetIntArrayRegion(env, renderbuffers, 0, size, (const jint*)native_renderbuffers);
+}
+
 
 JNI_METHOD(void, nativeSetupSampler)
 (JNIEnv *env, jobject obj, jint target, jfloat mag, jfloat min)

@@ -42,6 +42,8 @@ public class ExogfxRenderer implements GLSurfaceView.Renderer {
 
         NativeLibrary.nativeGlBindTexture(originalTexture.getTextureTarget(), texName);
         NativeLibrary.nativeSetupSampler(originalTexture.getTextureTarget(), GLES20.GL_LINEAR, GLES20.GL_NEAREST);
+        NativeLibrary.nativeGlBindTexture(GLES20.GL_TEXTURE_2D, 0);
+
 
         Log.d(TAG, "c");
     }
