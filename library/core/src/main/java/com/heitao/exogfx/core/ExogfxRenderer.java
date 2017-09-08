@@ -42,6 +42,20 @@ public class ExogfxRenderer extends ExogfxFramebufferObjectRenderer implements S
 
     private SimpleExoPlayer simpleExoPlayer;
 
+    public static int loadShader(int type, String shaderCode){
+
+        //创建一个vertex shader类型(GLES20.GL_VERTEX_SHADER)
+        //或一个fragment shader类型(GLES20.GL_FRAGMENT_SHADER)
+        int shader = GLES20.glCreateShader(type);
+
+        // 将源码添加到shader并编译它
+        GLES20.glShaderSource(shader, shaderCode);
+        GLES20.glCompileShader(shader);
+
+        return shader;
+    }
+    private Triangle mTriangle;
+
     public ExogfxRenderer(ExogfxView exogfxView)
     {
         super();
@@ -51,51 +65,50 @@ public class ExogfxRenderer extends ExogfxFramebufferObjectRenderer implements S
     @Override
     public void onSurfaceCreated(EGLConfig config) {
 
-        OGLES.glClearColor(0.0f, 0.5f, 0.0f, 1.0f);
+//        NativeLibrary.nativeOnSurfaceCreated();
+//
+//        int[] textures = new int[1];
+//        OGLES.glGenTextures(textures);
+//        texName = textures[0];
+//
+//        previewTexture = new ExogfxSurfaceTexture(texName);
+//        previewTexture.setOnFrameAvailableListener(this);
+//
+//        OGLES.glBindTexture(previewTexture.getTextureTarget(), texName);
+//        OGLESUtil.setupSampler(previewTexture.getTextureTarget(), GLES20.GL_LINEAR, GLES20.GL_NEAREST);
+//        OGLES.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+//
+//        filterFramebufferObject = new ExogfxFramebufferObject();
+//
+//        previewFilter = new OGLESPreviewFilter(previewTexture.getTextureTarget());
+//        previewFilter.setup();
+//
+//        Surface surface = new Surface(previewTexture.getSurfaceTexture());
+//
+//        simpleExoPlayer.setVideoSurface(surface);
+//
+//        Matrix.setLookAtM(viewMatrix, 0,
+//                0.0f, 0.0f, 5.0f,
+//                0.0f, 0.0f, 0.0f,
+//                0.0f, 1.0f, 0.0f
+//        );
 
-        NativeLibrary.nativeOnSurfaceCreated();
-
-        int[] textures = new int[1];
-        OGLES.glGenTextures(textures);
-        texName = textures[0];
-
-        previewTexture = new ExogfxSurfaceTexture(texName);
-        previewTexture.setOnFrameAvailableListener(this);
-
-        OGLES.glBindTexture(previewTexture.getTextureTarget(), texName);
-        OGLESUtil.setupSampler(previewTexture.getTextureTarget(), GLES20.GL_LINEAR, GLES20.GL_NEAREST);
-        OGLES.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
-
-        filterFramebufferObject = new ExogfxFramebufferObject();
-
-        previewFilter = new OGLESPreviewFilter(previewTexture.getTextureTarget());
-        previewFilter.setup();
-
-        Surface surface = new Surface(previewTexture.getSurfaceTexture());
-
-        simpleExoPlayer.setVideoSurface(surface);
-
-        Matrix.setLookAtM(viewMatrix, 0,
-                0.0f, 0.0f, 5.0f,
-                0.0f, 0.0f, 0.0f,
-                0.0f, 1.0f, 0.0f
-        );
-
+        mTriangle = new Triangle();
     }
 
     @Override
     public void onSurfaceChanged( int width, int height) {
 
-        NativeLibrary.nativeInitializeGfx(width, height);
-        NativeLibrary.nativeOnSurfaceChanged();
-
-        filterFramebufferObject.setup(width, height);
-        previewFilter.setFrameSize(width, height);
-
-        aspectRatio = (float) width / height;
-
-        Matrix.frustumM(projectionMatrix, 0, -aspectRatio, aspectRatio, -1, 1, 5, 7);
-        Matrix.setIdentityM(modelMatrix, 0);
+//        NativeLibrary.nativeInitializeGfx(width, height);
+//        NativeLibrary.nativeOnSurfaceChanged();
+//
+//        filterFramebufferObject.setup(width, height);
+//        previewFilter.setFrameSize(width, height);
+//
+//        aspectRatio = (float) width / height;
+//
+//        Matrix.frustumM(projectionMatrix, 0, -aspectRatio, aspectRatio, -1, 1, 5, 7);
+//        Matrix.setIdentityM(modelMatrix, 0);
     }
 
     @Override
@@ -110,13 +123,14 @@ public class ExogfxRenderer extends ExogfxFramebufferObjectRenderer implements S
                 updateSurface = false;
             }
         }
-
         OGLES.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-        Matrix.multiplyMM(mvpMatrix, 0, viewMatrix, 0, modelMatrix, 0);
-        Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, mvpMatrix, 0);
+        mTriangle.draw();
 
-        previewFilter.draw(texName, mvpMatrix, stMatrix, aspectRatio);
+//        Matrix.multiplyMM(mvpMatrix, 0, viewMatrix, 0, modelMatrix, 0);
+//        Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, mvpMatrix, 0);
+//
+//        previewFilter.draw(texName, mvpMatrix, stMatrix, aspectRatio);
 
     }
 

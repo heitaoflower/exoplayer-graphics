@@ -1,7 +1,6 @@
 package com.heitao.exogfx.ogles;
 
 import com.heitao.exogfx.core.NativeLibrary;
-import com.heitao.exogfx.view.PlayerScaleType;
 
 /**
  * Created by showtime on 9/7/2017.
@@ -14,6 +13,10 @@ public final class OGLES extends NativeLibrary {
     public static native void glClear(int mask);
 
     public static native void glClearColor(float red, float green, float blue, float alpha);
+
+    public static native void glViewport(int x, int y, int width, int height);
+
+    public static native void glAttachShader(int program, int shader);
 
     public static native void glGenTextures(int[] textures);
 
@@ -53,9 +56,13 @@ public final class OGLES extends NativeLibrary {
 
     public static native void glBindRenderbuffer(int target, int renderbuffer);
 
+    public static native void glLinkProgram(int program);
+
     public static native void glRenderbufferStorage(int target, int internalformat, int width, int height);
 
     public static native void glGenRenderbuffers(int[] renderbuffers);
+
+    public static native int glCreateProgram();
 
     public static native void glDeleteProgram(int program);
 
@@ -66,6 +73,8 @@ public final class OGLES extends NativeLibrary {
     public static native void glUniform1f(int location, float value);
 
     public static native void glUniform1i(int location, int value);
+
+    public static native void glUniform4fv(int location, int count, float[] value);
 
     public static native void glUniformMatrix4fv(int location, int count, boolean transpose, float[] value);
 

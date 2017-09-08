@@ -8,6 +8,7 @@ import com.heitao.exogfx.ogles.OGLESUtil;
 
 import java.util.HashMap;
 
+import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.GL_FRAGMENT_SHADER;
 import static android.opengl.GLES20.GL_VERTEX_SHADER;
 import static android.opengl.GLES20.glGetUniformLocation;
@@ -34,12 +35,13 @@ public class OGLESFilter {
                     "varying highp vec2 vTextureCoord;\n" +
                     "uniform lowp sampler2D sTexture;\n" +
                     "void main() {\n" +
+                    "vec2 c = vec2(1.0, 1.0);\n" +
                     "gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
                     "}\n";
 
 
     private static final float[] VERTICES_DATA = new float[]{
-            //X,  Y,     Z,    U,    V
+            //X,   Y,     Z,    U,    V
             -1.0f, 1.0f,  0.0f, 0.0f, 1.0f,
             1.0f,  1.0f,  0.0f, 1.0f, 1.0f,
             -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
@@ -112,7 +114,26 @@ public class OGLESFilter {
 
     public void draw(final int texName, final ExogfxFramebufferObject framebufferObject)
     {
+        useProgram();
 
+        OGLES.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertexBufferName);
+        OGLES.glEnableVertexAttribArray(getHandle("aPosition"));
+        OGLES.glVertexAttribPointer(getHandle("aPosition"), VERTICES_DATA_POSITION_SIZE, GL_FLOAT, false, VERTICES_DATA_STRIDE_BYTES, VERTICES_DATA_POSITION_OFFSET);
+        OGLES.glEnableVertexAttribArray(getHandle("aTextureCoord"));
+        OGLES.glVertexAttribPointer(getHandle("aTextureCoord"), VERTICES_DATA_UV_SIZE, GL_FLOAT, false, VERTICES_DATA_STRIDE_BYTES, VERTICES_DATA_UV_OFFSET);
+
+        OGLES.glActiveTexture(GLES20.GL_TEXTURE0);
+        OGLES.glBindTexture(GLES20.GL_TEXTURE_2D, texName);
+        OGLES.glUniform1i(getHandle("sTexture"), 0);
+
+        onDraw();
+
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+
+        GLES20.glDisableVertexAttribArray(getHandle("aPosition"));
+        GLES20.glDisableVertexAttribArray(getHandle("aTextureCoord"));
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
     }
 
     protected void onDraw()
@@ -138,7 +159,7 @@ public class OGLESFilter {
             return value;
         }
 
-        int location = OGLES.glGetAttribLocation(program, name);
+        int location = GLES20.glGetAttribLocation(program, name);
 
         if (location == -1)
         {

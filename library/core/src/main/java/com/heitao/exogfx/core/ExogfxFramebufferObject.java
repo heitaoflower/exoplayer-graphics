@@ -85,7 +85,7 @@ public class ExogfxFramebufferObject {
             final int status = OGLES.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
             if (status != GLES20.GL_FRAMEBUFFER_COMPLETE)
             {
-                throw new RuntimeException("Failed to initialize framebuffer object " + status);
+                throw new RuntimeException("failed to initialize framebuffer object " + status);
             }
         }catch (final RuntimeException e)
         {
@@ -93,9 +93,9 @@ public class ExogfxFramebufferObject {
             throw e;
         }
 
-        OGLES.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, currentFramebuffer);
-        OGLES.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, currentRenderbuffer);
-        OGLES.glBindTexture(GLES20.GL_TEXTURE_2D, currentRenderTexName);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, currentFramebuffer);
+        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, currentRenderbuffer);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, currentRenderTexName);
     }
 
     public void release()

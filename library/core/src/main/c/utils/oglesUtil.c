@@ -3,10 +3,10 @@
 //
 #include "oglesUtil.h"
 
-void setupSampler(GLenum target, GLfloat mag, GLfloat min)
+void setupSampler(GLenum target, GLint mag, GLint min)
 {
-    glTexParameterf(target, GL_TEXTURE_MAG_FILTER, mag);
-    glTexParameterf(target, GL_TEXTURE_MIN_FILTER, min);
+    glTexParameteri(target, GL_TEXTURE_MAG_FILTER, mag);
+    glTexParameteri(target, GL_TEXTURE_MIN_FILTER, min);
     glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
@@ -104,20 +104,19 @@ GLuint loadShader(GLenum shaderType, const char* shaderSource)
     return shader;
 }
 
-GLuint createBuffer(GLfloat *data)
+GLuint createBuffer(GLfloat *data, GLsizei size)
 {
-    GLsizei size = 1;
-    GLuint buffers[size];
+    GLuint buffers[1];
 
-    glGenBuffers(size, buffers);
-    updateBuffer(buffers[0], data);
+    glGenBuffers(1, buffers);
+    updateBuffer(buffers[0], data, size);
 
     return buffers[0];
 }
 
-void updateBuffer(GLuint buffer, GLfloat *data)
+void updateBuffer(GLuint buffer, GLfloat *data, GLsizei size)
 {
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

@@ -152,6 +152,18 @@ JNI_METHOD(OGLES, void, glClearColor)
     glClearColor(red, green, blue, alpha);
 }
 
+JNI_METHOD(OGLES, void, glViewport)
+(JNIEnv *env, jobject obj, jint x, jint y, jint width, jint height)
+{
+    glViewport((GLint)x, (GLint)y, (GLsizei)width, (GLsizei)height);
+}
+
+JNI_METHOD(OGLES, void, glAttachShader)
+(JNIEnv *env, jobject obj, jint program, jint shader)
+{
+    glAttachShader((GLuint)program, (GLuint)shader);
+}
+
 JNI_METHOD(OGLES, void, glGenTextures)
 (JNIEnv *env, jobject obj, jintArray textures)
 {
@@ -173,6 +185,7 @@ JNI_METHOD(OGLES, void, glTexImage2D)
 (JNIEnv *env, jobject obj, jint target, jint level, jint internalformat, jint width, jint height, jint border, jint format, jint type, jbyteArray pixels)
 {
     const void *nativePixels = pixels != NULL ? (*env)->GetByteArrayElements(env, pixels, JNI_FALSE) : NULL;
+
     glTexImage2D((GLenum)target, (GLint)level, (GLint)internalformat, (GLsizei)width, (GLsizei)height, (GLint)border, (GLenum)format, (GLenum)type, nativePixels);
 }
 
@@ -306,6 +319,12 @@ JNI_METHOD(OGLES, void, glBindRenderbuffer)
     glBindRenderbuffer((GLenum)target, (GLuint)renderbuffer);
 }
 
+JNI_METHOD(OGLES, void, glLinkProgram)
+(JNIEnv *env, jobject obj, jint program)
+{
+    glLinkProgram((GLuint)program);
+}
+
 JNI_METHOD(OGLES, void, glRenderbufferStorage)
 (JNIEnv *env, jobject obj, jint target, jint internalformat, jint width, jint height)
 {
@@ -320,6 +339,12 @@ JNI_METHOD(OGLES, void, glGenRenderbuffers)
 
     glGenRenderbuffers(size, nativeRenderbuffers);
     (*env)->SetIntArrayRegion(env, renderbuffers, 0, size, (const jint*)nativeRenderbuffers);
+}
+
+JNI_METHOD(OGLES, jint , glCreateProgram)
+(JNIEnv *env, jobject obj)
+{
+    return glCreateProgram();
 }
 
 JNI_METHOD(OGLES, void, glDeleteProgram)
@@ -354,6 +379,14 @@ JNI_METHOD(OGLES, void, glUniform1i)
     glUniform1i((GLint)location, (GLint)value);
 }
 
+JNI_METHOD(OGLES, void, glUniform4fv)
+(JNIEnv *env, jobject obj, jint location, jint count, jfloatArray value)
+{
+    const GLfloat *nativeValue = (*env)->GetFloatArrayElements(env, value, JNI_FALSE);
+
+    glUniform4fv(location, count, nativeValue);
+}
+
 JNI_METHOD(OGLES, void, glUniformMatrix4fv)
 (JNIEnv *env, jobject obj, jint location, jint count, jboolean transpose, jfloatArray value)
 {
@@ -371,7 +404,7 @@ JNI_METHOD(OGLES, void, glUseProgram)
 JNI_METHOD(OGLES, void, glVertexAttribPointer)
 (JNIEnv *env, jobject obj, jint index, jint size, jint type, jboolean normalized, jint stride, jint offset)
 {
-    glVertexAttribPointer((GLuint)index, size, (GLenum)type, normalized, stride, &offset);
+    glVertexAttribPointer((GLuint)index, (GLint)size, (GLenum)type, (GLboolean)normalized, (GLsizei)stride, (const void *)offset);
 }
 
 #undef JNI_METHOD
@@ -380,9 +413,9 @@ JNI_METHOD(OGLES, void, glVertexAttribPointer)
         Java_com_heitao_exogfx_ogles_##class_name##_##method_name
 
 JNI_METHOD(OGLESUtil, void, setupSampler)
-(JNIEnv *env, jobject obj, jint target, jfloat mag, jfloat min)
+(JNIEnv *env, jobject obj, jint target, jint mag, jint min)
 {
-    setupSampler((GLenum)target, (GLfloat)mag, (GLfloat)min);
+    setupSampler((GLenum)target, (GLint)mag, (GLint)min);
 }
 
 JNI_METHOD(OGLESUtil, jint , loadShader)
@@ -404,9 +437,9 @@ JNI_METHOD(OGLESUtil, jint, createProgram)
 }
 
 JNI_METHOD(OGLESUtil, jint, createBuffer)
-(JNIEnv *env, jobject obj, jfloatArray data)
+(JNIEnv *env, jobject obj, jobject data)
 {
-    GLfloat * nativeData = (*env)->GetFloatArrayElements(env, data, JNI_FALSE);
-
-    return createBuffer(nativeData);
+    GLfloat *nativeData = (*env)->GetDirectBufferAddress(env, data);
+    GLsizei nativeSize = (GLsizei)(*env)->GetDirectBufferCapacity(env, data);
+    return createBuffer(nativeData, nativeSize * sizeof(GLfloat));
 }
