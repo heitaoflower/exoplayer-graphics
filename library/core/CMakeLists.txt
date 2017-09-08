@@ -24,13 +24,13 @@ SET( SOURCES
     ${GRAPHICS_SOURCE_DIR}/load_lib.c
 
     # Utils source dir.
-    ${UTILS_SOURCE_DIR}/glUtil.c )
+    ${UTILS_SOURCE_DIR}/oglesUtil.c )
 
 SET( HEADERS
 
      # Utils source dir.
      ${UTILS_SOURCE_DIR}/logUtil.h
-     ${UTILS_SOURCE_DIR}/glUtil.h
+     ${UTILS_SOURCE_DIR}/oglesUtil.h
 
      # Graphics source dir.
      ${GRAPHICS_SOURCE_DIR}/gfx.h

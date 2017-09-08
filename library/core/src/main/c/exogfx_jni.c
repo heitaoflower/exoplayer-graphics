@@ -22,14 +22,15 @@
 
 #include "graphics/gfx.h"
 #include "utils/logUtil.h"
-#include "utils/glUtil.h"
+#include "utils/oglesUtil.h"
 
 #include <jni.h>
 #include <stdlib.h>
 
-#define JNI_METHOD(return_type, method_name) \
-    JNIEXPORT return_type JNICALL            \
-        Java_com_heitao_exogfx_core_NativeLibrary_##method_name
+#undef JNI_METHOD
+#define JNI_METHOD(class_name, return_type, method_name)        \
+    JNIEXPORT return_type JNICALL                               \
+        Java_com_heitao_exogfx_core_##class_name##_##method_name
 
 /* [Vertex source] */
 static const char glVertexShader[] =
@@ -49,95 +50,6 @@ static const char glFragmentShader[] =
                 "}\n";
 /* [Fragment source] */
 
-/* [loadShader] */
-GLuint  loadShader(GLenum shaderType, const char* shaderSource)
-{
-    GLuint shader = glCreateShader(shaderType);
-    if (shader)
-    {
-        glShaderSource(shader, 1, &shaderSource, NULL);
-        glCompileShader(shader);
-
-        GLint compiled = 0;
-        glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
-
-        if (!compiled)
-        {
-            GLint infoLen = 0;
-            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
-
-            if (infoLen)
-            {
-                char * buf = (char*) malloc(infoLen);
-
-                if (buf)
-                {
-                    glGetShaderInfoLog(shader, infoLen, NULL, buf);
-                    LOGE("Could not Compile Shader %d:\n%s\n", shaderType, buf);
-                    free(buf);
-                }
-
-                glDeleteShader(shader);
-                shader = 0;
-            }
-        }
-    }
-
-    return shader;
-}
-
-/* [createProgram] */
-GLuint createProgram(const char* vertexSource, const char * fragmentSource)
-{
-    GLuint vertexShader = loadShader(GL_VERTEX_SHADER, vertexSource);
-    if (!vertexShader)
-    {
-        return 0;
-    }
-
-    GLuint fragmentShader = loadShader(GL_FRAGMENT_SHADER, fragmentSource);
-    if (!fragmentShader)
-    {
-        return 0;
-    }
-
-    GLuint program = glCreateProgram();
-
-    if (program)
-    {
-        glAttachShader(program , vertexShader);
-        glAttachShader(program, fragmentShader);
-
-        glLinkProgram(program);
-        GLint linkStatus = GL_FALSE;
-
-        glGetProgramiv(program , GL_LINK_STATUS, &linkStatus);
-
-        if( linkStatus != GL_TRUE)
-        {
-            GLint bufLength = 0;
-
-            glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
-
-            if (bufLength)
-            {
-                char* buf = (char*) malloc(bufLength);
-
-                if (buf)
-                {
-                    glGetProgramInfoLog(program, bufLength, NULL, buf);
-                    LOGE("Could not link program:\n%s\n", buf);
-                    free(buf);
-                }
-            }
-            glDeleteProgram(program);
-            program = 0;
-        }
-    }
-
-    return program;
-}
-/* [createProgram] */
 
 /* [setupGraphics] */
 GLuint  simpleTriangleProgram;
@@ -145,7 +57,7 @@ GLuint  vPosition;
 
 bool setupGraphics(int w, int h)
 {
-    simpleTriangleProgram = createProgram(glVertexShader, glFragmentShader);
+    simpleTriangleProgram = createProgramUTFChars(glVertexShader, glFragmentShader);
 
     if (!simpleTriangleProgram)
     {
@@ -184,7 +96,7 @@ JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_nativeInitializ
     setupGraphics(width, height);
 }
 
-JNI_METHOD(void, nativeInitializeContext)
+JNI_METHOD(NativeLibrary, void, nativeInitializeContext)
 (JNIEnv *evn, jobject obj)
 {
     if (!init_gfx())
@@ -193,157 +105,308 @@ JNI_METHOD(void, nativeInitializeContext)
     }
 }
 
-JNI_METHOD(void, nativeCreateRenderer)
+JNI_METHOD(NativeLibrary, void, nativeCreateRenderer)
 (JNIEnv *env, jobject obj)
 {
 
 }
 
-JNI_METHOD(void, nativeOnSurfaceCreated)
+JNI_METHOD(NativeLibrary, void, nativeOnSurfaceCreated)
 (JNIEnv *env, jobject obj)
 {
 
 }
 
-JNI_METHOD(void, nativeOnSurfaceChanged)
+JNI_METHOD(NativeLibrary, void, nativeOnSurfaceChanged)
 (JNIEnv *env, jobject obj, jint width, jint height)
 {
 
 }
 
-JNI_METHOD(void, nativeDrawFrame)
+JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
 (JNIEnv *env, jobject obj)
 {
     renderFrame();
 }
 
-JNI_METHOD(jboolean, nativeGlCheckFramebufferStatus)
+#undef JNI_METHOD
+#define JNI_METHOD(class_name, return_type, method_name)        \
+    JNIEXPORT return_type JNICALL                               \
+        Java_com_heitao_exogfx_ogles_##class_name##_##method_name
+
+JNI_METHOD(OGLES, jboolean, glCheckFramebufferStatus)
 (JNIEnv *env, jobject obj, jint target)
 {
-    return glCheckFramebufferStatus((GLenum)target);
+    return (jboolean)glCheckFramebufferStatus((GLenum)target);
 }
 
-JNI_METHOD(void, nativeGlClearColor)
+JNI_METHOD(OGLES, void, glClear)
+(JNIEnv *env, jobject obj, jint mask)
+{
+    glClear((GLbitfield)mask);
+}
+
+JNI_METHOD(OGLES, void, glClearColor)
 (JNIEnv *env, jobject obj, jfloat red, jfloat green, jfloat blue, jfloat alpha)
 {
     glClearColor(red, green, blue, alpha);
 }
 
-JNI_METHOD(void, nativeGlGenTextures)
+JNI_METHOD(OGLES, void, glGenTextures)
 (JNIEnv *env, jobject obj, jintArray textures)
 {
     GLsizei size = (*env)->GetArrayLength(env, textures);
-    GLuint native_textures[size];
+    GLuint nativeTextures[size];
 
-    glGenTextures(size, native_textures);
+    glGenTextures(size, nativeTextures);
 
-    (*env)->SetIntArrayRegion(env, textures, 0, size, (const jint*)native_textures);
+    (*env)->SetIntArrayRegion(env, textures, 0, size, (const jint*)nativeTextures);
 }
 
-JNI_METHOD(void, nativeGlBindTexture)
+JNI_METHOD(OGLES, void, glBindTexture)
 (JNIEnv *env, jobject obj, jint target, jint texture)
 {
     glBindTexture((GLenum)target, (GLuint)texture);
 }
 
-JNI_METHOD(void, nativeGlTexImage2D)
+JNI_METHOD(OGLES, void, glTexImage2D)
 (JNIEnv *env, jobject obj, jint target, jint level, jint internalformat, jint width, jint height, jint border, jint format, jint type, jbyteArray pixels)
 {
-    const void *native_pixels = (*env)->GetByteArrayElements(env, pixels, JNI_FALSE);
-    glTexImage2D((GLenum)target, (GLint)level, (GLint)internalformat, (GLsizei)width, (GLsizei)height, (GLint)border, (GLenum)format, (GLenum)type, native_pixels);
+    const void *nativePixels = pixels != NULL ? (*env)->GetByteArrayElements(env, pixels, JNI_FALSE) : NULL;
+    glTexImage2D((GLenum)target, (GLint)level, (GLint)internalformat, (GLsizei)width, (GLsizei)height, (GLint)border, (GLenum)format, (GLenum)type, nativePixels);
 }
 
-JNI_METHOD(void, nativeGlGetIntegerv)
+JNI_METHOD(OGLES, jint , glGetAttribLocation)
+(JNIEnv *env, jobject obj, jint program, jstring name)
+{
+    const GLchar *nativeName = (*env)->GetStringUTFChars(env, name, JNI_FALSE);
+
+    GLint location = glGetAttribLocation((GLuint)program, nativeName);
+
+    (*env)->ReleaseStringUTFChars(env, name, nativeName);
+
+    return location;
+
+}
+
+JNI_METHOD(OGLES, void, glGetIntegerv)
 (JNIEnv *env, jobject obj, jint pname, jintArray data)
 {
-    GLint *pdata = (*env)->GetIntArrayElements(env, data, JNI_FALSE);
+    GLsizei size = (*env)->GetArrayLength(env, data);
 
-    glGetIntegerv((GLenum)pname, pdata);
+    GLint nativeData[size];
+
+    glGetIntegerv((GLenum)pname, nativeData);
+
+    (*env)->SetIntArrayRegion(env, data, 0, size, nativeData);
 }
 
-JNI_METHOD(void, nativeGlDeleteFramebuffers)
+JNI_METHOD(OGLES, jint , glGetUniformLocation)
+(JNIEnv *env, jobject obj, jint program, jstring name)
+{
+    const GLchar *nativeName = (*env)->GetStringUTFChars(env, name, JNI_FALSE);
+
+    GLint location = glGetUniformLocation((GLuint)program, nativeName);
+
+    (*env)->ReleaseStringUTFChars(env, name, nativeName);
+
+    return location;
+}
+
+JNI_METHOD(OGLES, void, glDeleteFramebuffers)
 (JNIEnv *env, jobject obj, jintArray framebuffers)
 {
     GLsizei size = (*env)->GetArrayLength(env, framebuffers);
 
-    const GLuint *native_framebuffers = (const GLuint *)(*env)->GetIntArrayElements(env, framebuffers, JNI_FALSE);
+    const GLuint *nativeFramebuffers = (const GLuint *)(*env)->GetIntArrayElements(env, framebuffers, JNI_FALSE);
 
-    glDeleteFramebuffers(size, native_framebuffers);
+    glDeleteFramebuffers(size, nativeFramebuffers);
 }
 
-JNI_METHOD(void, nativeGlDeleteRenderbuffers)
+JNI_METHOD(OGLES, void, glDeleteRenderbuffers)
 (JNIEnv *env, jobject obj, jintArray renderbuffers)
 {
     GLsizei size = (*env)->GetArrayLength(env, renderbuffers);
 
-    const GLuint *native_renderbuffers = (const GLuint *)(*env)->GetIntArrayElements(env, renderbuffers, JNI_FALSE);
+    const GLuint *nativeRenderbuffers = (const GLuint *)(*env)->GetIntArrayElements(env, renderbuffers, JNI_FALSE);
 
-    glDeleteRenderbuffers(size, native_renderbuffers);
+    glDeleteRenderbuffers(size, nativeRenderbuffers);
 }
 
-JNI_METHOD(void, nativeGlDeleteTextures)
+JNI_METHOD(OGLES, void, glDeleteTextures)
 (JNIEnv *env, jobject obj, jintArray textures)
 {
     GLsizei size = (*env)->GetArrayLength(env, textures);
 
-    const GLuint *native_textures = (const GLuint *)(*env)->GetIntArrayElements(env, textures, JNI_FALSE);
+    const GLuint *nativeTextures = (const GLuint *)(*env)->GetIntArrayElements(env, textures, JNI_FALSE);
 
-    glDeleteTextures(size, native_textures);
+    glDeleteTextures(size, nativeTextures);
 }
 
-JNI_METHOD(void, nativeGlFramebufferRenderbuffer)
+JNI_METHOD(OGLES, void, glDisableVertexAttribArray)
+(JNIEnv *env, jobject obj, jint index)
+{
+    glDisableVertexAttribArray((GLenum)index);
+}
+JNI_METHOD(OGLES, void, glDrawArrays)
+(JNIEnv *env, jobject obj, jint mode, jint first, jint count)
+{
+    glDrawArrays((GLenum)mode, (GLint)first, (GLsizei)count);
+}
+
+JNI_METHOD(OGLES, void, glEnableVertexAttribArray)
+(JNIEnv *env, jobject obj, jint index)
+{
+    glEnableVertexAttribArray((GLuint)index);
+}
+
+JNI_METHOD(OGLES, void, glFramebufferRenderbuffer)
 (JNIEnv *env, jobject obj, jint target, jint attachment, jint renderbuffertarget, jint renderbuffer)
 {
     glFramebufferRenderbuffer((GLenum)target, (GLenum)attachment, (GLenum)renderbuffertarget, (GLuint)renderbuffer);
 }
 
-JNI_METHOD(void, nativeGlFramebufferTexture2D)
+JNI_METHOD(OGLES, void, glFramebufferTexture2D)
 (JNIEnv *env, jobject obj, jint target, jint attachment, jint textarget, jint texture, jint level)
 {
     glFramebufferTexture2D((GLenum)target, (GLenum)attachment, (GLenum)textarget, (GLuint)textarget, (GLenum)level);
 }
 
-JNI_METHOD(void, nativeGlGenFramebuffers)
+JNI_METHOD(OGLES, void, glGenFramebuffers)
 (JNIEnv *env, jobject obj, jintArray framebuffers)
 {
     GLsizei size = (*env)->GetArrayLength(env, framebuffers);
-    GLuint native_framebuffers[size];
+    GLuint nativeFramebuffers[size];
 
-    glGenFramebuffers(size, native_framebuffers);
-    (*env)->SetIntArrayRegion(env, framebuffers, 0, size, (const jint*)native_framebuffers);
+    glGenFramebuffers(size, nativeFramebuffers);
+    (*env)->SetIntArrayRegion(env, framebuffers, 0, size, (const jint*)nativeFramebuffers);
 }
 
-JNI_METHOD(void, nativeGlBindRenderbuffer)
-(JNIEnv *env, jobject obj, jint target, jint renderbuffer)
+JNI_METHOD(OGLES, void, glActiveTexture)
+(JNIEnv *env, jobject obj, jint texture)
 {
-    glBindRenderbuffer((GLenum)target, (GLuint)renderbuffer);
+    glActiveTexture((GLenum)texture);
 }
 
-JNI_METHOD(void, nativeGlBindFramebuffer)
+JNI_METHOD(OGLES, void, glBindBuffer)
+(JNIEnv *env, jobject obj, jint target, jint buffer)
+{
+    glBindBuffer((GLenum)target, (GLuint)buffer);
+}
+
+JNI_METHOD(OGLES, void, glBindFramebuffer)
 (JNIEnv *env, jobject obj, jint target, jint framebuffer)
 {
     glBindFramebuffer((GLenum)target, (GLuint)framebuffer);
 }
 
-JNI_METHOD(void, nativeGlRenderbufferStorage)
+JNI_METHOD(OGLES, void, glBindRenderbuffer)
+(JNIEnv *env, jobject obj, jint target, jint renderbuffer)
+{
+    glBindRenderbuffer((GLenum)target, (GLuint)renderbuffer);
+}
+
+JNI_METHOD(OGLES, void, glRenderbufferStorage)
 (JNIEnv *env, jobject obj, jint target, jint internalformat, jint width, jint height)
 {
     glRenderbufferStorage((GLenum)target, (GLenum)internalformat, (GLsizei)width, (GLsizei)height);
 }
 
-JNI_METHOD(void, nativeGlGenRenderbuffers)
+JNI_METHOD(OGLES, void, glGenRenderbuffers)
 (JNIEnv *env, jobject obj, jintArray renderbuffers)
 {
     GLsizei  size = (*env)->GetArrayLength(env, renderbuffers);
-    GLuint native_renderbuffers[size];
+    GLuint nativeRenderbuffers[size];
 
-    glGenRenderbuffers(size, native_renderbuffers);
-    (*env)->SetIntArrayRegion(env, renderbuffers, 0, size, (const jint*)native_renderbuffers);
+    glGenRenderbuffers(size, nativeRenderbuffers);
+    (*env)->SetIntArrayRegion(env, renderbuffers, 0, size, (const jint*)nativeRenderbuffers);
 }
 
+JNI_METHOD(OGLES, void, glDeleteProgram)
+(JNIEnv *env, jobject obj, jint program)
+{
+    glDeleteProgram((GLuint)program);
+}
 
-JNI_METHOD(void, nativeSetupSampler)
+JNI_METHOD(OGLES, void, glDeleteShader)
+(JNIEnv *env, jobject obj, jint shader)
+{
+    glDeleteShader((GLuint)shader);
+}
+
+JNI_METHOD(OGLES, void, glDeleteBuffers)
+(JNIEnv *env, jobject obj, jintArray buffers)
+{
+    GLsizei size = (*env)->GetArrayLength(env, buffers);
+    const GLuint *nativeBuffers = (const GLuint *)(*env)->GetIntArrayElements(env, buffers, JNI_FALSE);
+    glDeleteBuffers(size, nativeBuffers);
+}
+
+JNI_METHOD(OGLES, void, glUniform1f)
+(JNIEnv *env, jobject obj, jint location, jfloat value)
+{
+    glUniform1f((GLint)location, (GLfloat)value);
+}
+
+JNI_METHOD(OGLES, void, glUniform1i)
+(JNIEnv *env, jobject obj, jint location, jint value)
+{
+    glUniform1i((GLint)location, (GLint)value);
+}
+
+JNI_METHOD(OGLES, void, glUniformMatrix4fv)
+(JNIEnv *env, jobject obj, jint location, jint count, jboolean transpose, jfloatArray value)
+{
+    const GLfloat *nativeValue = (*env)->GetFloatArrayElements(env, value, JNI_FALSE);
+
+    glUniformMatrix4fv((GLint)location, (GLsizei)count, (GLboolean)transpose, nativeValue);
+}
+
+JNI_METHOD(OGLES, void, glUseProgram)
+(JNIEnv *env, jobject obj, jint program)
+{
+    glUseProgram((GLuint)program);
+}
+
+JNI_METHOD(OGLES, void, glVertexAttribPointer)
+(JNIEnv *env, jobject obj, jint index, jint size, jint type, jboolean normalized, jint stride, jint offset)
+{
+    glVertexAttribPointer((GLuint)index, size, (GLenum)type, normalized, stride, &offset);
+}
+
+#undef JNI_METHOD
+#define JNI_METHOD(class_name, return_type, method_name)        \
+    JNIEXPORT return_type JNICALL                               \
+        Java_com_heitao_exogfx_ogles_##class_name##_##method_name
+
+JNI_METHOD(OGLESUtil, void, setupSampler)
 (JNIEnv *env, jobject obj, jint target, jfloat mag, jfloat min)
 {
     setupSampler((GLenum)target, (GLfloat)mag, (GLfloat)min);
+}
+
+JNI_METHOD(OGLESUtil, jint , loadShader)
+(JNIEnv *env, jobject obj, jint shaderType, jstring shaderSource)
+{
+    const char *nativeShaderSource = (*env)->GetStringUTFChars(env, shaderSource, JNI_FALSE);
+
+    GLuint shader = loadShader((GLenum)shaderType, nativeShaderSource);
+
+    (*env)->ReleaseStringUTFChars(env, shaderSource, nativeShaderSource);
+
+    return shader;
+}
+
+JNI_METHOD(OGLESUtil, jint, createProgram)
+(JNIEnv *env, jobject obj, jint vertexShader, jint fragmentShader)
+{
+    return createProgram((GLuint)vertexShader, (GLuint)fragmentShader);
+}
+
+JNI_METHOD(OGLESUtil, jint, createBuffer)
+(JNIEnv *env, jobject obj, jfloatArray data)
+{
+    GLfloat * nativeData = (*env)->GetFloatArrayElements(env, data, JNI_FALSE);
+
+    return createBuffer(nativeData);
 }

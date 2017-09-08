@@ -17,6 +17,8 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
 
     private final static String TAG = ExogfxView.class.getSimpleName();
 
+    private ExogfxRenderer renderer;
+
     private SimpleExoPlayer player;
 
     private float videoAspect = 1.0f;
@@ -31,10 +33,12 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
         super(context, attrs);
 
         setEGLContextFactory(new DefaultEGLContextFactory());
-
         setEGLConfigChooser(new DefaultEGLConfigChooser());
 
-        setRenderer(new ExogfxRenderer());
+        renderer = new ExogfxRenderer(this);
+        setRenderer(renderer);
+
+        setRenderMode(RENDERMODE_WHEN_DIRTY);
     }
 
     public ExogfxView setSimpleExoPlayer(final SimpleExoPlayer player) {
@@ -45,6 +49,7 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
 
         this.player = player;
         this.player.setVideoListener(this);
+        this.renderer.setSimpleExoPlayer(player);
 
         return this;
     }
