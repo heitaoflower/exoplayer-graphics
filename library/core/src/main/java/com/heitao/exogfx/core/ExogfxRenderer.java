@@ -42,8 +42,6 @@ public class ExogfxRenderer extends ExogfxFramebufferObjectRenderer implements S
 
     private SimpleExoPlayer simpleExoPlayer;
 
-    private Triangle mTriangle;
-
     public ExogfxRenderer(ExogfxView exogfxView)
     {
         super();
@@ -78,8 +76,6 @@ public class ExogfxRenderer extends ExogfxFramebufferObjectRenderer implements S
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f
         );
-
-        mTriangle = new Triangle();
     }
 
     @Override
