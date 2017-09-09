@@ -16,7 +16,7 @@ import java.nio.FloatBuffer;
 public class Triangle {
     private final String vertexShaderCode =
             "attribute vec4 vPosition;" +
-                    "attribute vec4 aTextureCoord;" +
+                    "attribute vec2 aTextureCoord;" +
                     "varying highp vec2 vTextureCoord;" +
                     "void main() {" +
                     "  gl_Position = vPosition;" +

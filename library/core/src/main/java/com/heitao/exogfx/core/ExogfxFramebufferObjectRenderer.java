@@ -24,6 +24,7 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
         NativeLibrary.nativeInitializeContext();
     }
 
+    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
         framebufferObject = new ExogfxFramebufferObject();
@@ -33,6 +34,7 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
         onSurfaceCreated(config);
     }
 
+    @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
 
         framebufferObject.setup(width, height);
@@ -41,22 +43,20 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
         onSurfaceChanged(width, height);
     }
 
+    @Override
     public void onDrawFrame(GL10 gl) {
 
-        //framebufferObject.enable();
+        framebufferObject.enable();
         OGLES.glViewport(0, 0, framebufferObject.getWidth(), framebufferObject.getHeight());
 
         onDrawFrame(framebufferObject);
 
-        //NativeLibrary.nativeDrawFrame();
+        OGLES.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        OGLES.glViewport(0, 0, framebufferObject.getWidth(), framebufferObject.getHeight());
 
-        //OGLES.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
-        //OGLES.glViewport(0, 0, framebufferObject.getWidth(), framebufferObject.getHeight());
+        OGLES.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        //OGLES.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-
-        //presentFilter.draw(framebufferObject.getTexName(), null);
-
+        presentFilter.draw(framebufferObject.getTexName(), null);
     }
 
     public abstract void onSurfaceCreated(EGLConfig config);

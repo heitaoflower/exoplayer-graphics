@@ -35,7 +35,6 @@ public class OGLESFilter {
                     "varying highp vec2 vTextureCoord;\n" +
                     "uniform lowp sampler2D sTexture;\n" +
                     "void main() {\n" +
-                    "vec2 c = vec2(1.0, 1.0);\n" +
                     "gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
                     "}\n";
 
@@ -128,12 +127,12 @@ public class OGLESFilter {
 
         onDraw();
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+        OGLES.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 
-        GLES20.glDisableVertexAttribArray(getHandle("aPosition"));
-        GLES20.glDisableVertexAttribArray(getHandle("aTextureCoord"));
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+        OGLES.glDisableVertexAttribArray(getHandle("aPosition"));
+        OGLES.glDisableVertexAttribArray(getHandle("aTextureCoord"));
+        OGLES.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+        OGLES.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
     }
 
     protected void onDraw()

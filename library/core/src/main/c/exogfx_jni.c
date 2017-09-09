@@ -282,7 +282,7 @@ JNI_METHOD(OGLES, void, glFramebufferRenderbuffer)
 JNI_METHOD(OGLES, void, glFramebufferTexture2D)
 (JNIEnv *env, jobject obj, jint target, jint attachment, jint textarget, jint texture, jint level)
 {
-    glFramebufferTexture2D((GLenum)target, (GLenum)attachment, (GLenum)textarget, (GLuint)textarget, (GLenum)level);
+    glFramebufferTexture2D((GLenum)target, (GLenum)attachment, (GLenum)textarget, (GLuint)texture, (GLenum)level);
 }
 
 JNI_METHOD(OGLES, void, glGenFramebuffers)
