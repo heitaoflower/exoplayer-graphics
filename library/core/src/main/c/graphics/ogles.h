@@ -2,8 +2,8 @@
 // Created by showtime on 9/3/2017.
 //
 
-#ifndef EXOPLAYER_GRAPHICS_GL_H
-#define EXOPLAYER_GRAPHICS_GL_H
+#ifndef EXOPLAYER_GRAPHICS_OGLES_H
+#define EXOPLAYER_GRAPHICS_OGLES_H
 
 #include <GLES2/gl2.h>
 
@@ -74,8 +74,8 @@
 #define FNSYM(fn, ret, args)                          \
         typedef ret (*PFN_##fn)args;        \
         extern PFN_##fn fn;
-#include "gl_func.h"
+#include "ogles_func.h"
 #undef FNSYM
 
-#endif //EXOPLAYER_GRAPHICS_GL_H
+#endif //EXOPLAYER_GRAPHICS_OGLES_H
 

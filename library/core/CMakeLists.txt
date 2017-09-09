@@ -21,9 +21,10 @@ SET( SOURCES
 
     # Graphics source dir.
     ${GRAPHICS_SOURCE_DIR}/gfx.c
-    ${GRAPHICS_SOURCE_DIR}/load_lib.c
+    ${GRAPHICS_SOURCE_DIR}/context.c
 
     # Utils source dir.
+    ${UTILS_SOURCE_DIR}/load_lib.c
     ${UTILS_SOURCE_DIR}/oglesUtil.c )
 
 SET( HEADERS
@@ -31,12 +32,13 @@ SET( HEADERS
      # Utils source dir.
      ${UTILS_SOURCE_DIR}/logUtil.h
      ${UTILS_SOURCE_DIR}/oglesUtil.h
+     ${UTILS_SOURCE_DIR}/load_lib.h
 
      # Graphics source dir.
      ${GRAPHICS_SOURCE_DIR}/gfx.h
-     ${GRAPHICS_SOURCE_DIR}/gl.h
-     ${GRAPHICS_SOURCE_DIR}/gl_func.h
-     ${GRAPHICS_SOURCE_DIR}/load_lib.h )
+     ${GRAPHICS_SOURCE_DIR}/context.h
+     ${GRAPHICS_SOURCE_DIR}/ogles.h
+     ${GRAPHICS_SOURCE_DIR}/ogles_func.h )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 

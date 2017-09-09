@@ -15,12 +15,14 @@ public class NativeLibrary {
 
     public static native void nativeInitializeContext();
 
-    public static native void nativeOnSurfaceChanged();
+    public static native void nativeOnSurfaceChanged(long renderer, int width, int height);
 
-    public static native void nativeOnSurfaceCreated();
+    public static native void nativeOnSurfaceCreated(long renderer);
 
-    public static native void nativeDrawFrame();
+    public static native void nativeDrawFrame(long renderer);
 
-    public static native void nativeInitializeGfx(int width, int height);
+    public static native long nativeCreateRenderer();
+
+    public static native void nativeDestroyRenderer(long renderer);
 
 }

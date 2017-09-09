@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.heitao.exogfx.core.ExogfxRenderer;
+import com.heitao.exogfx.core.NativeLibrary;
 import com.heitao.exogfx.egl.DefaultEGLConfigChooser;
 import com.heitao.exogfx.egl.DefaultEGLContextFactory;
 
@@ -21,6 +22,8 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
 
     private SimpleExoPlayer player;
 
+    private long nativeRenderer;
+
     private float videoAspect = 1.0f;
 
     private PlayerScaleType playerScaleType = PlayerScaleType.RESIZE_FIT_WIDTH;
@@ -34,6 +37,8 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
 
         setEGLContextFactory(new DefaultEGLContextFactory());
         setEGLConfigChooser(new DefaultEGLConfigChooser());
+
+        nativeRenderer = NativeLibrary.nativeCreateRenderer();
 
         renderer = new ExogfxRenderer(this);
         setRenderer(renderer);

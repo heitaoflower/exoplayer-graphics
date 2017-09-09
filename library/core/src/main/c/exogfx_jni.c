@@ -20,113 +20,54 @@
  * IN THE SOFTWARE.
  */
 
-#include "graphics/gfx.h"
+#include "graphics/context.h"
 #include "utils/logUtil.h"
 #include "utils/oglesUtil.h"
 
 #include <jni.h>
-#include <stdlib.h>
 
 #undef JNI_METHOD
 #define JNI_METHOD(class_name, return_type, method_name)        \
     JNIEXPORT return_type JNICALL                               \
         Java_com_heitao_exogfx_core_##class_name##_##method_name
 
-/* [Vertex source] */
-static const char glVertexShader[] =
-        "attribute vec4 vPosition;\n"
-                "void main()\n"
-                "{\n"
-                "  gl_Position = vPosition;\n"
-                "}\n";
-/* [Vertex source] */
-
-/* [Fragment source] */
-static const char glFragmentShader[] =
-        "precision mediump float;\n"
-                "void main()\n"
-                "{\n"
-                "  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
-                "}\n";
-/* [Fragment source] */
-
-
-/* [setupGraphics] */
-GLuint  simpleTriangleProgram;
-GLuint  vPosition;
-
-bool setupGraphics(int w, int h)
-{
-    simpleTriangleProgram = createProgramUTFChars(glVertexShader, glFragmentShader);
-
-    if (!simpleTriangleProgram)
-    {
-        LOGE("Could not create program");
-        return false;
-    }
-
-    vPosition = glGetAttribLocation(simpleTriangleProgram, "vPosition");
-
-    glViewport(0, 0, w, h);
-
-    return true;
-}
-/* [setupGraphics] */
-
-/* [renderFrame] */
-const GLfloat triangleVertices[] = {
-        0.0f, 1.0f,
-        -1.0f, -1.0f,
-        1.0f, -1.0f
-};
-
-void renderFrame()
-{
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    glUseProgram(simpleTriangleProgram);
-    glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, triangleVertices);
-    glEnableVertexAttribArray(vPosition);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-}
-/* [renderFrame] */
-
-JNIEXPORT void JNICALL Java_com_heitao_exogfx_core_NativeLibrary_nativeInitializeGfx(JNIEnv *env, jobject obj, jint width, jint height)
-{
-    setupGraphics(width, height);
-}
-
 JNI_METHOD(NativeLibrary, void, nativeInitializeContext)
 (JNIEnv *evn, jobject obj)
 {
-    if (!init_gfx())
+    if (!init_context())
     {
-        LOGE("initialized graphics failed.");
+        LOGE("initialized context failed.");
     }
 }
 
-JNI_METHOD(NativeLibrary, void, nativeCreateRenderer)
+JNI_METHOD(NativeLibrary, jlong , nativeCreateRenderer)
 (JNIEnv *env, jobject obj)
+{
+    return 99;
+}
+
+JNI_METHOD(NativeLibrary, void, nativeDestroyRenderer)
+(JNIEnv *env, jobject obj, jlong renderer)
 {
 
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnSurfaceCreated)
-(JNIEnv *env, jobject obj)
+(JNIEnv *env, jobject obj, jlong renderer)
 {
 
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnSurfaceChanged)
-(JNIEnv *env, jobject obj, jint width, jint height)
+(JNIEnv *env, jobject obj, jlong renderer, jint width, jint height)
 {
 
 }
 
 JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
-(JNIEnv *env, jobject obj)
+(JNIEnv *env, jobject obj, jlong renderer)
 {
-    renderFrame();
+
 }
 
 #undef JNI_METHOD

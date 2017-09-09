@@ -5,7 +5,7 @@
 #ifndef EXOPLAYER_GRAPHICS_OGLESUTIL_H
 #define EXOPLAYER_GRAPHICS_OGLESUTIL_H
 
-#include "../graphics/gl.h"
+#include "../graphics/ogles.h"
 #include "logUtil.h"
 #include <stdlib.h>
 
