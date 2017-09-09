@@ -1,6 +1,4 @@
 # exoplayer-graphics
-[![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
-<img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat">
-[![API](https://img.shields.io/badge/API-16%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=16)
+![Release][release-img] [![License][license-img]][license-url]
 
 An native graphics extensible library for ExoPlayer.
