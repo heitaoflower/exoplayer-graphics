@@ -7,7 +7,6 @@
 
 #include "../graphics/ogles.h"
 #include "logUtil.h"
-#include <stdlib.h>
 
 void setupSampler(GLenum target, GLint mag, GLint min);
 

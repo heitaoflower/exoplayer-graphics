@@ -40,34 +40,44 @@ JNI_METHOD(NativeLibrary, void, nativeInitializeContext)
     }
 }
 
+inline jlong jptr(struct exogfx_renderer *renderer)
+{
+    return (jlong)renderer;
+}
+
+inline struct exogfx_renderer* native(jlong ptr)
+{
+    return (struct exogfx_renderer*)ptr;
+}
 JNI_METHOD(NativeLibrary, jlong , nativeCreateRenderer)
 (JNIEnv *env, jobject obj)
 {
-    return 99;
+    return jptr(&ogles_renderer);
 }
 
 JNI_METHOD(NativeLibrary, void, nativeDestroyRenderer)
 (JNIEnv *env, jobject obj, jlong renderer)
 {
-
+    struct exogfx_renderer *nativeRenderer = native(renderer);
+    nativeRenderer->destroy();
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnSurfaceCreated)
 (JNIEnv *env, jobject obj, jlong renderer)
 {
-
+    native(renderer)->create();
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnSurfaceChanged)
 (JNIEnv *env, jobject obj, jlong renderer, jint width, jint height)
 {
-
+    native(renderer)->resize((size_t)width, (size_t)height);
 }
 
 JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
 (JNIEnv *env, jobject obj, jlong renderer)
 {
-
+    native(renderer)->draw();
 }
 
 #undef JNI_METHOD

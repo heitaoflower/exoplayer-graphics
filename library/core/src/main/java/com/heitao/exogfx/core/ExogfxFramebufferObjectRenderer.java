@@ -16,16 +16,20 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
 
     private static final String TAG = ExogfxFramebufferObjectRenderer.class.getSimpleName();
 
+    private long nativeRenderer;
     private ExogfxFramebufferObject framebufferObject;
     private OGLESFilter presentFilter;
 
     public ExogfxFramebufferObjectRenderer()
     {
         NativeLibrary.nativeInitializeContext();
+        nativeRenderer = NativeLibrary.nativeCreateRenderer();
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+
+        NativeLibrary.nativeOnSurfaceCreated(nativeRenderer);
 
         framebufferObject = new ExogfxFramebufferObject();
         presentFilter = new OGLESFilter();
@@ -37,6 +41,8 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
 
+        NativeLibrary.nativeOnSurfaceChanged(nativeRenderer, width, height);
+
         framebufferObject.setup(width, height);
         presentFilter.setFrameSize(width, height);
 
@@ -45,6 +51,8 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
 
     @Override
     public void onDrawFrame(GL10 gl) {
+
+        NativeLibrary.nativeDrawFrame(nativeRenderer);
 
         framebufferObject.enable();
         OGLES.glViewport(0, 0, framebufferObject.getWidth(), framebufferObject.getHeight());

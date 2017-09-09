@@ -22,6 +22,7 @@ SET( SOURCES
     # Graphics source dir.
     ${GRAPHICS_SOURCE_DIR}/gfx.c
     ${GRAPHICS_SOURCE_DIR}/context.c
+    ${GRAPHICS_SOURCE_DIR}/ogles_renderer.c
 
     # Utils source dir.
     ${UTILS_SOURCE_DIR}/load_lib.c
