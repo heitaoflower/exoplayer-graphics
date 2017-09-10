@@ -21,8 +21,8 @@
  */
 
 #include "graphics/context.h"
-#include "utils/logUtil.h"
-#include "utils/oglesUtil.h"
+#include "utils/log_util.h"
+#include "utils/ogles_util.h"
 
 #include <jni.h>
 
@@ -52,7 +52,7 @@ inline struct exogfx_renderer* native(jlong ptr)
 JNI_METHOD(NativeLibrary, jlong , nativeCreateRenderer)
 (JNIEnv *env, jobject obj)
 {
-    return jptr(&ogles_renderer);
+    return jptr(renderer);
 }
 
 JNI_METHOD(NativeLibrary, void, nativeDestroyRenderer)
@@ -66,6 +66,7 @@ JNI_METHOD(NativeLibrary, void, nativeOnSurfaceCreated)
 (JNIEnv *env, jobject obj, jlong renderer)
 {
     native(renderer)->create();
+
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnSurfaceChanged)

@@ -4,7 +4,14 @@
 #include "context.h"
 #include "gfx.h"
 
+struct exogfx_renderer *renderer;
+
 bool init_context(void)
 {
-    return init_gfx();
+    // TODO select ogles or vulkan, for now only ogles
+    init_gfx();
+
+    renderer = &ogles_renderer;
+
+    return true;
 }

@@ -2,8 +2,8 @@
 // Created by showtime on 9/3/2017.
 //
 
-#ifndef EXOPLAYER_UTILS_LOG_H
-#define EXOPLAYER_UTILS_LOG_H
+#ifndef EXOPLAYER_UTILS_LOG_UTIL_H
+#define EXOPLAYER_UTILS_LOG_UTIL_H
 
 #include <android/log.h>
 
@@ -12,4 +12,4 @@
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
 
-#endif //EXOPLAYER_UTILS_LOG_H
+#endif //EXOPLAYER_UTILS_LOG_UTIL_H

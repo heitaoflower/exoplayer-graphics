@@ -2,11 +2,11 @@
 // Created by showtime on 9/5/2017.
 //
 
-#ifndef EXOPLAYER_GRAPHICS_OGLESUTIL_H
-#define EXOPLAYER_GRAPHICS_OGLESUTIL_H
+#ifndef EXOPLAYER_GRAPHICS_OGLES_UTIL_H
+#define EXOPLAYER_GRAPHICS_OGLES_UTIL_H
 
 #include "../graphics/ogles.h"
-#include "logUtil.h"
+#include "log_util.h"
 
 void setupSampler(GLenum target, GLint mag, GLint min);
 
@@ -20,4 +20,4 @@ GLuint createBuffer(GLfloat *data, GLsizei size);
 
 void updateBuffer(GLuint buffer, GLfloat *data, GLsizei size);
 
-#endif //EXOPLAYER_GRAPHICS_OGLESUTIL_H
+#endif //EXOPLAYER_GRAPHICS_OGLES_UTIL_H

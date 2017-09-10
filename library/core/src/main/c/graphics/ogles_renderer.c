@@ -2,11 +2,16 @@
 // Created by showtime on 9/9/2017.
 //
 #include "context.h"
-#include "../utils/logUtil.h"
+#include "ogles_fbo.h"
+#include "../utils/log_util.h"
 
 static void create(void)
 {
     LOGI("create");
+
+    struct ogles_fbo fbo;
+
+    ogles_fbo_setup(&fbo, 100, 200);
 }
 
 static void resize(size_t width, size_t height)
