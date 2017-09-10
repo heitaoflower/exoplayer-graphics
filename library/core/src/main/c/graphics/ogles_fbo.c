@@ -5,7 +5,7 @@
 #include "../utils/log_util.h"
 #include "../utils/ogles_util.h"
 
-void ogles_fbo_setup(struct ogles_fbo *fbo, uint32_t width, uint32_t height)
+void ogles_fbo_init(struct ogles_fbo *fbo, GLint width, GLint height)
 {
     GLint params[1];
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, params);
@@ -33,24 +33,18 @@ void ogles_fbo_setup(struct ogles_fbo *fbo, uint32_t width, uint32_t height)
     fbo->width = width;
     fbo->height = height;
 
-    GLuint framebuffers[1];
-    glGenFramebuffers(1, params);
-    fbo->framebuffer_name = framebuffers[0];
+    glGenFramebuffers(1, &fbo->framebuffer_name);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo->framebuffer_name);
 
-    GLuint renderbuffers[1];
-    glGenRenderbuffers(1, renderbuffers);
-    fbo->renderbuffer_name = renderbuffers[0];
+    glGenRenderbuffers(1, &fbo->renderbuffer_name);
     glBindRenderbuffer(GL_RENDERBUFFER, fbo->renderbuffer_name);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, fbo->width, fbo->height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fbo->renderbuffer_name);
 
-    GLuint textures[1];
-    glGenTextures(1, textures);
-    fbo->texture_name = textures[0];
+    glGenTextures(1, &fbo->texture_name);
     glBindTexture(GL_TEXTURE_2D, fbo->texture_name);
 
-    setupSampler(GL_TEXTURE_2D, GL_LINEAR, GL_NEAREST);
+    initSampler(GL_TEXTURE_2D, GL_LINEAR, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fbo->width, fbo->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo->texture_name, 0);
 
@@ -70,17 +64,13 @@ void ogles_fbo_setup(struct ogles_fbo *fbo, uint32_t width, uint32_t height)
 
 void ogles_fbo_release(struct ogles_fbo* fbo)
 {
-    GLuint params[1];
-    params[0] = fbo->texture_name;
-    glDeleteTextures(1, params);
+    glDeleteTextures(1, &fbo->texture_name);
     fbo->texture_name = 0;
 
-    params[0] = fbo->renderbuffer_name;
-    glDeleteRenderbuffers(1, params);
+    glDeleteRenderbuffers(1, &fbo->renderbuffer_name);
     fbo->renderbuffer_name = 0;
 
-    params[0] = fbo->framebuffer_name;
-    glDeleteFramebuffers(1, params);
+    glDeleteFramebuffers(1, &fbo->framebuffer_name);
     fbo->framebuffer_name = 0;
 }
 

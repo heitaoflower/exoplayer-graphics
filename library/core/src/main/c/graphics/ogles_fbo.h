@@ -11,14 +11,14 @@
 
 struct ogles_fbo
 {
-    uint32_t width;
-    uint32_t height;
-    uint32_t framebuffer_name;
-    uint32_t renderbuffer_name;
-    uint32_t texture_name;
+    GLint width;
+    GLint height;
+    GLuint framebuffer_name;
+    GLuint renderbuffer_name;
+    GLuint texture_name;
 };
 
-void ogles_fbo_setup(struct ogles_fbo *fbo, uint32_t width, uint32_t height);
+void ogles_fbo_init(struct ogles_fbo *fbo, GLint width, GLint height);
 
 void ogles_fbo_release(struct ogles_fbo* fbo);
 

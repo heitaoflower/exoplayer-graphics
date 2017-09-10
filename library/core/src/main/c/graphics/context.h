@@ -30,7 +30,7 @@ extern struct exogfx_renderer vulkan_renderer;
 
 extern struct exogfx_renderer *renderer;
 
-bool init_context(void);
+bool context_init(void);
 
 static inline bool api_is_ogles(void)
 {

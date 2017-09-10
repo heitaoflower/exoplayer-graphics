@@ -14,7 +14,7 @@ public class OGLESUtil extends NativeLibrary {
 
     private static final int FLOAT_SIZE_BYTES = 4;
 
-    public static native void setupSampler(int target, int mag, int min);
+    public static native void initSampler(int target, int mag, int min);
 
     public static native int loadShader(int shaderType, String shaderSource);
 

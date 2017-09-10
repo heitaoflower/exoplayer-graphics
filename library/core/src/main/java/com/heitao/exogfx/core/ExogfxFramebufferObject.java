@@ -77,7 +77,7 @@ public class ExogfxFramebufferObject {
             texName = params[0];
             OGLES.glBindTexture(GLES20.GL_TEXTURE_2D, texName);
 
-            OGLESUtil.setupSampler(GLES20.GL_TEXTURE_2D, GLES20.GL_LINEAR, GLES20.GL_NEAREST);
+            OGLESUtil.initSampler(GLES20.GL_TEXTURE_2D, GLES20.GL_LINEAR, GLES20.GL_NEAREST);
 
             OGLES.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
             OGLES.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, texName, 0);

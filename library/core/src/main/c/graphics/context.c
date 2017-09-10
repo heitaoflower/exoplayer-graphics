@@ -6,10 +6,10 @@
 
 struct exogfx_renderer *renderer;
 
-bool init_context(void)
+bool context_init(void)
 {
     // TODO select ogles or vulkan, for now only ogles
-    init_gfx();
+    gfx_init();
 
     renderer = &ogles_renderer;
 

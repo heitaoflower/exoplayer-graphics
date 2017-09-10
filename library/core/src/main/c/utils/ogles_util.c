@@ -3,7 +3,7 @@
 //
 #include "ogles_util.h"
 
-void setupSampler(GLenum target, GLint mag, GLint min)
+void initSampler(GLenum target, GLint mag, GLint min)
 {
     glTexParameteri(target, GL_TEXTURE_MAG_FILTER, mag);
     glTexParameteri(target, GL_TEXTURE_MIN_FILTER, min);
@@ -104,7 +104,7 @@ GLuint loadShader(GLenum shaderType, const char* shaderSource)
     return shader;
 }
 
-GLuint createBuffer(GLfloat *data, GLsizei size)
+GLuint createBuffer(const GLfloat *data, GLsizei size)
 {
     GLuint buffers[1];
 
@@ -114,7 +114,7 @@ GLuint createBuffer(GLfloat *data, GLsizei size)
     return buffers[0];
 }
 
-void updateBuffer(GLuint buffer, GLfloat *data, GLsizei size)
+void updateBuffer(GLuint buffer, const GLfloat *data, GLsizei size)
 {
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
     glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);

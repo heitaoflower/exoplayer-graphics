@@ -40,7 +40,7 @@ static bool load_ogles_library(void)
     return true;
 }
 
-bool init_gfx(void)
+bool gfx_init(void)
 {
     return load_ogles_library();
 }

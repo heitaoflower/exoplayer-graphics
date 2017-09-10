@@ -59,7 +59,7 @@ public class ExogfxRenderer extends ExogfxFramebufferObjectRenderer implements S
         previewTexture.setOnFrameAvailableListener(this);
 
         OGLES.glBindTexture(previewTexture.getTextureTarget(), texName);
-        OGLESUtil.setupSampler(previewTexture.getTextureTarget(), GLES20.GL_LINEAR, GLES20.GL_NEAREST);
+        OGLESUtil.initSampler(previewTexture.getTextureTarget(), GLES20.GL_LINEAR, GLES20.GL_NEAREST);
         OGLES.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
         filterFramebufferObject = new ExogfxFramebufferObject();

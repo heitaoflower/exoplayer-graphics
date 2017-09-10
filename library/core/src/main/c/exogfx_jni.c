@@ -34,7 +34,7 @@
 JNI_METHOD(NativeLibrary, void, nativeInitializeContext)
 (JNIEnv *evn, jobject obj)
 {
-    if (!init_context())
+    if (!context_init())
     {
         LOGE("initialized context failed.");
     }
@@ -364,10 +364,10 @@ JNI_METHOD(OGLES, void, glVertexAttribPointer)
     JNIEXPORT return_type JNICALL                               \
         Java_com_heitao_exogfx_ogles_##class_name##_##method_name
 
-JNI_METHOD(OGLESUtil, void, setupSampler)
+JNI_METHOD(OGLESUtil, void, initSampler)
 (JNIEnv *env, jobject obj, jint target, jint mag, jint min)
 {
-    setupSampler((GLenum)target, (GLint)mag, (GLint)min);
+    initSampler((GLenum)target, (GLint)mag, (GLint)min);
 }
 
 JNI_METHOD(OGLESUtil, jint , loadShader)

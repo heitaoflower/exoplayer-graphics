@@ -3,25 +3,28 @@
 //
 #include "context.h"
 #include "ogles_fbo.h"
+#include "ogles_filter.h"
 #include "../utils/log_util.h"
+
+static struct ogles_fbo fbo;
+static struct ogles_filter filter;
 
 static void create(void)
 {
     LOGI("create");
+    ogles_filter_init(&filter);
 
-    struct ogles_fbo fbo;
-
-    ogles_fbo_setup(&fbo, 100, 200);
+    ogles_fbo_init(&fbo, 100, 200);
 }
 
 static void resize(size_t width, size_t height)
 {
-    LOGI("width%d", width);
+
 }
 
 static void draw(void)
 {
-    LOGI("draw");
+
 }
 
 static void destroy(void)
