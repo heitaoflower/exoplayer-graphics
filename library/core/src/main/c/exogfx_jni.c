@@ -71,13 +71,13 @@ JNI_METHOD(NativeLibrary, void, nativeOnSurfaceCreated)
 JNI_METHOD(NativeLibrary, void, nativeOnSurfaceChanged)
 (JNIEnv *env, jobject obj, jlong renderer, jint width, jint height)
 {
-    native(renderer)->resize((size_t)width, (size_t)height);
+    native(renderer)->resize((GLsizei)width, (GLsizei)height);
 }
 
 JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
-(JNIEnv *env, jobject obj, jlong renderer)
+(JNIEnv *env, jobject obj, jlong renderer, jint texture)
 {
-    native(renderer)->draw();
+    native(renderer)->draw(texture);
 }
 
 #undef JNI_METHOD

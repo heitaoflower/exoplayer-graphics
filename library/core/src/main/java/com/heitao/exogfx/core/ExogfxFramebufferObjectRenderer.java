@@ -18,7 +18,7 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
 
     private long nativeRenderer;
     private ExogfxFramebufferObject framebufferObject;
-    private OGLESFilter presentFilter;
+    private OGLESFilter presentationFilter;
 
     public ExogfxFramebufferObjectRenderer()
     {
@@ -32,8 +32,8 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
         NativeLibrary.nativeOnSurfaceCreated(nativeRenderer);
 
         framebufferObject = new ExogfxFramebufferObject();
-        presentFilter = new OGLESFilter();
-        presentFilter.setup();
+        presentationFilter = new OGLESFilter();
+        presentationFilter.setup();
 
         onSurfaceCreated(config);
     }
@@ -44,7 +44,7 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
         NativeLibrary.nativeOnSurfaceChanged(nativeRenderer, width, height);
 
         framebufferObject.setup(width, height);
-        presentFilter.setFrameSize(width, height);
+        presentationFilter.setFrameSize(width, height);
 
         onSurfaceChanged(width, height);
     }
@@ -52,7 +52,7 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
     @Override
     public void onDrawFrame(GL10 gl) {
 
-        NativeLibrary.nativeDrawFrame(nativeRenderer);
+        NativeLibrary.nativeDrawFrame(nativeRenderer, 99);
 
         framebufferObject.enable();
         OGLES.glViewport(0, 0, framebufferObject.getWidth(), framebufferObject.getHeight());
@@ -64,7 +64,7 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
 
         OGLES.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        presentFilter.draw(framebufferObject.getTexName(), null);
+        presentationFilter.draw(framebufferObject.getTexName(), null);
     }
 
     public abstract void onSurfaceCreated(EGLConfig config);

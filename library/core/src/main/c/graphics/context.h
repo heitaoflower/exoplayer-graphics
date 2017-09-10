@@ -7,6 +7,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "ogles.h"
 
 enum api_type
 {
@@ -17,11 +18,11 @@ enum api_type
 
 struct exogfx_renderer
 {
-    const char* name;
+    const char *name;
     enum api_type api_type;
     void (*create)(void);
-    void (*resize)(size_t width, size_t height);
-    void (*draw)(void);
+    void (*resize)(GLsizei width, GLsizei height);
+    void (*draw)(GLuint);
     void (*destroy)(void);
 };
 

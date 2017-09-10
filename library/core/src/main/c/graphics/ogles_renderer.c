@@ -7,22 +7,27 @@
 #include "../utils/log_util.h"
 
 static struct ogles_fbo fbo;
-static struct ogles_filter filter;
+static struct ogles_filter presentation_filter;
 
 static void create(void)
 {
-    ogles_filter_init(&filter);
+    ogles_filter_init(&presentation_filter);
 }
 
-static void resize(GLint width, GLint height)
+static void resize(GLsizei width, GLsizei height)
 {
     ogles_fbo_init(&fbo, width, height);
-    ogles_filter_resize(&filter, width, height);
+
+    ogles_filter_resize(&presentation_filter, width, height);
 }
 
-static void draw(void)
+static void draw(GLuint texture)
 {
+    //ogles_fbo_enable(&fbo);
 
+    //glViewport(0, 0, fbo.width, fbo.height);
+
+    LOGI("texture%d", texture);
 }
 
 static void destroy(void)
