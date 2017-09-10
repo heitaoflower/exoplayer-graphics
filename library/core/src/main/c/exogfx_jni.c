@@ -40,12 +40,12 @@ JNI_METHOD(NativeLibrary, void, nativeInitializeContext)
     }
 }
 
-inline jlong jptr(struct exogfx_renderer *renderer)
+jlong jptr(struct exogfx_renderer *nativeRenderer)
 {
-    return (jlong)renderer;
+    return (jlong)nativeRenderer;
 }
 
-inline struct exogfx_renderer* native(jlong ptr)
+struct exogfx_renderer* native(jlong ptr)
 {
     return (struct exogfx_renderer*)ptr;
 }
@@ -66,7 +66,6 @@ JNI_METHOD(NativeLibrary, void, nativeOnSurfaceCreated)
 (JNIEnv *env, jobject obj, jlong renderer)
 {
     native(renderer)->create();
-
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnSurfaceChanged)
@@ -356,7 +355,7 @@ JNI_METHOD(OGLES, void, glUseProgram)
 JNI_METHOD(OGLES, void, glVertexAttribPointer)
 (JNIEnv *env, jobject obj, jint index, jint size, jint type, jboolean normalized, jint stride, jint offset)
 {
-    glVertexAttribPointer((GLuint)index, (GLint)size, (GLenum)type, (GLboolean)normalized, (GLsizei)stride, (const void *)offset);
+    glVertexAttribPointer((GLuint)index, (GLint)size, (GLenum)type, (GLboolean)normalized, (GLsizei)stride, (const void*)offset);
 }
 
 #undef JNI_METHOD

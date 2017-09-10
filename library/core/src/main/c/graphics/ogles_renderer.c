@@ -11,15 +11,13 @@ static struct ogles_filter filter;
 
 static void create(void)
 {
-    LOGI("create");
     ogles_filter_init(&filter);
-
-    ogles_fbo_init(&fbo, 100, 200);
 }
 
-static void resize(size_t width, size_t height)
+static void resize(GLint width, GLint height)
 {
-
+    ogles_fbo_init(&fbo, width, height);
+    ogles_filter_resize(&filter, width, height);
 }
 
 static void draw(void)

@@ -2,6 +2,7 @@
 // Created by showtime on 9/5/2017.
 //
 #include "ogles_util.h"
+#include <stdlib.h>
 
 void initSampler(GLenum target, GLint mag, GLint min)
 {
