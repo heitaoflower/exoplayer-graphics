@@ -25,6 +25,7 @@ SET( SOURCES
     ${GRAPHICS_SOURCE_DIR}/ogles_renderer.c
     ${GRAPHICS_SOURCE_DIR}/ogles_fbo.c
     ${GRAPHICS_SOURCE_DIR}/ogles_filter.c
+    ${GRAPHICS_SOURCE_DIR}/ogles_video_filter.c
 
     # Utils source dir.
     ${UTILS_SOURCE_DIR}/load_lib.c
@@ -45,7 +46,8 @@ SET( HEADERS
      ${GRAPHICS_SOURCE_DIR}/ogles.h
      ${GRAPHICS_SOURCE_DIR}/ogles_func.h
      ${GRAPHICS_SOURCE_DIR}/ogles_fbo.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_filter.h )
+     ${GRAPHICS_SOURCE_DIR}/ogles_filter.h
+     ${GRAPHICS_SOURCE_DIR}/ogles_video_filter.h )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
