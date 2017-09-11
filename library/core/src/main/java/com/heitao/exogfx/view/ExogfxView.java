@@ -43,12 +43,13 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
 
     public ExogfxView setSimpleExoPlayer(final SimpleExoPlayer player) {
         if (this.player != null) {
+            this.player.removeVideoListener(this);
             this.player.release();
             this.player = null;
         }
 
         this.player = player;
-        this.player.setVideoListener(this);
+        this.player.addVideoListener(this);
         this.renderer.setSimpleExoPlayer(player);
 
         return this;
