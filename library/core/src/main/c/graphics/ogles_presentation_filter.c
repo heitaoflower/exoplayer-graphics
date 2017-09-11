@@ -1,7 +1,7 @@
 //
 // Created by showtime on 9/10/2017.
 //
-#include "ogles_filter.h"
+#include "ogles_presentation_filter.h"
 #include "../utils/ogles_util.h"
 
 #define L(s) s "\n"
@@ -30,16 +30,10 @@ static const GLfloat VERTICES_DATA[] =
             -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
             1.0f,  -1.0f, 0.0f, 1.0f, 0.0f };
 
-#define FLOAT_SIZE_BYTES 4
-#define VERTICES_DATA_POSITION_SIZE 3
-#define VERTICES_DATA_UV_SIZE 2
-#define VERTICES_DATA_STRIDE_BYTES (VERTICES_DATA_POSITION_SIZE + VERTICES_DATA_UV_SIZE) * FLOAT_SIZE_BYTES
-#define VERTICES_DATA_POSITION_OFFSET 0 * FLOAT_SIZE_BYTES
-#define VERTICES_DATA_UV_OFFSET VERTICES_DATA_POSITION_OFFSET + VERTICES_DATA_POSITION_SIZE * FLOAT_SIZE_BYTES
-
-void ogles_filter_init(struct ogles_filter *filter)
+OGLES_FILTER_INIT(presentation)
+(struct ogles_presentation_filter *filter)
 {
-    ogles_filter_release(filter);
+    ogles_presentation_filter_release(filter);
 
     filter->vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader);
     filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader);
@@ -49,35 +43,42 @@ void ogles_filter_init(struct ogles_filter *filter)
     map_init(&filter->handle_map);
 }
 
-void ogles_filter_resize(struct ogles_filter *filter, GLint width, GLint height)
+OGLES_FILTER_RESIZE(presentation)
+(struct ogles_presentation_filter *filter, GLint width, GLint height)
 {
 
 }
 
-void ogles_filter_draw(struct ogles_filter *filter, GLuint texture, struct ogles_fbo *fbo)
+OGLES_FILTER_DRAW(presentation)
+(struct ogles_presentation_filter *filter, GLuint texture, struct ogles_fbo *fbo)
 {
-    ogles_filter_use_program(filter);
+    ogles_presentation_filter_use_program(filter);
 
     glBindBuffer(GL_ARRAY_BUFFER, filter->vertex_buffer);
-    glEnableVertexAttribArray((GLuint)ogles_filter_get_handle(filter, "aPosition"));
-    glVertexAttribPointer((GLuint)ogles_filter_get_handle(filter, "aPosition"), VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, VERTICES_DATA + VERTICES_DATA_POSITION_OFFSET);
-    glEnableVertexAttribArray((GLuint)ogles_filter_get_handle(filter, "aTextureCoord"));
-    glVertexAttribPointer((GLuint)ogles_filter_get_handle(filter, "aTextureCoord"), VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, VERTICES_DATA + VERTICES_DATA_UV_OFFSET);
+    glEnableVertexAttribArray((GLuint)ogles_presentation_filter_get_handle(filter, "aPosition"));
+    glVertexAttribPointer((GLuint)ogles_presentation_filter_get_handle(filter, "aPosition"), VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, VERTICES_DATA + VERTICES_DATA_POSITION_OFFSET);
+    glEnableVertexAttribArray((GLuint)ogles_presentation_filter_get_handle(filter, "aTextureCoord"));
+    glVertexAttribPointer((GLuint)ogles_presentation_filter_get_handle(filter, "aTextureCoord"), VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, VERTICES_DATA + VERTICES_DATA_UV_OFFSET);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glUniform1i(ogles_filter_get_handle(filter, "sTexture"), 0);
+    glUniform1i(ogles_presentation_filter_get_handle(filter, "sTexture"), 0);
 
-    ogles_filter_draw_cb(filter);
+    ogles_presentation_filter_draw_cb(filter);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glDisableVertexAttribArray((GLuint)ogles_filter_get_handle(filter, "aPosition"));
-    glDisableVertexAttribArray((GLuint)ogles_filter_get_handle(filter, "aTextureCoord"));
+    glDisableVertexAttribArray((GLuint)ogles_presentation_filter_get_handle(filter, "aPosition"));
+    glDisableVertexAttribArray((GLuint)ogles_presentation_filter_get_handle(filter, "aTextureCoord"));
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindTexture(GL_ARRAY_BUFFER, 0);
 }
 
-void ogles_filter_release(struct ogles_filter *filter)
+OGLES_FILTER_DRAW_CB(presentation)(struct ogles_presentation_filter *filter)
+{
+
+}
+OGLES_FILTER_RELEASE(presentation)
+(struct ogles_presentation_filter *filter)
 {
     glDeleteProgram(filter->program);
     filter->program = 0;
@@ -94,22 +95,17 @@ void ogles_filter_release(struct ogles_filter *filter)
     map_deinit(&filter->handle_map);
 }
 
-void ogles_filter_draw_cb(struct ogles_filter *filter)
-{
-
-}
-
-void ogles_filter_use_program(struct ogles_filter *filter)
+OGLES_FILTER_USE_PROGRAM(presentation)(struct ogles_presentation_filter *filter)
 {
     glUseProgram(filter->program);
 }
 
-GLuint ogles_filter_get_vertex_buffer(struct ogles_filter *filter)
+OGLES_FILTER_GET_VERTEX_BUFFER(presentation)(struct ogles_presentation_filter *filter)
 {
     return filter->vertex_buffer;
 }
 
-GLint ogles_filter_get_handle(struct ogles_filter *filter, const GLchar *name)
+OGLES_FILTER_GET_HANDLE(presentation)(struct ogles_presentation_filter *filter, const GLchar *name)
 {
     GLuint* value = (GLuint*)map_get(&filter->handle_map, name);
 

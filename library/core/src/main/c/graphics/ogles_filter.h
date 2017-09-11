@@ -1,37 +1,39 @@
 //
-// Created by showtime on 9/10/2017.
+// Created by showtime on 9/11/2017.
 //
 
 #ifndef EXOPLAYER_GRAPHICS_OGLES_FILTER_H
 #define EXOPLAYER_GRAPHICS_OGLES_FILTER_H
 
-#include "ogles.h"
-#include "ogles_fbo.h"
-#include "../utils/map.h"
+#define FLOAT_SIZE_BYTES 4
+#define VERTICES_DATA_POSITION_SIZE 3
+#define VERTICES_DATA_UV_SIZE 2
+#define VERTICES_DATA_STRIDE_BYTES (VERTICES_DATA_POSITION_SIZE + VERTICES_DATA_UV_SIZE) * FLOAT_SIZE_BYTES
+#define VERTICES_DATA_POSITION_OFFSET 0 * FLOAT_SIZE_BYTES
+#define VERTICES_DATA_UV_OFFSET VERTICES_DATA_POSITION_OFFSET + VERTICES_DATA_POSITION_SIZE * FLOAT_SIZE_BYTES
 
-struct ogles_filter
-{
-    GLuint program;
-    GLuint vertex_shader;
-    GLuint fragment_shader;
-    GLuint vertex_buffer;
-    map_int_t handle_map;
-};
+#define OGLES_FILTER_INIT(name)    \
+        void ogles_##name##_filter_init
 
-void ogles_filter_init(struct ogles_filter *filter);
+#define OGLES_FILTER_RELEASE(name) \
+        void ogles_##name##_filter_release
 
-void ogles_filter_release(struct ogles_filter *filter);
+#define OGLES_FILTER_RESIZE(name)  \
+        void ogles_##name##_filter_resize
 
-void ogles_filter_resize(struct ogles_filter *filter, GLint width, GLint height);
+#define OGLES_FILTER_DRAW(name)    \
+        void ogles_##name##_filter_draw
 
-void ogles_filter_draw(struct ogles_filter *filter, GLuint texture, struct ogles_fbo *fbo);
+#define OGLES_FILTER_DRAW_CB(name) \
+        void ogles_##name##_filter_draw_cb
 
-void ogles_filter_draw_cb(struct ogles_filter *filter);
+#define OGLES_FILTER_USE_PROGRAM(name) \
+        void ogles_##name##_filter_use_program
 
-void ogles_filter_use_program(struct ogles_filter *filter);
+#define OGLES_FILTER_GET_VERTEX_BUFFER(name)    \
+        GLuint ogles_##name##_filter_get_vertex_buffer
 
-GLuint ogles_filter_get_vertex_buffer(struct ogles_filter *filter);
-
-GLint ogles_filter_get_handle(struct ogles_filter *filter, const GLchar *name);
+#define OGLES_FILTER_GET_HANDLE(name)  \
+        GLint ogles_##name##_filter_get_handle
 
 #endif //EXOPLAYER_GRAPHICS_OGLES_FILTER_H

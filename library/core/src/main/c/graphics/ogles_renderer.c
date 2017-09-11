@@ -3,22 +3,22 @@
 //
 #include "context.h"
 #include "ogles_fbo.h"
-#include "ogles_filter.h"
+#include "ogles_presentation_filter.h"
 #include "../utils/log_util.h"
 
 static struct ogles_fbo fbo;
-static struct ogles_filter presentation_filter;
+static struct ogles_presentation_filter presentation_filter;
 
 static void create(void)
 {
-    ogles_filter_init(&presentation_filter);
+    ogles_presentation_filter_init(&presentation_filter);
 }
 
 static void resize(GLsizei width, GLsizei height)
 {
     ogles_fbo_init(&fbo, width, height);
 
-    ogles_filter_resize(&presentation_filter, width, height);
+    ogles_presentation_filter_resize(&presentation_filter, width, height);
 }
 
 static void draw(GLuint texture)
