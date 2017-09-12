@@ -33,20 +33,20 @@ void ogles_fbo_resize(struct ogles_fbo *fbo, GLsizei width, GLsizei height)
     fbo->width = width;
     fbo->height = height;
 
-    glGenFramebuffers(1, &fbo->framebuffer_name);
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo->framebuffer_name);
+    glGenFramebuffers(1, &fbo->framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo->framebuffer);
 
-    glGenRenderbuffers(1, &fbo->renderbuffer_name);
-    glBindRenderbuffer(GL_RENDERBUFFER, fbo->renderbuffer_name);
+    glGenRenderbuffers(1, &fbo->renderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, fbo->renderbuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, fbo->width, fbo->height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fbo->renderbuffer_name);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fbo->renderbuffer);
 
-    glGenTextures(1, &fbo->texture_name);
-    glBindTexture(GL_TEXTURE_2D, fbo->texture_name);
+    glGenTextures(1, &fbo->rendertexture);
+    glBindTexture(GL_TEXTURE_2D, fbo->rendertexture);
 
     initSampler(GL_TEXTURE_2D, GL_LINEAR, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fbo->width, fbo->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo->texture_name, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo->rendertexture, 0);
 
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
@@ -64,17 +64,17 @@ void ogles_fbo_resize(struct ogles_fbo *fbo, GLsizei width, GLsizei height)
 
 void ogles_fbo_release(struct ogles_fbo* fbo)
 {
-    glDeleteTextures(1, &fbo->texture_name);
-    fbo->texture_name = 0;
+    glDeleteTextures(1, &fbo->rendertexture);
+    fbo->rendertexture = 0;
 
-    glDeleteRenderbuffers(1, &fbo->renderbuffer_name);
-    fbo->renderbuffer_name = 0;
+    glDeleteRenderbuffers(1, &fbo->renderbuffer);
+    fbo->renderbuffer = 0;
 
-    glDeleteFramebuffers(1, &fbo->framebuffer_name);
-    fbo->framebuffer_name = 0;
+    glDeleteFramebuffers(1, &fbo->framebuffer);
+    fbo->framebuffer = 0;
 }
 
 void ogles_fbo_enable(struct ogles_fbo* fbo)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo->framebuffer_name);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo->framebuffer);
 }

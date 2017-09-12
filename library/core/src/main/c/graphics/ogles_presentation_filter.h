@@ -29,7 +29,7 @@ OGLES_FILTER_RESIZE(presentation)
 (struct ogles_presentation_filter *filter, GLint width, GLint height);
 
 OGLES_FILTER_DRAW(presentation)
-(struct ogles_presentation_filter *filter, GLuint texture, struct ogles_fbo *fbo);
+(struct ogles_presentation_filter *filter, GLuint texture);
 
 OGLES_FILTER_DRAW_CB(presentation)
 (struct ogles_presentation_filter *filter);

@@ -13,9 +13,9 @@ struct ogles_fbo
 {
     GLsizei width;
     GLsizei height;
-    GLuint framebuffer_name;
-    GLuint renderbuffer_name;
-    GLuint texture_name;
+    GLuint framebuffer;
+    GLuint renderbuffer;
+    GLuint rendertexture;
 };
 
 void ogles_fbo_resize(struct ogles_fbo *fbo, GLsizei width, GLsizei height);

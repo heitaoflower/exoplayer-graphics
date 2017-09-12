@@ -43,15 +43,15 @@ OGLES_FILTER_RESIZE(presentation)
 }
 
 OGLES_FILTER_DRAW(presentation)
-(struct ogles_presentation_filter *filter, GLuint texture, struct ogles_fbo *fbo)
+(struct ogles_presentation_filter *filter, GLuint texture)
 {
     ogles_presentation_filter_use_program(filter);
 
     glBindBuffer(GL_ARRAY_BUFFER, filter->vertex_buffer);
     glEnableVertexAttribArray((GLuint)ogles_presentation_filter_get_handle(filter, "aPosition"));
-    glVertexAttribPointer((GLuint)ogles_presentation_filter_get_handle(filter, "aPosition"), VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, VERTICES_DATA + VERTICES_DATA_POSITION_OFFSET);
+    glVertexAttribPointer((GLuint)ogles_presentation_filter_get_handle(filter, "aPosition"), VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, VERTICES_DATA_POSITION_OFFSET);
     glEnableVertexAttribArray((GLuint)ogles_presentation_filter_get_handle(filter, "aTextureCoord"));
-    glVertexAttribPointer((GLuint)ogles_presentation_filter_get_handle(filter, "aTextureCoord"), VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, VERTICES_DATA + VERTICES_DATA_UV_OFFSET);
+    glVertexAttribPointer((GLuint)ogles_presentation_filter_get_handle(filter, "aTextureCoord"), VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, VERTICES_DATA_UV_OFFSET);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -63,7 +63,7 @@ OGLES_FILTER_DRAW(presentation)
     glDisableVertexAttribArray((GLuint)ogles_presentation_filter_get_handle(filter, "aPosition"));
     glDisableVertexAttribArray((GLuint)ogles_presentation_filter_get_handle(filter, "aTextureCoord"));
     glBindTexture(GL_TEXTURE_2D, 0);
-    glBindTexture(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 OGLES_FILTER_DRAW_CB(presentation)(struct ogles_presentation_filter *filter)

@@ -48,28 +48,21 @@ static void draw(GLuint texture)
             0.0, 0.0, 0.0, 1.0
     };
 
-    //ogles_fbo_enable(&fbo);
-
+    ogles_fbo_enable(&fbo);
+    glViewport(0, 0, fbo.width, fbo.height);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glBindTexture(video_filter.target, texture);
-
-    LOGI("video_filter.target%d   texture %d", video_filter.target, texture);
-
     initSampler(video_filter.target, GL_LINEAR, GL_NEAREST);
-
     glBindTexture(GL_TEXTURE_2D, 0);
 
     ogles_video_filter_draw(&video_filter, texture, m, st, 1.0);
 
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, fbo.width, fbo.height);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    //glViewport(0, 0, fbo.width, fbo.height);
-
-    //ogles_presentation_filter_draw(&presentation_filter, fbo.renderbuffer_name, NULL);
-
+    ogles_presentation_filter_draw(&presentation_filter, fbo.rendertexture);
 }
 
 static void destroy(void)
