@@ -85,10 +85,10 @@ JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
     JNIEXPORT return_type JNICALL                               \
         Java_com_heitao_exogfx_ogles_##class_name##_##method_name
 
-JNI_METHOD(OGLES, jboolean, glCheckFramebufferStatus)
+JNI_METHOD(OGLES, jint , glCheckFramebufferStatus)
 (JNIEnv *env, jobject obj, jint target)
 {
-    return (jboolean)glCheckFramebufferStatus((GLenum)target);
+    return glCheckFramebufferStatus((GLenum)target);
 }
 
 JNI_METHOD(OGLES, void, glClear)

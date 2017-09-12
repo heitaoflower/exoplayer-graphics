@@ -36,4 +36,11 @@
 #define OGLES_FILTER_GET_HANDLE(name)  \
         GLint ogles_##name##_filter_get_handle
 
+static const GLfloat VERTICES_DATA[] =
+        {
+                -1.0f, 1.0f,  0.0f, 0.0f, 1.0f,
+                1.0f,  1.0f,  0.0f, 1.0f, 1.0f,
+                -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+                1.0f,  -1.0f, 0.0f, 1.0f, 0.0f };
+
 #endif //EXOPLAYER_GRAPHICS_OGLES_FILTER_H

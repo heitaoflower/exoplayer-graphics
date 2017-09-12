@@ -1,9 +1,6 @@
 package com.heitao.exogfx.core;
 
-import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-
-import com.heitao.exogfx.ogles.OGLES;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -17,8 +14,6 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
     private static final String TAG = ExogfxFramebufferObjectRenderer.class.getSimpleName();
 
     private long nativeRenderer;
-    private ExogfxFramebufferObject framebufferObject;
-    private OGLESFilter presentationFilter;
 
     public ExogfxFramebufferObjectRenderer()
     {
@@ -31,10 +26,6 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
 
         NativeLibrary.nativeOnSurfaceCreated(nativeRenderer);
 
-        framebufferObject = new ExogfxFramebufferObject();
-        presentationFilter = new OGLESFilter();
-        presentationFilter.setup();
-
         onSurfaceCreated(config);
     }
 
@@ -43,35 +34,22 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
 
         NativeLibrary.nativeOnSurfaceChanged(nativeRenderer, width, height);
 
-        framebufferObject.setup(width, height);
-        presentationFilter.setFrameSize(width, height);
-
         onSurfaceChanged(width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
 
-        NativeLibrary.nativeDrawFrame(nativeRenderer, 99);
+        onDrawFrame();
 
-        framebufferObject.enable();
-        OGLES.glViewport(0, 0, framebufferObject.getWidth(), framebufferObject.getHeight());
-
-        onDrawFrame(framebufferObject);
-
-        OGLES.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
-        OGLES.glViewport(0, 0, framebufferObject.getWidth(), framebufferObject.getHeight());
-
-        OGLES.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-
-        presentationFilter.draw(framebufferObject.getTexName(), null);
+        NativeLibrary.nativeDrawFrame(nativeRenderer, 1);
     }
 
     public abstract void onSurfaceCreated(EGLConfig config);
 
     public abstract void onSurfaceChanged(int width, int height);
 
-    public abstract void onDrawFrame(ExogfxFramebufferObject framebufferObject);
+    public abstract void onDrawFrame();
 
 
 }

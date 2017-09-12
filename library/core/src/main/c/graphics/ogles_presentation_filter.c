@@ -23,13 +23,6 @@ static const char *fragment_shader =
         L("}");
 #undef L
 
-static const GLfloat VERTICES_DATA[] =
-        {
-            -1.0f, 1.0f,  0.0f, 0.0f, 1.0f,
-            1.0f,  1.0f,  0.0f, 1.0f, 1.0f,
-            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-            1.0f,  -1.0f, 0.0f, 1.0f, 0.0f };
-
 OGLES_FILTER_INIT(presentation)
 (struct ogles_presentation_filter *filter)
 {

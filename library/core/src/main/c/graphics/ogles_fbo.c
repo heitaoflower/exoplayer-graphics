@@ -5,7 +5,7 @@
 #include "../utils/log_util.h"
 #include "../utils/ogles_util.h"
 
-void ogles_fbo_init(struct ogles_fbo *fbo, GLsizei width, GLsizei height)
+void ogles_fbo_resize(struct ogles_fbo *fbo, GLsizei width, GLsizei height)
 {
     GLint params[1];
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, params);

@@ -18,7 +18,7 @@ struct ogles_fbo
     GLuint texture_name;
 };
 
-void ogles_fbo_init(struct ogles_fbo *fbo, GLsizei width, GLsizei height);
+void ogles_fbo_resize(struct ogles_fbo *fbo, GLsizei width, GLsizei height);
 
 void ogles_fbo_release(struct ogles_fbo* fbo);
 
