@@ -81,9 +81,9 @@ OGLES_FILTER_DRAW(video)
     glBindBuffer(GL_ARRAY_BUFFER, ogles_video_filter_get_vertex_buffer(filter));
     glEnableVertexAttribArray((GLuint)ogles_video_filter_get_handle(filter, "aPosition"));
 
-    glVertexAttribPointer((GLuint)ogles_video_filter_get_handle(filter, "aPosition"), VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, VERTICES_DATA_POSITION_OFFSET);
+    glVertexAttribPointer((GLuint)ogles_video_filter_get_handle(filter, "aPosition"), VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, (void*)(VERTICES_DATA_POSITION_OFFSET));
     glEnableVertexAttribArray((GLuint)ogles_video_filter_get_handle(filter, "aTextureCoord"));
-    glVertexAttribPointer((GLuint)ogles_video_filter_get_handle(filter, "aTextureCoord"), VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, VERTICES_DATA_UV_OFFSET);
+    glVertexAttribPointer((GLuint)ogles_video_filter_get_handle(filter, "aTextureCoord"), VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, (void*)(VERTICES_DATA_UV_OFFSET));
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(filter->target, texture);
