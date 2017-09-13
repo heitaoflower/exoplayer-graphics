@@ -12,6 +12,7 @@ cmake_minimum_required(VERSION 3.4.1)
 
 set (SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/main/c")
 set (GRAPHICS_SOURCE_DIR "${SOURCE_DIR}/graphics")
+set (MATH_SOURCE_DIR "${SOURCE_DIR}/math")
 set (UTILS_SOURCE_DIR "${SOURCE_DIR}/utils")
 
 SET( SOURCES
@@ -39,6 +40,9 @@ SET( HEADERS
      ${UTILS_SOURCE_DIR}/ogles_util.h
      ${UTILS_SOURCE_DIR}/load_lib.h
      ${UTILS_SOURCE_DIR}/map.h
+
+     # Math source dir.
+     ${MATH_SOURCE_DIR}/math.h
 
      # Graphics source dir.
      ${GRAPHICS_SOURCE_DIR}/gfx.h
