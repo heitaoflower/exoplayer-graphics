@@ -19,28 +19,28 @@ struct ogles_video_filter
     GLuint target;
     map_int_t handle_map;
 };
-OGLES_FILTER_INIT(video)
+ogles_filter_init(video)
 (struct ogles_video_filter *filter);
 
-OGLES_FILTER_RELEASE(video)
+ogles_filter_release(video)
 (struct ogles_video_filter *filter);
 
-OGLES_FILTER_RESIZE(video)
+ogles_filter_resize(video)
 (struct ogles_video_filter *filter, GLint width, GLint height);
 
-OGLES_FILTER_DRAW(video)
+ogles_filter_draw(video)
 (struct ogles_video_filter *filter, GLuint texture, const float mvp_matrix[], const float st_matrix[], const float aspect_ratio);
 
-OGLES_FILTER_DRAW_CB(video)
+ogles_filter_draw_cb(video)
 (struct ogles_video_filter *filter);
 
-OGLES_FILTER_USE_PROGRAM(video)
+ogles_filter_use_program(video)
 (struct ogles_video_filter *filter);
 
-OGLES_FILTER_GET_VERTEX_BUFFER(video)
+ogles_filter_get_vertex_buffer(video)
 (struct ogles_video_filter *filter);
 
-OGLES_FILTER_GET_HANDLE(video)
+ogles_filter_get_handle(video)
 (struct ogles_video_filter *filter, const GLchar *name);
 
 #endif //EXOPLAYER_GRAPHICS_OGLES_VIDEO_FILTER_H

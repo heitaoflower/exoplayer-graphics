@@ -7,6 +7,10 @@
 
 #include <stdbool.h>
 
+#ifndef PI
+#define PI 3.14159265358979323846264338327950288419716939937510f
+#endif
+
 #pragma pack(1)
 
 struct vec2
@@ -24,10 +28,14 @@ struct vec4
     float x, y, z, w;
 };
 
-typedef struct vec3 mat3[3];
-typedef struct vec3 mat4x3[4];
 typedef struct vec4 mat4[4];
 
 #pragma pack()
+
+float length(float x, float y, float z);
+
+float deg2rad(float deg);
+
+float rad2deg(float rad);
 
 #endif //EXOPLAYER_MATH_H

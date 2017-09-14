@@ -12,28 +12,28 @@
 #define VERTICES_DATA_POSITION_OFFSET 0 * FLOAT_SIZE_BYTES
 #define VERTICES_DATA_UV_OFFSET VERTICES_DATA_POSITION_OFFSET + VERTICES_DATA_POSITION_SIZE * FLOAT_SIZE_BYTES
 
-#define OGLES_FILTER_INIT(name)    \
+#define ogles_filter_init(name)    \
         void ogles_##name##_filter_init
 
-#define OGLES_FILTER_RELEASE(name) \
+#define ogles_filter_release(name) \
         void ogles_##name##_filter_release
 
-#define OGLES_FILTER_RESIZE(name)  \
+#define ogles_filter_resize(name)  \
         void ogles_##name##_filter_resize
 
-#define OGLES_FILTER_DRAW(name)    \
+#define ogles_filter_draw(name)    \
         void ogles_##name##_filter_draw
 
-#define OGLES_FILTER_DRAW_CB(name) \
+#define ogles_filter_draw_cb(name) \
         void ogles_##name##_filter_draw_cb
 
-#define OGLES_FILTER_USE_PROGRAM(name) \
+#define ogles_filter_use_program(name) \
         void ogles_##name##_filter_use_program
 
-#define OGLES_FILTER_GET_VERTEX_BUFFER(name)    \
+#define ogles_filter_get_vertex_buffer(name)    \
         GLuint ogles_##name##_filter_get_vertex_buffer
 
-#define OGLES_FILTER_GET_HANDLE(name)  \
+#define ogles_filter_get_handle(name)  \
         GLint ogles_##name##_filter_get_handle
 
 static const GLfloat VERTICES_DATA[] =

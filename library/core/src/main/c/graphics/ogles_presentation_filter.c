@@ -23,7 +23,7 @@ static const char *fragment_shader =
         L("}");
 #undef L
 
-OGLES_FILTER_INIT(presentation)
+ogles_filter_init(presentation)
 (struct ogles_presentation_filter *filter)
 {
     ogles_presentation_filter_release(filter);
@@ -36,13 +36,13 @@ OGLES_FILTER_INIT(presentation)
     map_init(&filter->handle_map);
 }
 
-OGLES_FILTER_RESIZE(presentation)
+ogles_filter_resize(presentation)
 (struct ogles_presentation_filter *filter, GLint width, GLint height)
 {
 
 }
 
-OGLES_FILTER_DRAW(presentation)
+ogles_filter_draw(presentation)
 (struct ogles_presentation_filter *filter, GLuint texture)
 {
     ogles_presentation_filter_use_program(filter);
@@ -66,11 +66,11 @@ OGLES_FILTER_DRAW(presentation)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-OGLES_FILTER_DRAW_CB(presentation)(struct ogles_presentation_filter *filter)
+ogles_filter_draw_cb(presentation)(struct ogles_presentation_filter *filter)
 {
 
 }
-OGLES_FILTER_RELEASE(presentation)
+ogles_filter_release(presentation)
 (struct ogles_presentation_filter *filter)
 {
     glDeleteProgram(filter->program);
@@ -88,17 +88,17 @@ OGLES_FILTER_RELEASE(presentation)
     map_deinit(&filter->handle_map);
 }
 
-OGLES_FILTER_USE_PROGRAM(presentation)(struct ogles_presentation_filter *filter)
+ogles_filter_use_program(presentation)(struct ogles_presentation_filter *filter)
 {
     glUseProgram(filter->program);
 }
 
-OGLES_FILTER_GET_VERTEX_BUFFER(presentation)(struct ogles_presentation_filter *filter)
+ogles_filter_get_vertex_buffer(presentation)(struct ogles_presentation_filter *filter)
 {
     return filter->vertex_buffer;
 }
 
-OGLES_FILTER_GET_HANDLE(presentation)(struct ogles_presentation_filter *filter, const GLchar *name)
+ogles_filter_get_handle(presentation)(struct ogles_presentation_filter *filter, const GLchar *name)
 {
     GLuint* value = (GLuint*)map_get(&filter->handle_map, name);
 

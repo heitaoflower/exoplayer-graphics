@@ -31,7 +31,11 @@ SET( SOURCES
     # Utils source dir.
     ${UTILS_SOURCE_DIR}/load_lib.c
     ${UTILS_SOURCE_DIR}/ogles_util.c
-    ${UTILS_SOURCE_DIR}/map.c )
+    ${UTILS_SOURCE_DIR}/map.c
+
+    # Math source dir.
+    ${MATH_SOURCE_DIR}/math.c
+    ${MATH_SOURCE_DIR}/mat4.c )
 
 SET( HEADERS
 
@@ -43,6 +47,7 @@ SET( HEADERS
 
      # Math source dir.
      ${MATH_SOURCE_DIR}/math.h
+     ${MATH_SOURCE_DIR}/mat4.h
 
      # Graphics source dir.
      ${GRAPHICS_SOURCE_DIR}/gfx.h

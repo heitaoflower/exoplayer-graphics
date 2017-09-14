@@ -31,7 +31,7 @@ static const char *fragment_shader =
                 L("}");
 #undef L
 
-OGLES_FILTER_INIT(video)
+ogles_filter_init(video)
 (struct ogles_video_filter *filter)
 {
     ogles_video_filter_release(filter);
@@ -40,12 +40,12 @@ OGLES_FILTER_INIT(video)
     filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader);
     filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);
     filter->vertex_buffer = createBuffer(VERTICES_DATA, sizeof(VERTICES_DATA));
-    filter->target = 0x8D65;
+    filter->target = GL_TEXTURE_EXTERNAL_OES;
 
     map_init(&filter->handle_map);
 }
 
-OGLES_FILTER_RELEASE(video)
+ogles_filter_release(video)
 (struct ogles_video_filter *filter)
 {
     glDeleteProgram(filter->program);
@@ -63,13 +63,13 @@ OGLES_FILTER_RELEASE(video)
     map_deinit(&filter->handle_map);
 }
 
-OGLES_FILTER_RESIZE(video)
+ogles_filter_resize(video)
 (struct ogles_video_filter *filter, GLint width, GLint height)
 {
 
 }
 
-OGLES_FILTER_DRAW(video)
+ogles_filter_draw(video)
 (struct ogles_video_filter *filter, GLuint texture, const float mvp_matrix[], const float st_matrix[], const float aspect_ratio)
 {
     ogles_video_filter_use_program(filter);
@@ -97,25 +97,25 @@ OGLES_FILTER_DRAW(video)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-OGLES_FILTER_DRAW_CB(video)
+ogles_filter_draw_cb(video)
 (struct ogles_video_filter *filter)
 {
 
 }
 
-OGLES_FILTER_USE_PROGRAM(video)
+ogles_filter_use_program(video)
 (struct ogles_video_filter *filter)
 {
     glUseProgram(filter->program);
 }
 
-OGLES_FILTER_GET_VERTEX_BUFFER(video)
+ogles_filter_get_vertex_buffer(video)
 (struct ogles_video_filter *filter)
 {
     return filter->vertex_buffer;
 }
 
-OGLES_FILTER_GET_HANDLE(video)
+ogles_filter_get_handle(video)
 (struct ogles_video_filter *filter, const GLchar *name)
 {
     GLuint* value = (GLuint*)map_get(&filter->handle_map, name);

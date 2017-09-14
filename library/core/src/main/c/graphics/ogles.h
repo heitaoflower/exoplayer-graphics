@@ -9,6 +9,8 @@
 
 #define GL_FN(fn) gl_##fn
 
+#define GL_TEXTURE_EXTERNAL_OES 0x8D65
+
 #define glCheckFramebufferStatus GL_FN(glCheckFramebufferStatus)
 #define glClear GL_FN(glClear)
 #define glClearColor GL_FN(glClearColor)

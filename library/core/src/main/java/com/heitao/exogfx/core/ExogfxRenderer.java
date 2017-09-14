@@ -1,6 +1,7 @@
 package com.heitao.exogfx.core;
 
 import android.graphics.SurfaceTexture;
+import android.opengl.Matrix;
 import android.util.Log;
 import android.view.Surface;
 
@@ -49,6 +50,15 @@ public class ExogfxRenderer extends ExogfxFramebufferObjectRenderer implements S
         Surface surface = new Surface(previewTexture.getSurfaceTexture());
 
         simpleExoPlayer.setVideoSurface(surface);
+
+        float[] VMatrix= new float[16];
+        Matrix.setLookAtM(VMatrix, 0,
+                0.0f, 0.0f, 5.0f,
+                0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f
+        );
+
+        Log.d(TAG, VMatrix.toString());
     }
 
     @Override

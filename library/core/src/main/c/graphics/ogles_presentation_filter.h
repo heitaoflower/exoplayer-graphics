@@ -19,28 +19,28 @@ struct ogles_presentation_filter
     map_int_t handle_map;
 };
 
-OGLES_FILTER_INIT(presentation)
+ogles_filter_init(presentation)
 (struct ogles_presentation_filter *filter);
 
-OGLES_FILTER_RELEASE(presentation)
+ogles_filter_release(presentation)
 (struct ogles_presentation_filter *filter);
 
-OGLES_FILTER_RESIZE(presentation)
+ogles_filter_resize(presentation)
 (struct ogles_presentation_filter *filter, GLint width, GLint height);
 
-OGLES_FILTER_DRAW(presentation)
+ogles_filter_draw(presentation)
 (struct ogles_presentation_filter *filter, GLuint texture);
 
-OGLES_FILTER_DRAW_CB(presentation)
+ogles_filter_draw_cb(presentation)
 (struct ogles_presentation_filter *filter);
 
-OGLES_FILTER_USE_PROGRAM(presentation)
+ogles_filter_use_program(presentation)
 (struct ogles_presentation_filter *filter);
 
-OGLES_FILTER_GET_VERTEX_BUFFER(presentation)
+ogles_filter_get_vertex_buffer(presentation)
 (struct ogles_presentation_filter *filter);
 
-OGLES_FILTER_GET_HANDLE(presentation)
+ogles_filter_get_handle(presentation)
 (struct ogles_presentation_filter *filter, const GLchar *name);
 
 #endif //EXOPLAYER_GRAPHICS_OGLES_PRESENTATION_FILTER_H

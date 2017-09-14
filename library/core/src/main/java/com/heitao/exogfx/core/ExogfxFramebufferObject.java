@@ -1,6 +1,7 @@
 package com.heitao.exogfx.core;
 
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 
 import com.heitao.exogfx.ogles.OGLES;
 import com.heitao.exogfx.ogles.OGLESUtil;
