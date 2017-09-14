@@ -55,10 +55,6 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
         return this;
     }
 
-    public void setFilter() {
-
-    }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -82,6 +78,7 @@ public class ExogfxView extends GLSurfaceView implements SimpleExoPlayer.VideoLi
 
         setMeasuredDimension(viewWidth, viewHeight);
     }
+
 
     @Override
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {

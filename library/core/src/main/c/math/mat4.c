@@ -8,31 +8,30 @@
 #include <math.h>
 #include <assert.h>
 
-float* mat4_get(float *mat4, int row, int col)
+float* mat4_get(mat4 *mat, int row, int col)
 {
-    /* column major */
-    return mat4 + (row + (col << 2));
+    return (float*)mat + (row + (col << 2));
 }
 
-void mat4_identity(float *mat4)
+void mat4_identity(mat4 *mat)
 {
-    memset(mat4, 0, sizeof(*mat4) * 4 * 4);
+    memset(mat, 0, sizeof(*mat) * 4 * 4);
 
     for (int i = 0; i < 4; i++)
     {
-        *mat4_get(mat4, i, i) = 1.0f;
+        *mat4_get(mat, i, i) = 1.0f;
     }
 }
 
-void mat4_multiply(float *dst, float *src1, float *src2)
+void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2)
 {
-    float mat4[16];
+    float mat[16];
 
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < 4; j++)
         {
-            *mat4_get(mat4, i, j) =
+            *mat4_get(mat, i, j) =
                     *mat4_get(src1, i, 0) * *mat4_get(src2, 0, j) +
                     *mat4_get(src1, i, 1) * *mat4_get(src2, 1, j) +
                     *mat4_get(src1, i, 2) * *mat4_get(src2, 2, j) +
@@ -41,7 +40,7 @@ void mat4_multiply(float *dst, float *src1, float *src2)
 
     }
 
-    memcpy(dst, mat4, sizeof(mat4));
+    memcpy(dst, mat, sizeof(mat4));
 }
 
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFrustum.xml
@@ -78,7 +77,7 @@ void mat4_multiply(float *dst, float *src1, float *src2)
 *         farVal - nearVal
 *
 */
-void mat4_frustum(float *mat4, float left, float right, float bottom, float top, float nearVal, float farVal)
+void mat4_frustum(mat4 *mat, float left, float right, float bottom, float top, float nearVal, float farVal)
 {
     assert(left != right && top != bottom && farVal != nearVal);
 
@@ -87,14 +86,14 @@ void mat4_frustum(float *mat4, float left, float right, float bottom, float top,
     float C = - (farVal + nearVal) / (farVal - nearVal);
     float D = - (2.0f * farVal * nearVal) / (farVal - nearVal);
 
-    memset(mat4, 0, sizeof(*mat4) * 4 * 4);
-    *mat4_get(mat4, 0, 0) = (2.0f * nearVal) / (right - left);
-    *mat4_get(mat4, 0, 2) = A;
-    *mat4_get(mat4, 1, 1) = (2.0f * nearVal) / (top - bottom);
-    *mat4_get(mat4, 1, 2) = B;
-    *mat4_get(mat4, 2, 2) = C;
-    *mat4_get(mat4, 2, 3) = D;
-    *mat4_get(mat4, 3, 2) = -1.0f;
+    memset(mat, 0, sizeof(*mat) * 4 * 4);
+    *mat4_get(mat, 0, 0) = (2.0f * nearVal) / (right - left);
+    *mat4_get(mat, 0, 2) = A;
+    *mat4_get(mat, 1, 1) = (2.0f * nearVal) / (top - bottom);
+    *mat4_get(mat, 1, 2) = B;
+    *mat4_get(mat, 2, 2) = C;
+    *mat4_get(mat, 2, 3) = D;
+    *mat4_get(mat, 3, 2) = -1.0f;
 }
 
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml
@@ -117,18 +116,23 @@ void mat4_frustum(float *mat4, float left, float right, float bottom, float top,
 * \                                                       /
 *
 */
-void mat4_perspective(float *mat4, float fovy, float aspect, float zNear, float zFar)
+void mat4_perspective(mat4 *mat, float fovy, float aspect, float zNear, float zFar)
 {
     float f = (1.0f / (float)tan(fovy / 2.0));
-    memset(mat4, 0, sizeof(*mat4) * 4 * 4);
+    memset(mat, 0, sizeof(*mat) * 4 * 4);
 
     assert(aspect != 0.0 && zNear != zFar);
 
-    *mat4_get(mat4, 0, 0) = f / aspect;
-    *mat4_get(mat4, 1, 1) = f;
-    *mat4_get(mat4, 2, 2) = (zFar + zNear) / (zNear - zFar);
-    *mat4_get(mat4, 2, 3) = (2.0f * zFar * zNear) / (zNear - zFar);
-    *mat4_get(mat4, 3, 2) = -1.0f;
+    *mat4_get(mat, 0, 0) = f / aspect;
+    *mat4_get(mat, 1, 1) = f;
+    *mat4_get(mat, 2, 2) = (zFar + zNear) / (zNear - zFar);
+    *mat4_get(mat, 2, 3) = (2.0f * zFar * zNear) / (zNear - zFar);
+    *mat4_get(mat, 3, 2) = -1.0f;
+}
+
+void mat4_perspective_default(mat4 *mat)
+{
+    mat4_perspective(mat, deg2rad(60), 1, 0.03f, 1000);
 }
 
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluLookAt.xml
@@ -151,8 +155,15 @@ void mat4_perspective(float *mat4, float fovy, float aspect, float zNear, float 
 * \                                                       /
 *
 */
-void mat4_lookat(float *mat4, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ)
+void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ)
 {
+    if (fabsf(eyeX - centerX) < 0.000001 &&
+        fabsf(eyeY - centerY) < 0.000001 &&
+        fabsf(eyeZ - centerZ) < 0.000001) {
+        mat4_identity(mat);
+        return;
+    }
+
     float fx = centerX - eyeX;
     float fy = centerY - eyeY;
     float fz = centerZ - eyeZ;
@@ -179,27 +190,27 @@ void mat4_lookat(float *mat4, float eyeX, float eyeY, float eyeZ, float centerX,
     float uy = sz * fx - sx * fz;
     float uz = sx * fy - sy * fx;
 
-    *mat4_get(mat4, 0, 0) = sx;
-    *mat4_get(mat4, 0, 1) = ux;
-    *mat4_get(mat4, 0, 2) = -fx;
-    *mat4_get(mat4, 0, 3) = 0.0f;
+    *mat4_get(mat, 0, 0) = sx;
+    *mat4_get(mat, 0, 1) = ux;
+    *mat4_get(mat, 0, 2) = -fx;
+    *mat4_get(mat, 0, 3) = 0.0f;
 
-    *mat4_get(mat4, 1, 0) = sy;
-    *mat4_get(mat4, 1, 1) = uy;
-    *mat4_get(mat4, 1, 2) = -fy;
-    *mat4_get(mat4, 1, 3) = 0.0f;
+    *mat4_get(mat, 1, 0) = sy;
+    *mat4_get(mat, 1, 1) = uy;
+    *mat4_get(mat, 1, 2) = -fy;
+    *mat4_get(mat, 1, 3) = 0.0f;
 
-    *mat4_get(mat4, 2, 0) = sz;
-    *mat4_get(mat4, 2, 1) = uz;
-    *mat4_get(mat4, 2, 2) = -fz;
-    *mat4_get(mat4, 2, 3) = 0.0f;
+    *mat4_get(mat, 2, 0) = sz;
+    *mat4_get(mat, 2, 1) = uz;
+    *mat4_get(mat, 2, 2) = -fz;
+    *mat4_get(mat, 2, 3) = 0.0f;
 
-    *mat4_get(mat4, 3, 0) = 0.0f;
-    *mat4_get(mat4, 3, 1) = 0.0f;
-    *mat4_get(mat4, 3, 2) = 0.0f;
-    *mat4_get(mat4, 3, 3) = 1.0f;
+    *mat4_get(mat, 3, 0) = 0.0f;
+    *mat4_get(mat, 3, 1) = 0.0f;
+    *mat4_get(mat, 3, 2) = 0.0f;
+    *mat4_get(mat, 3, 3) = 1.0f;
 
-    mat4_translate(mat4, -eyeX, -eyeY, -eyeZ);
+    mat4_translate(mat, -eyeX, -eyeY, -eyeZ);
 }
 
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTranslate.xml
@@ -215,16 +226,16 @@ void mat4_lookat(float *mat4, float eyeX, float eyeY, float eyeZ, float centerX,
 * \              /
 *
 */
-void mat4_translate(float *mat4, float x, float y, float z)
+void mat4_translate(mat4 *mat, float x, float y, float z)
 {
-    memset(mat4, 0, sizeof(*mat4) * 4 * 4);
-    *mat4_get(mat4, 0, 0) = 1.0;
-    *mat4_get(mat4, 1, 1) = 1.0;
-    *mat4_get(mat4, 2, 2) = 1.0;
-    *mat4_get(mat4, 3, 3) = 1.0;
-    *mat4_get(mat4, 0, 3) = x;
-    *mat4_get(mat4, 1, 3) = y;
-    *mat4_get(mat4, 2, 3) = z;
+    memset(mat, 0, sizeof(*mat) * 4 * 4);
+    *mat4_get(mat, 0, 0) = 1.0;
+    *mat4_get(mat, 1, 1) = 1.0;
+    *mat4_get(mat, 2, 2) = 1.0;
+    *mat4_get(mat, 3, 3) = 1.0;
+    *mat4_get(mat, 0, 3) = x;
+    *mat4_get(mat, 1, 3) = y;
+    *mat4_get(mat, 2, 3) = z;
 }
 
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glRotate.xml
@@ -244,20 +255,20 @@ void mat4_translate(float *mat4, float x, float y, float z)
 * c = cos(angle), s = sin(angle)
 *
 */
-void mat4_rotate(float *mat4, float angle, float x, float y, float z)
+void mat4_rotate(mat4 *mat, float angle, float x, float y, float z)
 {
     float c = (float)cos(angle);
     float omc = 1.0f - c;
     float s = (float)sin(angle);
-    memset(mat4, 0, sizeof(*mat4) * 4 * 4);
-    *mat4_get(mat4, 0, 0) = (x * x * omc) + c;
-    *mat4_get(mat4, 0, 1) = (x * y * omc) - z * s;
-    *mat4_get(mat4, 0, 2) = (x * z * omc) + y * s;
-    *mat4_get(mat4, 1, 0) = (y * x * omc) + z * s;
-    *mat4_get(mat4, 1, 1) = (y * y * omc) + c;
-    *mat4_get(mat4, 1, 2) = (y * z * omc) - x * s;
-    *mat4_get(mat4, 2, 0) = (z * x * omc) - y * s;
-    *mat4_get(mat4, 2, 1) = (z * y * omc) + x * s;
-    *mat4_get(mat4, 2, 2) = (z * z * omc) + c;
-    *mat4_get(mat4, 3, 3) = 1.0;
+    memset(mat, 0, sizeof(*mat) * 4 * 4);
+    *mat4_get(mat, 0, 0) = (x * x * omc) + c;
+    *mat4_get(mat, 0, 1) = (x * y * omc) - z * s;
+    *mat4_get(mat, 0, 2) = (x * z * omc) + y * s;
+    *mat4_get(mat, 1, 0) = (y * x * omc) + z * s;
+    *mat4_get(mat, 1, 1) = (y * y * omc) + c;
+    *mat4_get(mat, 1, 2) = (y * z * omc) - x * s;
+    *mat4_get(mat, 2, 0) = (z * x * omc) - y * s;
+    *mat4_get(mat, 2, 1) = (z * y * omc) + x * s;
+    *mat4_get(mat, 2, 2) = (z * z * omc) + c;
+    *mat4_get(mat, 3, 3) = 1.0;
 }

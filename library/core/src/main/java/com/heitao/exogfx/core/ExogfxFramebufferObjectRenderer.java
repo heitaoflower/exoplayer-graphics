@@ -13,11 +13,16 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
 
     private static final String TAG = ExogfxFramebufferObjectRenderer.class.getSimpleName();
 
-    private long nativeRenderer;
+    protected long nativeRenderer;
+
+    protected int texName;
+
+    protected float[] stMatrix = new float[16];
 
     public ExogfxFramebufferObjectRenderer()
     {
         NativeLibrary.nativeInitializeContext();
+
         nativeRenderer = NativeLibrary.nativeCreateRenderer();
     }
 
@@ -42,7 +47,7 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
 
         onDrawFrame();
 
-        NativeLibrary.nativeDrawFrame(nativeRenderer, 1);
+        NativeLibrary.nativeDrawFrame(nativeRenderer, texName, stMatrix);
     }
 
     public abstract void onSurfaceCreated(EGLConfig config);
@@ -50,6 +55,4 @@ abstract class ExogfxFramebufferObjectRenderer implements GLSurfaceView.Renderer
     public abstract void onSurfaceChanged(int width, int height);
 
     public abstract void onDrawFrame();
-
-
 }

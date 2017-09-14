@@ -54,6 +54,8 @@ public class ExogfxSurfaceTexture implements SurfaceTexture.OnFrameAvailableList
 
     public void release()
     {
+        onFrameAvailableListener = null;
+
         surfaceTexture.release();
     }
 

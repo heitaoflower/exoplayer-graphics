@@ -75,9 +75,14 @@ JNI_METHOD(NativeLibrary, void, nativeOnSurfaceChanged)
 }
 
 JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
-(JNIEnv *env, jobject obj, jlong renderer, jint texture)
+(JNIEnv *env, jobject obj, jlong renderer, jint texture, jfloatArray stMatrix)
 {
-    native(renderer)->draw(texture);
+    GLsizei size = (*env)->GetArrayLength(env, stMatrix);
+    float nativeStMatrix[size];
+
+    (*env)->GetFloatArrayRegion(env, stMatrix, 0, size, nativeStMatrix);
+
+    native(renderer)->draw((GLuint)texture, nativeStMatrix);
 }
 
 #undef JNI_METHOD

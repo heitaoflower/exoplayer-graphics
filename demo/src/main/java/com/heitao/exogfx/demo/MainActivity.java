@@ -3,6 +3,7 @@ package com.heitao.exogfx.demo;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -39,34 +40,48 @@ public class MainActivity extends Activity {
 
     private SeekBar seekBar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupViews();
+
+        addUIViews();
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
+        releaseExogfxView();
+        releasePlayer();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        if ((Util.SDK_INT <= 23 || player == null)) {
-            setupSimpleExoPlayer();
-            setupExogfxView();
-        }
+        initializeExoPlayer();
+        initializeExogfxView();
     }
 
-    private void setupViews() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+    private void addUIViews() {
         button = (Button) findViewById(R.id.btn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +132,7 @@ public class MainActivity extends Activity {
         ListView listView = (ListView) findViewById(R.id.list);
     }
 
-    private void setupSimpleExoPlayer() {
+    private void initializeExoPlayer() {
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
@@ -138,7 +153,8 @@ public class MainActivity extends Activity {
         player.setPlayWhenReady(true);
     }
 
-    private void setupExogfxView() {
+    private void initializeExogfxView() {
+
         exogfxView = new ExogfxView(this);
         exogfxView.setSimpleExoPlayer(player);
         exogfxView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -146,14 +162,17 @@ public class MainActivity extends Activity {
         exogfxView.onResume();
     }
 
-    private void releasePlayer() {
+    private void releaseExogfxView()
+    {
         exogfxView.onPause();
         ((ScreenWrapperView) findViewById(R.id.layout_movie_wrapper)).removeAllViews();
         exogfxView = null;
+    }
+
+    private void releasePlayer() {
 
         player.stop();
         player.release();
         player = null;
     }
-
 }

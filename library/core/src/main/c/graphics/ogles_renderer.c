@@ -32,24 +32,22 @@ static mat4 mvp_mat;
 static mat4 model_mat;
 static mat4 view_mat;
 static mat4 projection_mat;
-static mat4 st_mat;
+
+static struct ogles_fbo fbo;
+static struct ogles_video_filter video_filter;
+static struct ogles_presentation_filter presentation_filter;
 
 #pragma pack()
-static struct ogles_fbo fbo;
-
-static struct ogles_video_filter video_filter;
-
-static struct ogles_presentation_filter presentation_filter;
 
 static void create(void)
 {
-    glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     ogles_presentation_filter_init(&presentation_filter);
 
     ogles_video_filter_init(&video_filter);
 
-    mat4_lookat((float*)view_mat, 0.0, 0.0, 5.0, 0.0, 0.0, 0, 0.0, 1.0, 0);
+    mat4_lookat(&view_mat, 0.0, 0.0, 1.0, 0.0, 0.0, -1.0f, 0.0, 1.0f, 0.0);
 }
 
 static void resize(GLsizei width, GLsizei height)
@@ -60,22 +58,15 @@ static void resize(GLsizei width, GLsizei height)
 
     ogles_video_filter_resize(&video_filter, width, height);
 
-    //mat4_frustum((float*)projection_mat,-1, 1, -1, 1, 5, 7);
-    mat4_perspective((float*)projection_mat, deg2rad(60), 1, 0.3f, 1000);
-    mat4_identity((float*)model_mat);
+    mat4_perspective_default(&projection_mat);
+
+    mat4_identity(&model_mat);
 }
 
-static void draw(GLuint texture)
+static void draw(GLuint texture, const float st_mat[])
 {
-    mat4_multiply(mvp_mat, view_mat, model_mat);
-    mat4_multiply(mvp_mat, projection_mat, mvp_mat);
-
-    float st[] = {
-            1.0, 0.0, 0.0, 0.0,
-            0.0, 1.0, 0.0, 0.0,
-            0.0, 0.0, 1.0, 0.0,
-            0.0, 0.0, 0.0, 1.0
-    };
+    mat4_multiply(&mvp_mat, &view_mat, &model_mat);
+    mat4_multiply(&mvp_mat, &projection_mat, &mvp_mat);
 
     ogles_fbo_enable(&fbo);
     glViewport(0, 0, fbo.width, fbo.height);
@@ -85,7 +76,7 @@ static void draw(GLuint texture)
     initSampler(video_filter.target, GL_LINEAR, GL_NEAREST);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    ogles_video_filter_draw(&video_filter, texture, (float*)mvp_mat, st, 1.0);
+    ogles_video_filter_draw(&video_filter, texture, (float *)mvp_mat, st_mat, 1.7);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, fbo.width, fbo.height);
@@ -96,7 +87,9 @@ static void draw(GLuint texture)
 
 static void destroy(void)
 {
-    LOGI("destroy");
+    ogles_fbo_release(&fbo);
+    ogles_video_filter_release(&video_filter);
+    ogles_presentation_filter_release(&presentation_filter);
 }
 
 struct exogfx_renderer ogles_renderer = {

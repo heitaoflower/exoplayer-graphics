@@ -19,7 +19,7 @@ public class NativeLibrary {
 
     public static native void nativeOnSurfaceCreated(long renderer);
 
-    public static native void nativeDrawFrame(long renderer, int texture);
+    public static native void nativeDrawFrame(long renderer, int texture, float[] stMatrix);
 
     public static native long nativeCreateRenderer();
 

@@ -1,8 +1,6 @@
 package com.heitao.exogfx.core;
 
 import android.graphics.SurfaceTexture;
-import android.opengl.Matrix;
-import android.util.Log;
 import android.view.Surface;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -19,13 +17,9 @@ public class ExogfxRenderer extends ExogfxFramebufferObjectRenderer implements S
 
     private static final String TAG = ExogfxRenderer.class.getSimpleName();
 
-    private ExogfxSurfaceTexture previewTexture;
+    private ExogfxSurfaceTexture videoTexture;
 
     private boolean updateSurface = false;
-
-    private int texName;
-
-    private float[] stMatrix = new float[16];
 
     private ExogfxView exogfxView;
 
@@ -44,21 +38,12 @@ public class ExogfxRenderer extends ExogfxFramebufferObjectRenderer implements S
         OGLES.glGenTextures(textures);
         texName = textures[0];
 
-        previewTexture = new ExogfxSurfaceTexture(texName);
-        previewTexture.setOnFrameAvailableListener(this);
+        videoTexture = new ExogfxSurfaceTexture(texName);
+        videoTexture.setOnFrameAvailableListener(this);
 
-        Surface surface = new Surface(previewTexture.getSurfaceTexture());
+        Surface surface = new Surface(videoTexture.getSurfaceTexture());
 
         simpleExoPlayer.setVideoSurface(surface);
-
-        float[] VMatrix= new float[16];
-        Matrix.setLookAtM(VMatrix, 0,
-                0.0f, 0.0f, 5.0f,
-                0.0f, 0.0f, 0.0f,
-                0.0f, 1.0f, 0.0f
-        );
-
-        Log.d(TAG, VMatrix.toString());
     }
 
     @Override
@@ -73,8 +58,8 @@ public class ExogfxRenderer extends ExogfxFramebufferObjectRenderer implements S
         {
             if (updateSurface)
             {
-                previewTexture.updateTexImage();
-                previewTexture.getTransformMatrix(stMatrix);
+                videoTexture.updateTexImage();
+                videoTexture.getTransformMatrix(stMatrix);
                 updateSurface = false;
             }
         }

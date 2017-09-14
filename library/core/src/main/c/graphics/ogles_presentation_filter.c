@@ -73,6 +73,8 @@ ogles_filter_draw_cb(presentation)(struct ogles_presentation_filter *filter)
 ogles_filter_release(presentation)
 (struct ogles_presentation_filter *filter)
 {
+    LOGI("delete delete %d", filter->program);
+
     glDeleteProgram(filter->program);
     filter->program = 0;
 
