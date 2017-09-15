@@ -39,7 +39,7 @@ static struct ogles_presentation_filter presentation_filter;
 
 #pragma pack()
 
-static void create(void)
+static void create(GLuint texture)
 {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -47,7 +47,31 @@ static void create(void)
 
     ogles_video_filter_init(&video_filter);
 
-    mat4_lookat(&view_mat, 0.0, 0.0, 1.0, 0.0, 0.0, -1.0f, 0.0, 1.0f, 0.0);
+    glBindTexture(video_filter.target, texture);
+    initSampler(video_filter.target, GL_LINEAR, GL_NEAREST);
+    glBindTexture(video_filter.target, 0);
+
+    mat4_lookat(&view_mat, 0.0, 0.0, 1.0, 0.0, 0.0, -1.0f, 0.0, -1.0f, 0.0);
+
+    LOGI("%f", *mat4_get(&view_mat, 0, 0));
+    LOGI("%f", *mat4_get(&view_mat, 0, 1));
+    LOGI("%f", *mat4_get(&view_mat, 0, 2));
+    LOGI("%f", *mat4_get(&view_mat, 0, 3));
+
+    LOGI("%f", *mat4_get(&view_mat, 1, 0));
+    LOGI("%f", *mat4_get(&view_mat, 1, 1));
+    LOGI("%f", *mat4_get(&view_mat, 1, 2));
+    LOGI("%f", *mat4_get(&view_mat, 1, 3));
+
+    LOGI("%f", *mat4_get(&view_mat, 2, 0));
+    LOGI("%f", *mat4_get(&view_mat, 2, 1));
+    LOGI("%f", *mat4_get(&view_mat, 2, 2));
+    LOGI("%f", *mat4_get(&view_mat, 2, 3));
+
+    LOGI("%f", *mat4_get(&view_mat, 3, 0));
+    LOGI("%f", *mat4_get(&view_mat, 3, 1));
+    LOGI("%f", *mat4_get(&view_mat, 3, 2));
+    LOGI("%f", *mat4_get(&view_mat, 3, 3));
 }
 
 static void resize(GLsizei width, GLsizei height)
@@ -71,10 +95,6 @@ static void draw(GLuint texture, const float st_mat[])
     ogles_fbo_enable(&fbo);
     glViewport(0, 0, fbo.width, fbo.height);
     glClear(GL_COLOR_BUFFER_BIT);
-
-    glBindTexture(video_filter.target, texture);
-    initSampler(video_filter.target, GL_LINEAR, GL_NEAREST);
-    glBindTexture(GL_TEXTURE_2D, 0);
 
     ogles_video_filter_draw(&video_filter, texture, (float *)mvp_mat, st_mat, 1.7);
 

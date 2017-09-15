@@ -81,4 +81,7 @@ public final class OGLES extends NativeLibrary {
     public static native void glUseProgram(int program);
 
     public static native void glVertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int offset);
+
+    public static final int GL_TEXTURE_EXTERNAL_OES = 0x8D65;
+
 }

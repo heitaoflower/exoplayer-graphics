@@ -191,23 +191,23 @@ void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, f
     float uz = sx * fy - sy * fx;
 
     *mat4_get(mat, 0, 0) = sx;
-    *mat4_get(mat, 0, 1) = ux;
-    *mat4_get(mat, 0, 2) = -fx;
-    *mat4_get(mat, 0, 3) = 0.0f;
-
-    *mat4_get(mat, 1, 0) = sy;
-    *mat4_get(mat, 1, 1) = uy;
-    *mat4_get(mat, 1, 2) = -fy;
-    *mat4_get(mat, 1, 3) = 0.0f;
-
-    *mat4_get(mat, 2, 0) = sz;
-    *mat4_get(mat, 2, 1) = uz;
-    *mat4_get(mat, 2, 2) = -fz;
-    *mat4_get(mat, 2, 3) = 0.0f;
-
+    *mat4_get(mat, 1, 0) = ux;
+    *mat4_get(mat, 2, 0) = -fx;
     *mat4_get(mat, 3, 0) = 0.0f;
+
+    *mat4_get(mat, 0, 1) = sy;
+    *mat4_get(mat, 1, 1) = uy;
+    *mat4_get(mat, 2, 1) = -fy;
     *mat4_get(mat, 3, 1) = 0.0f;
+
+    *mat4_get(mat, 0, 2) = sz;
+    *mat4_get(mat, 1, 2) = uz;
+    *mat4_get(mat, 2, 2) = -fz;
     *mat4_get(mat, 3, 2) = 0.0f;
+
+    *mat4_get(mat, 0, 3) = 0.0f;
+    *mat4_get(mat, 1, 3) = 0.0f;
+    *mat4_get(mat, 2, 3) = 0.0f;
     *mat4_get(mat, 3, 3) = 1.0f;
 
     mat4_translate(mat, -eyeX, -eyeY, -eyeZ);

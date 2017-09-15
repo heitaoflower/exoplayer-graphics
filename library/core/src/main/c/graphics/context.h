@@ -20,7 +20,7 @@ struct exogfx_renderer
 {
     const char *name;
     enum api_type api_type;
-    void (*create)(void);
+    void (*create)(GLuint texture);
     void (*resize)(GLsizei width, GLsizei height);
     void (*draw)(GLuint texture, const float st_mat[]);
     void (*destroy)(void);

@@ -34,8 +34,6 @@ static const char *fragment_shader =
 ogles_filter_init(video)
 (struct ogles_video_filter *filter)
 {
-    ogles_video_filter_release(filter);
-
     filter->vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader);
     filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader);
     filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);

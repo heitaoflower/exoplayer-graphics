@@ -26,8 +26,6 @@ static const char *fragment_shader =
 ogles_filter_init(presentation)
 (struct ogles_presentation_filter *filter)
 {
-    ogles_presentation_filter_release(filter);
-
     filter->vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader);
     filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader);
     filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);
@@ -73,8 +71,6 @@ ogles_filter_draw_cb(presentation)(struct ogles_presentation_filter *filter)
 ogles_filter_release(presentation)
 (struct ogles_presentation_filter *filter)
 {
-    LOGI("delete delete %d", filter->program);
-
     glDeleteProgram(filter->program);
     filter->program = 0;
 

@@ -63,9 +63,9 @@ JNI_METHOD(NativeLibrary, void, nativeDestroyRenderer)
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnSurfaceCreated)
-(JNIEnv *env, jobject obj, jlong renderer)
+(JNIEnv *env, jobject obj, jlong renderer, jint texture)
 {
-    native(renderer)->create();
+    native(renderer)->create((GLuint)texture);
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnSurfaceChanged)
@@ -83,6 +83,18 @@ JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
     (*env)->GetFloatArrayRegion(env, stMatrix, 0, size, nativeStMatrix);
 
     native(renderer)->draw((GLuint)texture, nativeStMatrix);
+}
+
+JNI_METHOD(NativeLibrary, void, nativeOnResume)
+(JNIEnv *env, jobject obj, jlong renderer)
+{
+
+}
+
+JNI_METHOD(NativeLibrary, void, nativeOnPause)
+(JNIEnv *env, jobject obj, jlong renderer)
+{
+
 }
 
 #undef JNI_METHOD

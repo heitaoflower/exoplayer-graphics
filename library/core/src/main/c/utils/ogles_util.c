@@ -121,3 +121,16 @@ void updateBuffer(GLuint buffer, const GLfloat *data, GLsizei size)
     glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+
+GLboolean checkGLError(const char* message)
+{
+    GLenum lastError = glGetError();
+    if (lastError != GL_NO_ERROR)
+    {
+        LOGE("%s failed (%d).\\n", message, lastError);
+
+        return false;
+    }
+
+    return true;
+}
