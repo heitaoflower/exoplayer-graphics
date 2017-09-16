@@ -157,13 +157,6 @@ void mat4_perspective_default(mat4 *mat)
 */
 void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ)
 {
-    if (fabsf(eyeX - centerX) < 0.000001 &&
-        fabsf(eyeY - centerY) < 0.000001 &&
-        fabsf(eyeZ - centerZ) < 0.000001) {
-        mat4_identity(mat);
-        return;
-    }
-
     float fx = centerX - eyeX;
     float fy = centerY - eyeY;
     float fz = centerZ - eyeZ;
@@ -210,7 +203,7 @@ void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, f
     *mat4_get(mat, 3, 2) = 0.0f;
     *mat4_get(mat, 3, 3) = 1.0f;
 
-    for (int i=0 ; i<4 ; i++)
+    for (int i = 0 ; i < 4 ; i++)
     {
         *mat4_get(mat, i, 3) = *mat4_get(mat, 0, i) * -eyeX + *mat4_get(mat, 1, i) * -eyeY + *mat4_get(mat, 2, i) * -eyeZ;
     }

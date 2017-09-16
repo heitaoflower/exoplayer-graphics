@@ -51,7 +51,7 @@ static void create(GLuint texture)
     initSampler(video_filter.target, GL_LINEAR, GL_NEAREST);
     glBindTexture(video_filter.target, 0);
 
-    mat4_lookat(&view_mat, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
+    mat4_lookat(&view_mat, 0.0f, 0.0f, 0.3f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
 }
 
 static void resize(GLsizei width, GLsizei height)
