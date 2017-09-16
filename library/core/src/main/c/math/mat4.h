@@ -26,4 +26,4 @@ void mat4_translate(mat4 *mat, float x, float y, float z);
 
 void mat4_rotate(mat4 *mat, float angle, float x, float y, float z);
 
-#endif //EXOPLAYER_MATH_MAT4_H
+#endif //EXOGFX_MATH_MAT4_H

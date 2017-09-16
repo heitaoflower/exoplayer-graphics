@@ -14,6 +14,7 @@ set (SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/main/c")
 set (GRAPHICS_SOURCE_DIR "${SOURCE_DIR}/graphics")
 set (MATH_SOURCE_DIR "${SOURCE_DIR}/math")
 set (UTILS_SOURCE_DIR "${SOURCE_DIR}/utils")
+set (GEOMETRY_SOURCE_DIR "${SOURCE_DIR}/geometry")
 
 SET( SOURCES
 
@@ -33,6 +34,10 @@ SET( SOURCES
     ${UTILS_SOURCE_DIR}/ogles_util.c
     ${UTILS_SOURCE_DIR}/map.c
 
+    # Model source dir.
+    ${GEOMETRY_SOURCE_DIR}/mesh.c
+    ${GEOMETRY_SOURCE_DIR}/mesh_factory.c
+
     # Math source dir.
     ${MATH_SOURCE_DIR}/math.c
     ${MATH_SOURCE_DIR}/mat4.c )
@@ -44,6 +49,10 @@ SET( HEADERS
      ${UTILS_SOURCE_DIR}/ogles_util.h
      ${UTILS_SOURCE_DIR}/load_lib.h
      ${UTILS_SOURCE_DIR}/map.h
+
+     ${GEOMETRY_SOURCE_DIR}/mesh_types.h
+     ${GEOMETRY_SOURCE_DIR}/mesh.h
+     ${GEOMETRY_SOURCE_DIR}/mesh_factory.h
 
      # Math source dir.
      ${MATH_SOURCE_DIR}/math.h

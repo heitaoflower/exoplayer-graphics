@@ -7,6 +7,7 @@
 #include "ogles_presentation_filter.h"
 #include "../utils/ogles_util.h"
 #include "../math/mat4.h"
+#include "../geometry/mesh.h"
 
 #pragma pack(1)
 
@@ -41,16 +42,16 @@ static struct ogles_presentation_filter presentation_filter;
 
 static void create(GLuint texture)
 {
+    create_model(Ball);
+    free_model(NULL);
     glDisable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     ogles_presentation_filter_init(&presentation_filter);
-
     ogles_video_filter_init(&video_filter);
 
     glBindTexture(video_filter.target, texture);
     initSampler(video_filter.target, GL_LINEAR, GL_NEAREST);
-    glBindTexture(video_filter.target, 0);
 
     mat4_lookat(&view_mat, 0.0f, 0.0f, 0.3f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
 }
