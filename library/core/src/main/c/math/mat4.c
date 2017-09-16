@@ -25,13 +25,13 @@ void mat4_identity(mat4 *mat)
 
 void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2)
 {
-    float mat[16];
+    mat4 mat;
 
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < 4; j++)
         {
-            *mat4_get(mat, i, j) =
+            *mat4_get(&mat, i, j) =
                     *mat4_get(src1, i, 0) * *mat4_get(src2, 0, j) +
                     *mat4_get(src1, i, 1) * *mat4_get(src2, 1, j) +
                     *mat4_get(src1, i, 2) * *mat4_get(src2, 2, j) +
@@ -40,7 +40,7 @@ void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2)
 
     }
 
-    memcpy(dst, mat, sizeof(mat4));
+    memcpy(dst, &mat, sizeof(mat4));
 }
 
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFrustum.xml
@@ -191,27 +191,32 @@ void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, f
     float uz = sx * fy - sy * fx;
 
     *mat4_get(mat, 0, 0) = sx;
-    *mat4_get(mat, 1, 0) = ux;
-    *mat4_get(mat, 2, 0) = -fx;
-    *mat4_get(mat, 3, 0) = 0.0f;
-
-    *mat4_get(mat, 0, 1) = sy;
-    *mat4_get(mat, 1, 1) = uy;
-    *mat4_get(mat, 2, 1) = -fy;
-    *mat4_get(mat, 3, 1) = 0.0f;
-
-    *mat4_get(mat, 0, 2) = sz;
-    *mat4_get(mat, 1, 2) = uz;
-    *mat4_get(mat, 2, 2) = -fz;
-    *mat4_get(mat, 3, 2) = 0.0f;
-
+    *mat4_get(mat, 0, 1) = ux;
+    *mat4_get(mat, 0, 2) = -fx;
     *mat4_get(mat, 0, 3) = 0.0f;
+
+    *mat4_get(mat, 1, 0) = sy;
+    *mat4_get(mat, 1, 1) = uy;
+    *mat4_get(mat, 1, 2) = -fy;
     *mat4_get(mat, 1, 3) = 0.0f;
+
+    *mat4_get(mat, 2, 0) = sz;
+    *mat4_get(mat, 2, 1) = uz;
+    *mat4_get(mat, 2, 2) = -fz;
     *mat4_get(mat, 2, 3) = 0.0f;
+
+    *mat4_get(mat, 3, 0) = 0.0f;
+    *mat4_get(mat, 3, 1) = 0.0f;
+    *mat4_get(mat, 3, 2) = 0.0f;
     *mat4_get(mat, 3, 3) = 1.0f;
 
-    mat4_translate(mat, -eyeX, -eyeY, -eyeZ);
+    for (int i=0 ; i<4 ; i++)
+    {
+        *mat4_get(mat, i, 3) = *mat4_get(mat, 0, i) * -eyeX + *mat4_get(mat, 1, i) * -eyeY + *mat4_get(mat, 2, i) * -eyeZ;
+    }
+
 }
+
 
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTranslate.xml
 *

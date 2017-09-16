@@ -51,27 +51,7 @@ static void create(GLuint texture)
     initSampler(video_filter.target, GL_LINEAR, GL_NEAREST);
     glBindTexture(video_filter.target, 0);
 
-    mat4_lookat(&view_mat, 0.0, 0.0, 1.0, 0.0, 0.0, -1.0f, 0.0, -1.0f, 0.0);
-
-    LOGI("%f", *mat4_get(&view_mat, 0, 0));
-    LOGI("%f", *mat4_get(&view_mat, 0, 1));
-    LOGI("%f", *mat4_get(&view_mat, 0, 2));
-    LOGI("%f", *mat4_get(&view_mat, 0, 3));
-
-    LOGI("%f", *mat4_get(&view_mat, 1, 0));
-    LOGI("%f", *mat4_get(&view_mat, 1, 1));
-    LOGI("%f", *mat4_get(&view_mat, 1, 2));
-    LOGI("%f", *mat4_get(&view_mat, 1, 3));
-
-    LOGI("%f", *mat4_get(&view_mat, 2, 0));
-    LOGI("%f", *mat4_get(&view_mat, 2, 1));
-    LOGI("%f", *mat4_get(&view_mat, 2, 2));
-    LOGI("%f", *mat4_get(&view_mat, 2, 3));
-
-    LOGI("%f", *mat4_get(&view_mat, 3, 0));
-    LOGI("%f", *mat4_get(&view_mat, 3, 1));
-    LOGI("%f", *mat4_get(&view_mat, 3, 2));
-    LOGI("%f", *mat4_get(&view_mat, 3, 3));
+    mat4_lookat(&view_mat, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
 }
 
 static void resize(GLsizei width, GLsizei height)
