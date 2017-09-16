@@ -2,8 +2,8 @@
 // Created by showtime on 9/3/2017.
 //
 
-#ifndef EXOPLAYER_GRAPHICS_OGLES_H
-#define EXOPLAYER_GRAPHICS_OGLES_H
+#ifndef EXOGFX_GRAPHICS_OGLES_H
+#define EXOGFX_GRAPHICS_OGLES_H
 
 #include <GLES2/gl2.h>
 
@@ -34,6 +34,7 @@
 #define glDeleteRenderbuffers GL_FN(glDeleteRenderbuffers)
 #define glDeleteTextures GL_FN(glDeleteTextures)
 #define glDepthFunc GL_FN(glDepthFunc)
+#define glDisable GL_FN(glDisable)
 #define glDisableVertexAttribArray GL_FN(glDisableVertexAttribArray)
 #define glDrawArrays GL_FN(glDrawArrays)
 #define glDrawArraysInstanced GL_FN(glDrawArraysInstanced)
@@ -79,5 +80,5 @@
 #include "ogles_func.h"
 #undef FNSYM
 
-#endif //EXOPLAYER_GRAPHICS_OGLES_H
+#endif //EXOGFX_GRAPHICS_OGLES_H
 

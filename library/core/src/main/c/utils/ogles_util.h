@@ -2,8 +2,8 @@
 // Created by showtime on 9/5/2017.
 //
 
-#ifndef EXOPLAYER_GRAPHICS_OGLES_UTIL_H
-#define EXOPLAYER_GRAPHICS_OGLES_UTIL_H
+#ifndef EXOGFX_OGLES_UTIL_H
+#define EXOGFX_OGLES_UTIL_H
 
 #include "../graphics/ogles.h"
 #include "log_util.h"
@@ -24,4 +24,4 @@ void updateBuffer(GLuint buffer,const GLfloat *data, GLsizei size);
 
 GLboolean checkGLError(const char* message);
 
-#endif //EXOPLAYER_GRAPHICS_OGLES_UTIL_H
+#endif //EXOGFX_OGLES_UTIL_H

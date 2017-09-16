@@ -2,8 +2,8 @@
 // Created by showtime on 9/10/2017.
 //
 
-#ifndef EXOPLAYER_GRAPHICS_OGLES_VIDEO_FILTER_H
-#define EXOPLAYER_GRAPHICS_OGLES_VIDEO_FILTER_H
+#ifndef EXOGFX_GRAPHICS_OGLES_VIDEO_FILTER_H
+#define EXOGFX_GRAPHICS_OGLES_VIDEO_FILTER_H
 
 #include "ogles.h"
 #include "ogles_fbo.h"
@@ -43,4 +43,4 @@ ogles_filter_get_vertex_buffer(video)
 ogles_filter_get_handle(video)
 (struct ogles_video_filter *filter, const GLchar *name);
 
-#endif //EXOPLAYER_GRAPHICS_OGLES_VIDEO_FILTER_H
+#endif //EXOGFX_GRAPHICS_OGLES_VIDEO_FILTER_H

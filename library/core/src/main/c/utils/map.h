@@ -5,8 +5,8 @@
  * under the terms of the MIT license. See LICENSE for details.
  */
 
-#ifndef MAP_H
-#define MAP_H
+#ifndef EXOGFX_UTILS_MAP_H
+#define EXOGFX_UTILS_MAP_H
 
 #include <string.h>
 
@@ -74,4 +74,4 @@ typedef map_t(char) map_char_t;
 typedef map_t(float) map_float_t;
 typedef map_t(double) map_double_t;
 
-#endif
+#endif // EXOGFX_UTILS_MAP_H

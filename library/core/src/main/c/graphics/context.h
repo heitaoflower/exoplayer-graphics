@@ -2,8 +2,8 @@
 // Created by showtime on 9/8/2017.
 //
 
-#ifndef EXOPLAYER_GRAPHICS_CONTEXT_H
-#define EXOPLAYER_GRAPHICS_CONTEXT_H
+#ifndef EXOGFX_GRAPHICS_CONTEXT_H
+#define EXOGFX_GRAPHICS_CONTEXT_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -48,4 +48,4 @@ static inline bool api_is_ogles(void)
     }
 }
 
-#endif //EXOPLAYER_GRAPHICS_CONTEXT_H
+#endif //EXOGFX_GRAPHICS_CONTEXT_H

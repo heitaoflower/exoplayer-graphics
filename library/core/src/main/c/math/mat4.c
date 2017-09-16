@@ -135,26 +135,6 @@ void mat4_perspective_default(mat4 *mat)
     mat4_perspective(mat, deg2rad(60), 1, 0.03f, 1000);
 }
 
-/* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluLookAt.xml
-*
-* f = cotangent(fovy / 2)
-*
-* perspective matrix:
-*
-* /    f                                                  \
-* |  ------       0          0                 0          |
-* |  aspect                                               |
-* |                                                       |
-* |    0          f          0                 0          |
-* |                                                       |
-* |                     zFar + zNear    2 * zFar * zNear  |
-* |    0          0    --------------  ------------------ |
-* |                     zNear - zFar      zNear - zFar    |
-* |                                                       |
-* |    0          0         -1                 0          |
-* \                                                       /
-*
-*/
 void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ)
 {
     float fx = centerX - eyeX;

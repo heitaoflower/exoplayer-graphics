@@ -2,8 +2,8 @@
 // Created by showtime on 9/12/2017.
 //
 
-#ifndef EXOPLAYER_MATH_MAT4_H
-#define EXOPLAYER_MATH_MAT4_H
+#ifndef EXOGFX_MATH_MAT4_H
+#define EXOGFX_MATH_MAT4_H
 
 #include "math.h"
 

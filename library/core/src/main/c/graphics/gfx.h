@@ -2,8 +2,8 @@
 // Created by showtime on 9/3/2017.
 //
 
-#ifndef EXOPLAYER_GRAPHICS_GFX_H
-#define EXOPLAYER_GRAPHICS_GFX_H
+#ifndef EXOGFX_GRAPHICS_GFX_H
+#define EXOGFX_GRAPHICS_GFX_H
 
 #include "ogles.h"
 
@@ -11,4 +11,4 @@
 
 bool gfx_init(void);
 
-#endif //EXOPLAYER_GRAPHICS_GFX_H
+#endif //EXOGFX_GRAPHICS_GFX_H

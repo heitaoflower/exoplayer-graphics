@@ -2,8 +2,8 @@
 // Created by showtime on 9/11/2017.
 //
 
-#ifndef EXOPLAYER_GRAPHICS_OGLES_FILTER_H
-#define EXOPLAYER_GRAPHICS_OGLES_FILTER_H
+#ifndef EXOGFX_GRAPHICS_OGLES_FILTER_H
+#define EXOGFX_GRAPHICS_OGLES_FILTER_H
 
 #define FLOAT_SIZE_BYTES 4
 #define VERTICES_DATA_POSITION_SIZE 3
@@ -43,4 +43,4 @@ static const GLfloat VERTICES_DATA[] =
                 -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
                 1.0f,  -1.0f, 0.0f, 1.0f, 0.0f };
 
-#endif //EXOPLAYER_GRAPHICS_OGLES_FILTER_H
+#endif //EXOGFX_GRAPHICS_OGLES_FILTER_H
