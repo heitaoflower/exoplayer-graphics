@@ -74,9 +74,9 @@ static void draw(GLuint texture, const float st_mat[])
 
 static void destroy(void)
 {
-    ogles_fbo_release(&fbo);
-    ogles_video_filter_release(&video_filter);
-    ogles_presentation_filter_release(&presentation_filter);
+    ogles_fbo_safe_release(&fbo);
+    ogles_video_filter_safe_release(&video_filter);
+    ogles_presentation_filter_safe_release(&presentation_filter);
 }
 
 struct exogfx_renderer ogles_renderer = {

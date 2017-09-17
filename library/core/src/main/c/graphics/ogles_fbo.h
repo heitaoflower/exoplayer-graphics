@@ -22,6 +22,8 @@ void ogles_fbo_resize(struct ogles_fbo *fbo, GLsizei width, GLsizei height);
 
 void ogles_fbo_release(struct ogles_fbo* fbo);
 
+void ogles_fbo_safe_release(struct ogles_fbo *fbo);
+
 void ogles_fbo_enable(struct ogles_fbo *fbo);
 
 #endif //EXOGFX_GRAPHICS_OGLES_FBO_H

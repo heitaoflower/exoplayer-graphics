@@ -64,24 +64,31 @@ ogles_filter_draw(presentation)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-ogles_filter_draw_cb(presentation)(struct ogles_presentation_filter *filter)
+ogles_filter_draw_cb(presentation)
+(struct ogles_presentation_filter *filter)
 {
 
 }
+
+ogles_filter_safe_release(presentation)
+(struct ogles_presentation_filter *filter)
+{
+    filter->program = 0;
+    filter->vertex_shader = 0;
+    filter->fragment_shader = 0;
+    filter->vertex_buffer = 0;
+}
+
 ogles_filter_release(presentation)
 (struct ogles_presentation_filter *filter)
 {
     glDeleteProgram(filter->program);
-    filter->program = 0;
-
     glDeleteShader(filter->vertex_shader);
-    filter->vertex_shader = 0;
-
     glDeleteShader(filter->fragment_shader);
-    filter->fragment_shader = 0;
-
     glDeleteBuffers(1, &filter->vertex_buffer);
-    filter->vertex_buffer = 0;
+
+    ogles_presentation_filter_safe_release(filter);
+
 }
 
 ogles_filter_use_program(presentation)(struct ogles_presentation_filter *filter)

@@ -18,6 +18,9 @@
 #define ogles_filter_release(name) \
         void ogles_##name##_filter_release
 
+#define ogles_filter_safe_release(name) \
+        void ogles_##name##_filter_safe_release
+
 #define ogles_filter_resize(name)  \
         void ogles_##name##_filter_resize
 

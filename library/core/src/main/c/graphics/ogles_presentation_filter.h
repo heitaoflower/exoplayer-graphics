@@ -34,6 +34,9 @@ ogles_filter_init(presentation)
 ogles_filter_release(presentation)
 (struct ogles_presentation_filter *filter);
 
+ogles_filter_safe_release(presentation)
+(struct ogles_presentation_filter *filter);
+
 ogles_filter_resize(presentation)
 (struct ogles_presentation_filter *filter, GLint width, GLint height);
 

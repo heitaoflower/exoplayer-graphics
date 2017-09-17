@@ -47,15 +47,18 @@ ogles_filter_release(video)
 (struct ogles_video_filter *filter)
 {
     glDeleteProgram(filter->program);
-    filter->program = 0;
-
     glDeleteShader(filter->vertex_shader);
-    filter->vertex_shader = 0;
-
     glDeleteShader(filter->fragment_shader);
-    filter->fragment_shader = 0;
-
     glDeleteBuffers(1, &filter->vertex_buffer);
+
+    ogles_video_filter_safe_release(filter);
+}
+ogles_filter_safe_release(video)
+(struct ogles_video_filter *filter)
+{
+    filter->program = 0;
+    filter->vertex_shader = 0;
+    filter->fragment_shader = 0;
     filter->vertex_buffer = 0;
 }
 
@@ -84,6 +87,8 @@ ogles_filter_draw(video)
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(filter->target, texture);
     glUniform1i(filter->uniforms.sTexture.location, 0);
+
+    ogles_video_filter_draw_cb(filter);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 

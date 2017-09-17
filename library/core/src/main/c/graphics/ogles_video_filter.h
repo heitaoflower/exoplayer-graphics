@@ -38,6 +38,9 @@ ogles_filter_init(video)
 ogles_filter_release(video)
 (struct ogles_video_filter *filter);
 
+ogles_filter_safe_release(video)
+(struct ogles_video_filter *filter);
+
 ogles_filter_resize(video)
 (struct ogles_video_filter *filter, GLint width, GLint height);
 

@@ -62,16 +62,20 @@ void ogles_fbo_resize(struct ogles_fbo *fbo, GLsizei width, GLsizei height)
     glBindTexture(GL_TEXTURE_2D, current_rendertexture);
 }
 
-void ogles_fbo_release(struct ogles_fbo* fbo)
+void ogles_fbo_safe_release(struct ogles_fbo *fbo)
+{
+    fbo->rendertexture = 0;
+    fbo->renderbuffer = 0;
+    fbo->framebuffer = 0;
+}
+
+void ogles_fbo_release(struct ogles_fbo *fbo)
 {
     glDeleteTextures(1, &fbo->rendertexture);
-    fbo->rendertexture = 0;
-
     glDeleteRenderbuffers(1, &fbo->renderbuffer);
-    fbo->renderbuffer = 0;
-
     glDeleteFramebuffers(1, &fbo->framebuffer);
-    fbo->framebuffer = 0;
+
+    ogles_fbo_safe_release(fbo);
 }
 
 void ogles_fbo_enable(struct ogles_fbo* fbo)
