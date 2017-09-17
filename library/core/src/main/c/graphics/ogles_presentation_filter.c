@@ -31,7 +31,7 @@ ogles_filter_init(presentation)
     filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);
     filter->vertex_buffer = createBuffer(VERTICES_DATA, sizeof(VERTICES_DATA));
 
-    map_init(&filter->handle_map);
+    ogles_presentation_filter_register_handle(filter);
 }
 
 ogles_filter_resize(presentation)
@@ -46,20 +46,20 @@ ogles_filter_draw(presentation)
     ogles_presentation_filter_use_program(filter);
 
     glBindBuffer(GL_ARRAY_BUFFER, filter->vertex_buffer);
-    glEnableVertexAttribArray((GLuint)ogles_presentation_filter_get_handle(filter, "aPosition"));
-    glVertexAttribPointer((GLuint)ogles_presentation_filter_get_handle(filter, "aPosition"), VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, (void*)(VERTICES_DATA_POSITION_OFFSET));
-    glEnableVertexAttribArray((GLuint)ogles_presentation_filter_get_handle(filter, "aTextureCoord"));
-    glVertexAttribPointer((GLuint)ogles_presentation_filter_get_handle(filter, "aTextureCoord"), VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, (void*)(VERTICES_DATA_UV_OFFSET));
+    glEnableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
+    glVertexAttribPointer((GLuint)filter->attributes.aPosition.location, VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, (void*)(VERTICES_DATA_POSITION_OFFSET));
+    glEnableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);
+    glVertexAttribPointer((GLuint)filter->attributes.aTextureCoord.location, VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, (void*)(VERTICES_DATA_UV_OFFSET));
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glUniform1i(ogles_presentation_filter_get_handle(filter, "sTexture"), 0);
+    glUniform1i(filter->uniforms.sTexture.location, 0);
 
     ogles_presentation_filter_draw_cb(filter);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glDisableVertexAttribArray((GLuint)ogles_presentation_filter_get_handle(filter, "aPosition"));
-    glDisableVertexAttribArray((GLuint)ogles_presentation_filter_get_handle(filter, "aTextureCoord"));
+    glDisableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
+    glDisableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -82,8 +82,6 @@ ogles_filter_release(presentation)
 
     glDeleteBuffers(1, &filter->vertex_buffer);
     filter->vertex_buffer = 0;
-
-    map_deinit(&filter->handle_map);
 }
 
 ogles_filter_use_program(presentation)(struct ogles_presentation_filter *filter)
@@ -96,30 +94,16 @@ ogles_filter_get_vertex_buffer(presentation)(struct ogles_presentation_filter *f
     return filter->vertex_buffer;
 }
 
-ogles_filter_get_handle(presentation)(struct ogles_presentation_filter *filter, const GLchar *name)
+ogles_filter_register_handle(presentation)
+(struct ogles_presentation_filter *filter)
 {
-    GLuint* value = (GLuint*)map_get(&filter->handle_map, name);
+    // Uniforms
+    filter->uniforms.sTexture.location = glGetUniformLocation(filter->program, filter->uniforms.sTexture.name);
+    if (filter->uniforms.sTexture.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.sTexture.name); }
 
-    if (value != NULL)
-    {
-        return *value;
-    }
-
-    GLint location = glGetAttribLocation(filter->program, name);
-
-    if (location == -1)
-    {
-        location = glGetUniformLocation(filter->program, name);
-    }
-
-    if (location == -1)
-    {
-        LOGE("could not get attrib or uniform location for %s", name);
-
-        return -1;
-    }
-
-    map_set(&filter->handle_map, name, location);
-
-    return location;
+    // Attributes
+    filter->attributes.aPosition.location = glGetAttribLocation(filter->program, filter->attributes.aPosition.name);
+    if (filter->attributes.aPosition.location == -1) { LOGE("could not get attribute location for %s", filter->attributes.aPosition.name); }
+    filter->attributes.aTextureCoord.location = glGetAttribLocation(filter->program, filter->attributes.aTextureCoord.name);
+    if (filter->attributes.aTextureCoord.location == -1) { LOGE("could not get attribute location for %s", filter->attributes.aTextureCoord.name); }
 }

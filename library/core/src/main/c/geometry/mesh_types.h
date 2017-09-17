@@ -7,7 +7,7 @@
 
 typedef enum
 {
-    None = 0, Ball = 1
+    None = 0, Sphere = 1
 } model_type;
 
 #endif //EXOGFX_MESH_TYPES_H

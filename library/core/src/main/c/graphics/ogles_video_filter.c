@@ -40,7 +40,7 @@ ogles_filter_init(video)
     filter->vertex_buffer = createBuffer(VERTICES_DATA, sizeof(VERTICES_DATA));
     filter->target = GL_TEXTURE_EXTERNAL_OES;
 
-    map_init(&filter->handle_map);
+    ogles_video_filter_register_handle(filter);
 }
 
 ogles_filter_release(video)
@@ -57,8 +57,6 @@ ogles_filter_release(video)
 
     glDeleteBuffers(1, &filter->vertex_buffer);
     filter->vertex_buffer = 0;
-
-    map_deinit(&filter->handle_map);
 }
 
 ogles_filter_resize(video)
@@ -72,25 +70,25 @@ ogles_filter_draw(video)
 {
     ogles_video_filter_use_program(filter);
 
-    glUniformMatrix4fv(ogles_video_filter_get_handle(filter, "uMVPMatrix"), 1, GL_FALSE, mvp_matrix);
-    glUniformMatrix4fv(ogles_video_filter_get_handle(filter, "uSTMatrix"), 1, GL_FALSE, st_matrix);
-    glUniform1f(ogles_video_filter_get_handle(filter, "uCRatio"), aspect_ratio);
+    glUniformMatrix4fv(filter->uniforms.uMVPMatrix.location, 1, GL_FALSE, mvp_matrix);
+    glUniformMatrix4fv(filter->uniforms.uSTMatrix.location, 1, GL_FALSE, st_matrix);
+    glUniform1f(filter->uniforms.uCRatio.location, aspect_ratio);
 
     glBindBuffer(GL_ARRAY_BUFFER, ogles_video_filter_get_vertex_buffer(filter));
-    glEnableVertexAttribArray((GLuint)ogles_video_filter_get_handle(filter, "aPosition"));
+    glEnableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
 
-    glVertexAttribPointer((GLuint)ogles_video_filter_get_handle(filter, "aPosition"), VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, (void*)(VERTICES_DATA_POSITION_OFFSET));
-    glEnableVertexAttribArray((GLuint)ogles_video_filter_get_handle(filter, "aTextureCoord"));
-    glVertexAttribPointer((GLuint)ogles_video_filter_get_handle(filter, "aTextureCoord"), VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, (void*)(VERTICES_DATA_UV_OFFSET));
+    glVertexAttribPointer((GLuint)filter->attributes.aPosition.location, VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, (void*)(VERTICES_DATA_POSITION_OFFSET));
+    glEnableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);
+    glVertexAttribPointer((GLuint)filter->attributes.aTextureCoord.location, VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, VERTICES_DATA_STRIDE_BYTES, (void*)(VERTICES_DATA_UV_OFFSET));
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(filter->target, texture);
-    glUniform1i(ogles_video_filter_get_handle(filter, "sTexture"), 0);
+    glUniform1i(filter->uniforms.sTexture.location, 0);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-    glDisableVertexAttribArray((GLuint)ogles_video_filter_get_handle(filter, "aPosition"));
-    glDisableVertexAttribArray((GLuint)ogles_video_filter_get_handle(filter, "aTextureCoord"));
+    glDisableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
+    glDisableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -113,31 +111,22 @@ ogles_filter_get_vertex_buffer(video)
     return filter->vertex_buffer;
 }
 
-ogles_filter_get_handle(video)
-(struct ogles_video_filter *filter, const GLchar *name)
+ogles_filter_register_handle(video)
+(struct ogles_video_filter *filter)
 {
-    GLuint* value = (GLuint*)map_get(&filter->handle_map, name);
+    // Uniforms
+    filter->uniforms.uMVPMatrix.location = glGetUniformLocation(filter->program, filter->uniforms.uMVPMatrix.name);
+    if (filter->uniforms.uMVPMatrix.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.uMVPMatrix.name); }
+    filter->uniforms.uSTMatrix.location = glGetUniformLocation(filter->program, filter->uniforms.uSTMatrix.name);
+    if (filter->uniforms.uSTMatrix.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.uSTMatrix.name); }
+    filter->uniforms.uCRatio.location = glGetUniformLocation(filter->program, filter->uniforms.uCRatio.name);
+    if (filter->uniforms.uCRatio.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.uCRatio.name); }
+    filter->uniforms.sTexture.location = glGetUniformLocation(filter->program, filter->uniforms.sTexture.name);
+    if (filter->uniforms.sTexture.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.sTexture.name); }
 
-    if (value != NULL)
-    {
-        return *value;
-    }
-
-    GLint location = glGetAttribLocation(filter->program, name);
-
-    if (location == -1)
-    {
-        location = glGetUniformLocation(filter->program, name);
-    }
-
-    if (location == -1)
-    {
-        LOGE("could not get attrib or uniform location for %s", name);
-
-        return -1;
-    }
-
-    map_set(&filter->handle_map, name, location);
-
-    return location;
+    // Attributes
+    filter->attributes.aPosition.location = glGetAttribLocation(filter->program, filter->attributes.aPosition.name);
+    if (filter->attributes.aPosition.location == -1) { LOGE("could not get attribute location for %s", filter->attributes.aPosition.name); }
+    filter->attributes.aTextureCoord.location = glGetAttribLocation(filter->program, filter->attributes.aTextureCoord.name);
+    if (filter->attributes.aTextureCoord.location == -1) { LOGE("could not get attribute location for %s", filter->attributes.aTextureCoord.name); }
 }

@@ -8,7 +8,6 @@
 #include "ogles.h"
 #include "ogles_fbo.h"
 #include "ogles_filter.h"
-#include "../utils/map.h"
 
 struct ogles_video_filter
 {
@@ -17,8 +16,22 @@ struct ogles_video_filter
     GLuint fragment_shader;
     GLuint vertex_buffer;
     GLuint target;
-    map_int_t handle_map;
+
+    struct
+    {
+        struct uniform uMVPMatrix;
+        struct uniform uSTMatrix;
+        struct uniform uCRatio;
+        struct uniform sTexture;
+    } uniforms;
+
+    struct
+    {
+        struct attribute aPosition;
+        struct attribute aTextureCoord;
+    } attributes;
 };
+
 ogles_filter_init(video)
 (struct ogles_video_filter *filter);
 
@@ -40,7 +53,7 @@ ogles_filter_use_program(video)
 ogles_filter_get_vertex_buffer(video)
 (struct ogles_video_filter *filter);
 
-ogles_filter_get_handle(video)
-(struct ogles_video_filter *filter, const GLchar *name);
+ogles_filter_register_handle(video)
+(struct ogles_video_filter *filter);
 
 #endif //EXOGFX_GRAPHICS_OGLES_VIDEO_FILTER_H

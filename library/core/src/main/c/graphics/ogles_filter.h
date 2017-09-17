@@ -33,8 +33,12 @@
 #define ogles_filter_get_vertex_buffer(name)    \
         GLuint ogles_##name##_filter_get_vertex_buffer
 
-#define ogles_filter_get_handle(name)  \
-        GLint ogles_##name##_filter_get_handle
+#define ogles_filter_register_handle(name)      \
+        void ogles_##name##_filter_register_handle
+
+#define UNIFORM(u) .u = {-1, #u}
+
+#define ATTRIBUTE(a) .a = {-1, #a}
 
 static const GLfloat VERTICES_DATA[] =
         {
@@ -42,5 +46,17 @@ static const GLfloat VERTICES_DATA[] =
                 1.0f,  1.0f,  0.0f, 1.0f, 1.0f,
                 -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
                 1.0f,  -1.0f, 0.0f, 1.0f, 0.0f };
+
+struct uniform
+{
+    GLint location;
+    const char *name;
+};
+
+struct attribute
+{
+    GLint location;
+    const char *name;
+};
 
 #endif //EXOGFX_GRAPHICS_OGLES_FILTER_H

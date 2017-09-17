@@ -82,6 +82,8 @@ public class ExogfxVideoTexture {
             surfaceTexture = null;
         }
 
+        onNewFrameListener = null;
+
     }
 
 }

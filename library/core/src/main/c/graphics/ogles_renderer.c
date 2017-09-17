@@ -7,27 +7,8 @@
 #include "ogles_presentation_filter.h"
 #include "../utils/ogles_util.h"
 #include "../math/mat4.h"
-#include "../geometry/mesh.h"
 
 #pragma pack(1)
-
-struct uniform
-{
-    GLint location;
-    const char *name;
-};
-
-struct
-{
-    struct uniform model;
-    struct uniform view;
-    struct uniform projection;
-} uniforms = {
-#define UNIFORM(u) .u = {-1, #u}
-        UNIFORM(model),
-        UNIFORM(view),
-        UNIFORM(projection),
-};
 
 static mat4 mvp_mat;
 static mat4 model_mat;
@@ -35,15 +16,19 @@ static mat4 view_mat;
 static mat4 projection_mat;
 
 static struct ogles_fbo fbo;
-static struct ogles_video_filter video_filter;
-static struct ogles_presentation_filter presentation_filter;
+static struct ogles_video_filter video_filter = {
+        .uniforms = {UNIFORM(uMVPMatrix), UNIFORM(uSTMatrix), UNIFORM(uCRatio), UNIFORM(sTexture)},
+        .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aTextureCoord)}
+};
+static struct ogles_presentation_filter presentation_filter = {
+        .uniforms = {UNIFORM(sTexture)},
+        .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aTextureCoord)}
+};
 
 #pragma pack()
 
 static void create(GLuint texture)
 {
-    create_model(Ball);
-    free_model(NULL);
     glDisable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 

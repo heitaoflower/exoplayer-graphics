@@ -1,9 +1,9 @@
 package com.heitao.exogfx.view;
 
 import android.content.Context;
+import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.heitao.exogfx.core.ExogfxVideoPlayer;
 import com.heitao.exogfx.core.ExogfxVideoRenderer;
@@ -32,6 +32,13 @@ public class ExogfxView extends GLSurfaceView {
     public ExogfxView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        scheduler = new GLThreadScheduler() {
+            @Override
+            public void queueGlThreadEvent(Runnable runnable) {
+                queueEvent(runnable);
+            }
+        };
+
         initializeRendering();
 
         initializeExoPlayer(context);
@@ -51,6 +58,11 @@ public class ExogfxView extends GLSurfaceView {
     private void initializeExoPlayer(Context context) {
 
         player = new ExogfxVideoPlayer(context);
+    }
+
+    public void loadVideo(Uri uri)
+    {
+        player.openUri(uri);
     }
 
     public void pauseRendering()

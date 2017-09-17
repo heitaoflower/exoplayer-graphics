@@ -2,8 +2,8 @@ package com.heitao.exogfx.demo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
         exogfxView = new ExogfxView(this);
         exogfxView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         ((ScreenWrapperView) findViewById(R.id.layout_movie_wrapper)).addView(exogfxView);
-        exogfxView.onResume();
+        exogfxView.loadVideo(Uri.parse(Constants.STREAM_URL_MP4_VOD_LONG));
     }
 
     private void releaseExogfxView()

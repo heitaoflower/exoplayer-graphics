@@ -8,7 +8,6 @@
 #include "ogles.h"
 #include "ogles_fbo.h"
 #include "ogles_filter.h"
-#include "../utils/map.h"
 
 struct ogles_presentation_filter
 {
@@ -16,7 +15,17 @@ struct ogles_presentation_filter
     GLuint vertex_shader;
     GLuint fragment_shader;
     GLuint vertex_buffer;
-    map_int_t handle_map;
+
+    struct
+    {
+        struct uniform sTexture;
+    } uniforms;
+
+    struct
+    {
+        struct attribute aPosition;
+        struct attribute aTextureCoord;
+    } attributes;
 };
 
 ogles_filter_init(presentation)
@@ -40,7 +49,7 @@ ogles_filter_use_program(presentation)
 ogles_filter_get_vertex_buffer(presentation)
 (struct ogles_presentation_filter *filter);
 
-ogles_filter_get_handle(presentation)
-(struct ogles_presentation_filter *filter, const GLchar *name);
+ogles_filter_register_handle(presentation)
+(struct ogles_presentation_filter *filter);
 
 #endif //EXOGFX_GRAPHICS_OGLES_PRESENTATION_FILTER_H

@@ -28,6 +28,10 @@ public class ExogfxVideoPlayer implements SimpleExoPlayer.VideoListener  {
 
     private SimpleExoPlayer exoPlayer;
 
+    private DataSource.Factory dataSourceFactory;
+
+    private ExtractorsFactory extractorsFactory;
+
     public ExogfxVideoPlayer(Context context)
     {
         initializeExoPlayer(context);
@@ -41,22 +45,19 @@ public class ExogfxVideoPlayer implements SimpleExoPlayer.VideoListener  {
 
         DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
 
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context, Util.getUserAgent(context, ExogfxView.class.getSimpleName()), defaultBandwidthMeter);
-
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-
-        MediaSource videoSource = new ExtractorMediaSource(Uri.parse("http://mirror.aarnet.edu.au/pub/TED-talks/911Mothers_2010W-480p.mp4"), dataSourceFactory, extractorsFactory, null, null);
+        dataSourceFactory = new DefaultDataSourceFactory(context, Util.getUserAgent(context, ExogfxView.class.getSimpleName()), defaultBandwidthMeter);
+        extractorsFactory = new DefaultExtractorsFactory();
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
-        exoPlayer.prepare(videoSource);
-
         exoPlayer.setPlayWhenReady(true);
         exoPlayer.addVideoListener(this);
     }
 
-    public void loadVideo(Uri uri)
+    public void openUri(final Uri uri)
     {
+        MediaSource mediaSource = buildMediaSource(uri);
 
+        exoPlayer.prepare(mediaSource);
     }
 
     public void onPause()
@@ -90,4 +91,10 @@ public class ExogfxVideoPlayer implements SimpleExoPlayer.VideoListener  {
     public void onRenderedFirstFrame() {
 
     }
+
+    public synchronized MediaSource buildMediaSource(final Uri uri)
+    {
+        return new ExtractorMediaSource(uri, dataSourceFactory, extractorsFactory, null, null);
+    }
+
 }
