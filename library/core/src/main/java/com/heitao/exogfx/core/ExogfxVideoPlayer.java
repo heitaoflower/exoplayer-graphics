@@ -29,7 +29,6 @@ public class ExogfxVideoPlayer implements SimpleExoPlayer.VideoListener  {
     private SimpleExoPlayer exoPlayer;
 
     private DataSource.Factory dataSourceFactory;
-
     private ExtractorsFactory extractorsFactory;
 
     public ExogfxVideoPlayer(Context context)

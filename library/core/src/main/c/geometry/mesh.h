@@ -9,11 +9,11 @@
 
 typedef struct mesh
 {
-    model_type type;
+    mesh_type type;
 };
 
-struct mesh* create_model(model_type type);
+struct mesh* create_mesh(mesh_type type);
 
-void free_model(struct mesh *model);
+void free_mesh(struct mesh *mesh);
 
 #endif //EXOGFX_MESH_H
