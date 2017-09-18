@@ -35,7 +35,7 @@ SET( SOURCES
     ${UTILS_SOURCE_DIR}/map.c
 
     # Model source dir.
-    ${GEOMETRY_SOURCE_DIR}/mesh.c
+    ${GEOMETRY_SOURCE_DIR}/primitive.c
     ${GEOMETRY_SOURCE_DIR}/mesh_factory.c
 
     # Math source dir.
@@ -50,8 +50,8 @@ SET( HEADERS
      ${UTILS_SOURCE_DIR}/load_lib.h
      ${UTILS_SOURCE_DIR}/map.h
 
-     ${GEOMETRY_SOURCE_DIR}/mesh_types.h
-     ${GEOMETRY_SOURCE_DIR}/mesh.h
+     ${GEOMETRY_SOURCE_DIR}/primitive_type.h
+     ${GEOMETRY_SOURCE_DIR}/primitive.h
      ${GEOMETRY_SOURCE_DIR}/mesh_factory.h
 
      # Math source dir.

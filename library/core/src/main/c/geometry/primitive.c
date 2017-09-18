@@ -1,24 +1,25 @@
 //
 // Created by showtime on 9/16/2017.
 //
-#include "mesh.h"
+#include "primitive.h"
 #include "mesh_factory.h"
 #include "../utils/log_util.h"
 
 #include <stddef.h>
 
-struct mesh *create_mesh(mesh_type type)
+struct primitive *create_primitive(primitive_type type)
 {
     switch (type)
     {
         case Sphere:
         {
-            return create_sphere_mesh();
+            create_sphere_mesh();
+            return NULL;
         }
         case Cube:
-            return create_cube_mesh();
+            return NULL;
         case Plane:
-            return create_plane_mesh();
+            return NULL;
         default:
             LOGE("invalid mesh type input.");
     }
@@ -26,7 +27,7 @@ struct mesh *create_mesh(mesh_type type)
     return NULL;
 }
 
-void free_mesh(struct mesh *mesh)
+void free_primitive(struct primitive *primitive)
 {
     LOGI("free_model");
 }

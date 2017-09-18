@@ -7,7 +7,7 @@
 #include "ogles_presentation_filter.h"
 #include "../utils/ogles_util.h"
 #include "../math/mat4.h"
-#include "../geometry/mesh.h"
+#include "../geometry/primitive.h"
 
 #pragma pack(1)
 
@@ -30,7 +30,7 @@ static struct ogles_presentation_filter presentation_filter = {
 
 static void create(GLuint texture)
 {
-    struct mesh* mesh = create_mesh(Sphere);
+    create_primitive(Sphere);
 
     glDisable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

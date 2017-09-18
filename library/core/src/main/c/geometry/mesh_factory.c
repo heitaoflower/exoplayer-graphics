@@ -11,10 +11,14 @@
 
 struct mesh *create_sphere_mesh(void)
 {
-    struct mesh *sphere = (struct mesh *) malloc(sizeof(struct mesh));
-    memset(sphere, 0, sizeof(struct mesh));
+    mesh *sphere_mesh;
+    sphere_mesh = (mesh *)malloc(sizeof(mesh));
 
-    return sphere;
+    memset(sphere_mesh, 0, sizeof(mesh));
+
+    LOGI("create_sphere_mesh");
+
+    return NULL;
 }
 
 struct mesh *create_cube_mesh(void)

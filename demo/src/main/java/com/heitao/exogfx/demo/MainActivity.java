@@ -3,6 +3,7 @@ package com.heitao.exogfx.demo;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.opengl.GLES20;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
