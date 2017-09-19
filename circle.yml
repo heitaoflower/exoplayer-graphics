@@ -4,9 +4,6 @@ machine:
     ANDROID_NDK_HOME: $ANDROID_NDK
     PATH: $PATH:$ANDROID_NDK
 
-general:
-  build_dir: Examples/Example1/android
-
 dependencies:
   cache_directories:
     - ~/android-ndk-r12b
