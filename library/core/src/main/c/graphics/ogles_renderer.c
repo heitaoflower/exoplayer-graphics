@@ -30,7 +30,7 @@ static struct ogles_presentation_filter presentation_filter = {
 
 static void create(GLuint texture)
 {
-    create_primitive(Sphere);
+    create_primitive(Plane);
 
     glDisable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

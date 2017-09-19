@@ -19,6 +19,7 @@ struct primitive *create_primitive(primitive_type type)
         case Cube:
             return NULL;
         case Plane:
+            create_plane_mesh();
             return NULL;
         default:
             LOGE("invalid mesh type input.");

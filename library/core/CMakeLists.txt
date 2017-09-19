@@ -34,12 +34,12 @@ SET( SOURCES
     ${UTILS_SOURCE_DIR}/ogles_util.c
     ${UTILS_SOURCE_DIR}/map.c
 
-    # Model source dir.
+    # Geometry source dir.
     ${GEOMETRY_SOURCE_DIR}/primitive.c
     ${GEOMETRY_SOURCE_DIR}/mesh_factory.c
 
     # Math source dir.
-    ${MATH_SOURCE_DIR}/math.c
+    ${MATH_SOURCE_DIR}/common.c
     ${MATH_SOURCE_DIR}/mat4.c )
 
 SET( HEADERS
@@ -50,12 +50,13 @@ SET( HEADERS
      ${UTILS_SOURCE_DIR}/load_lib.h
      ${UTILS_SOURCE_DIR}/map.h
 
+     # Geometry source dir.
      ${GEOMETRY_SOURCE_DIR}/primitive_type.h
      ${GEOMETRY_SOURCE_DIR}/primitive.h
      ${GEOMETRY_SOURCE_DIR}/mesh_factory.h
 
      # Math source dir.
-     ${MATH_SOURCE_DIR}/math.h
+     ${MATH_SOURCE_DIR}/common.h
      ${MATH_SOURCE_DIR}/mat4.h
 
      # Graphics source dir.

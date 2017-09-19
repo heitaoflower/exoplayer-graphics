@@ -2,7 +2,7 @@
 // Created by showtime on 9/12/2017.
 //
 
-#include "math.h"
+#include "common.h"
 
 #include <math.h>
 

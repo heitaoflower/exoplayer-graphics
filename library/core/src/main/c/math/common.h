@@ -2,8 +2,8 @@
 // Created by showtime on 9/12/2017.
 //
 
-#ifndef EXOGFX_MATH_H
-#define EXOGFX_MATH_H
+#ifndef EXOGFX_MATH_COMMON_H
+#define EXOGFX_MATH_COMMON_H
 
 #include <stdbool.h>
 
@@ -38,4 +38,4 @@ float deg2rad(float deg);
 
 float rad2deg(float rad);
 
-#endif //EXOPLAYER_MATH_H
+#endif //EXOPLAYER_MATH_COMMON_H
