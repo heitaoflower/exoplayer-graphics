@@ -1,0 +1,31 @@
+language: android
+jdk: oraclejdk8
+
+env:
+  global:
+  - ADB_INSTALL_TIMEOUT=10
+  matrix:
+  - ANDROID_TARGET=android-25  ANDROID_ABI=armeabi-v7a  TEST_SUITE=static
+  - ANDROID_TARGET=android-19  ANDROID_ABI=armeabi-v7a  TEST_SUITE=integration
+
+android:
+  components:
+  - extra-google-m2repository
+  - extra-android-m2repository
+  - tools
+  - platform-tools
+  - build-tools-25.0.2
+  - android-19
+  - android-25
+  - sys-img-armeabi-v7a-android-19
+
+before_install:
+  - ./config/ci/create-emulator
+  - echo "disablePreDex" >> gradle.properties
+
+before_script:
+  - ./gradlew dependencies
+  - ./config/ci/android-wait-for-emulator
+
+script:
+  - ./config/ci/run-test-suite
