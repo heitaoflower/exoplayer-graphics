@@ -2,10 +2,8 @@
 // Created by showtime on 9/16/2017.
 //
 #include "primitive.h"
-#include "mesh_factory.h"
+#include "plane.h"
 #include "../utils/log_util.h"
-
-#include <stddef.h>
 
 struct primitive *create_primitive(primitive_type type)
 {
@@ -19,8 +17,7 @@ struct primitive *create_primitive(primitive_type type)
         case Cube:
             return NULL;
         case Plane:
-            create_plane_mesh();
-            return NULL;
+            return primitive_plane_create();
         default:
             LOGE("invalid mesh type input.");
     }

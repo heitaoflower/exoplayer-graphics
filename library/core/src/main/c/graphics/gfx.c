@@ -3,7 +3,7 @@
 //
 
 #include "gfx.h"
-#include "../utils/load_lib.h"
+#include "../utils/lib_loader.h"
 
 #include <assert.h>
 

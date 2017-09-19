@@ -5,72 +5,84 @@
 #include "mesh_factory.h"
 
 #include "../utils/log_util.h"
-#include "../utils/math_util.h"
 
 #include <malloc.h>
 #include <string.h>
 #include <math.h>
 
-struct mesh *create_plane_mesh(void) {
+struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, uint32_t v_segments, enum axis up_axis) {
 
-    LOGI("create_plane_mesh");
+    uint32_t num_vertices , num_uvs;
+    num_vertices = num_uvs = (v_segments + 1) * (h_segments + 1);
 
     mesh *plane_mesh;
     plane_mesh = (mesh *)malloc(sizeof(mesh));
     memset(plane_mesh, 0, sizeof(mesh));
 
-    float width = 3;
-    float height = 2;
-    int segments_width = 2;
-    int segments_height = 2;
-    int num_texture_tiles = 1;
+    plane_mesh->vertice_size = num_vertices * 3;
+    plane_mesh->uv_size = num_uvs * 2;
+    plane_mesh->index_size = v_segments * h_segments * 6;
 
-    int i, j;
-    int num_vertices = (segments_width + 1) * (segments_height + 1);
-    float vertices[num_vertices * 3];
-    float uvs[num_vertices * 2];
-    int indices[segments_width * segments_height * 6];
+    plane_mesh->vertices = (float *)malloc((size_t)(sizeof(float) * plane_mesh->vertice_size));
+    plane_mesh->uvs = (float *)malloc((size_t)(sizeof(float) * plane_mesh->uv_size));
+    plane_mesh->indices = (uint32_t *)malloc((size_t)(sizeof(uint32_t) * plane_mesh->index_size));
 
-    int vertex_count = 0;
-    int uv_count = 0;
+    uint32_t vertex_counter = 0;
+    uint32_t uv_counter = 0;
 
-    for (i = 0; i <= segments_width; i++) {
-        for (j = 0; j <= segments_height; j++) {
-            float v1 = ((float) i / (float) segments_width - 0.5f) * width;
-            float v2 = ((float) j / (float) segments_height - 0.5f) * height;
+    for (uint32_t i = 0; i <= v_segments; i++) {
+        for (uint32_t j = 0; j <= h_segments; j++) {
+            float v1 = ((float) i / (float) v_segments - 0.5f) * width;
+            float v2 = ((float) j / (float) h_segments - 0.5f) * height;
 
-            vertices[vertex_count] = v1;
-            vertices[vertex_count + 1] = v2;
-            vertices[vertex_count + 2] = 0;
+            if (up_axis == AxisX)
+            {
+                plane_mesh->vertices[vertex_counter] = v1;
+                plane_mesh->vertices[vertex_counter + 1] = 0;
+                plane_mesh->vertices[vertex_counter + 2] = v2;
+            }
+            else if (up_axis == AxisY)
+            {
+                plane_mesh->vertices[vertex_counter] = v1;
+                plane_mesh->vertices[vertex_counter + 1] = v2;
+                plane_mesh->vertices[vertex_counter + 2] = 0;
+            }
+            else if (up_axis == AxisZ)
+            {
+                plane_mesh->vertices[vertex_counter] = v1;
+                plane_mesh->vertices[vertex_counter + 1] = v2;
+                plane_mesh->vertices[vertex_counter + 2] = 0;
+            }
 
-            float u = (float) i / (float) segments_width;
-            uvs[uv_count++] = u * num_texture_tiles;
-            float v = (float) j / (float) segments_height;
-            uvs[uv_count++] = (1.0f - v) * num_texture_tiles;
+            float u = (float) i / (float) v_segments;
+            plane_mesh->uvs[uv_counter++] = u;
 
-            vertex_count += 3;
+            float v = (float) j / (float) h_segments;
+            plane_mesh->uvs[uv_counter++] = (1.0f - v);
+
+            vertex_counter += 3;
         }
     }
 
-    int col_span = segments_height + 1;
-    int index_count = 0;
+    uint32_t col_span = h_segments + 1;
+    uint32_t index_counter = 0;
 
-    for (int col = 0; col < segments_width; col++)
+    for (uint32_t col = 0; col < v_segments; col++)
     {
-        for (int row = 0; row < segments_height; row++)
+        for (uint32_t row = 0; row < h_segments; row++)
         {
-            int ul = col * col_span + row;
-            int ll = ul + 1;
-            int ur = (col + 1) * col_span + row;
-            int lr = ur + 1;
+            uint32_t ul = col * col_span + row;
+            uint32_t ll = ul + 1;
+            uint32_t ur = (col + 1) * col_span + row;
+            uint32_t lr = ur + 1;
 
-            indices[index_count++] = (int) ur;
-            indices[index_count++] = (int) lr;
-            indices[index_count++] = (int) ul;
+            plane_mesh->indices[index_counter++] = ur;
+            plane_mesh->indices[index_counter++] = lr;
+            plane_mesh->indices[index_counter++] = ul;
 
-            indices[index_count++] = (int) lr;
-            indices[index_count++] = (int) ll;
-            indices[index_count++] = (int) ul;
+            plane_mesh->indices[index_counter++] = lr;
+            plane_mesh->indices[index_counter++] = ll;
+            plane_mesh->indices[index_counter++] = ul;
         }
     }
 

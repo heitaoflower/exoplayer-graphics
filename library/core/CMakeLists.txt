@@ -30,7 +30,7 @@ SET( SOURCES
     ${GRAPHICS_SOURCE_DIR}/ogles_video_filter.c
 
     # Utils source dir.
-    ${UTILS_SOURCE_DIR}/load_lib.c
+    ${UTILS_SOURCE_DIR}/lib_loader.c
     ${UTILS_SOURCE_DIR}/ogles_util.c
     ${UTILS_SOURCE_DIR}/math_util.c
     ${UTILS_SOURCE_DIR}/map.c
@@ -38,6 +38,7 @@ SET( SOURCES
     # Geometry source dir.
     ${GEOMETRY_SOURCE_DIR}/primitive.c
     ${GEOMETRY_SOURCE_DIR}/mesh_factory.c
+    ${GEOMETRY_SOURCE_DIR}/plane.c
 
     # Math source dir.
     ${MATH_SOURCE_DIR}/mat4.c )
@@ -48,13 +49,14 @@ SET( HEADERS
      ${UTILS_SOURCE_DIR}/log_util.h
      ${UTILS_SOURCE_DIR}/ogles_util.h
      ${UTILS_SOURCE_DIR}/math_util.h
-     ${UTILS_SOURCE_DIR}/load_lib.h
+     ${UTILS_SOURCE_DIR}/lib_loader.h
      ${UTILS_SOURCE_DIR}/map.h
 
      # Geometry source dir.
      ${GEOMETRY_SOURCE_DIR}/primitive_type.h
      ${GEOMETRY_SOURCE_DIR}/primitive.h
      ${GEOMETRY_SOURCE_DIR}/mesh_factory.h
+     ${GEOMETRY_SOURCE_DIR}/plane.h
 
      # Math source dir.
      ${MATH_SOURCE_DIR}/mat4.h

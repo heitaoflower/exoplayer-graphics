@@ -6,10 +6,12 @@
 #define EXOGFX_GEOMETRY_PRIMITIVE_H
 
 #include "primitive_type.h"
+#include "mesh_factory.h"
 
 struct primitive
 {
     primitive_type type;
+    struct mesh *mesh;
 };
 
 struct primitive* create_primitive(primitive_type type);

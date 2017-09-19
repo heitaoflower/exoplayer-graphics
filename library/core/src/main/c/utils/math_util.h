@@ -13,6 +13,10 @@
 
 #pragma pack(1)
 
+enum axis {
+    AxisX, AxisY, AxisZ
+};
+
 struct vec2
 {
     float x, y;
