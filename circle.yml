@@ -3,7 +3,8 @@ machine:
     version: oraclejdk8
   environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
-
+      ANDROID_NDK_HOME: ${ANDROID_NDK}
+      
 dependencies:
   pre:
     - if ! $(grep -q "Revision=47.0.0" $ANDROID_HOME/extras/android/m2repository/source.properties); then echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"; fi
