@@ -1,0 +1,4 @@
+## Customize the test machine
+machine:
+ java:
+    version: openjdk8 # This line is what you need.
