@@ -3,6 +3,8 @@
 //
 #include "lib_loader.h"
 
+#include <stdio.h>
+
 library_handle open_library(const char *lib)
 {
     return dlopen(lib, RTLD_NOW);
