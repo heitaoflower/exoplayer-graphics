@@ -3,7 +3,7 @@ project.ext {
     minSdkVersion = 14
     compileSdkVersion = 25
     targetSdkVersion = 25
-    buildToolsVersion = '25'
+    buildToolsVersion = '25.0.2'
     testSupportLibraryVersion = '0.5'
     supportLibraryVersion = '25.4.0'
     exoplayLibraryVersion = 'r2.5.2'
