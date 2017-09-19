@@ -5,5 +5,5 @@
 #ifndef EXOGFX_MATH_VEC3_H
 #define EXOGFX_MATH_VEC3_H
 
-#include "common.h"
+#include "../utils/math_util.h"
 #endif //EXOPLAYER_MATH_VEC3_H

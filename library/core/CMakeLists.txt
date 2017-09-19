@@ -32,6 +32,7 @@ SET( SOURCES
     # Utils source dir.
     ${UTILS_SOURCE_DIR}/load_lib.c
     ${UTILS_SOURCE_DIR}/ogles_util.c
+    ${UTILS_SOURCE_DIR}/math_util.c
     ${UTILS_SOURCE_DIR}/map.c
 
     # Geometry source dir.
@@ -39,7 +40,6 @@ SET( SOURCES
     ${GEOMETRY_SOURCE_DIR}/mesh_factory.c
 
     # Math source dir.
-    ${MATH_SOURCE_DIR}/common.c
     ${MATH_SOURCE_DIR}/mat4.c )
 
 SET( HEADERS
@@ -47,6 +47,7 @@ SET( HEADERS
      # Utils source dir.
      ${UTILS_SOURCE_DIR}/log_util.h
      ${UTILS_SOURCE_DIR}/ogles_util.h
+     ${UTILS_SOURCE_DIR}/math_util.h
      ${UTILS_SOURCE_DIR}/load_lib.h
      ${UTILS_SOURCE_DIR}/map.h
 
@@ -56,7 +57,6 @@ SET( HEADERS
      ${GEOMETRY_SOURCE_DIR}/mesh_factory.h
 
      # Math source dir.
-     ${MATH_SOURCE_DIR}/common.h
      ${MATH_SOURCE_DIR}/mat4.h
 
      # Graphics source dir.

@@ -7,7 +7,7 @@
 
 #include "primitive_type.h"
 
-typedef struct primitive
+struct primitive
 {
     primitive_type type;
 };

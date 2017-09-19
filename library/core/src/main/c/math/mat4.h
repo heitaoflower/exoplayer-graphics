@@ -5,7 +5,7 @@
 #ifndef EXOGFX_MATH_MAT4_H
 #define EXOGFX_MATH_MAT4_H
 
-#include "common.h"
+#include "../utils/math_util.h"
 
 
 float* mat4_get(mat4 *mat, int row, int col);

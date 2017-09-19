@@ -5,7 +5,7 @@
 #include "mesh_factory.h"
 
 #include "../utils/log_util.h"
-#include "../math/common.h"
+#include "../utils/math_util.h"
 
 #include <malloc.h>
 #include <string.h>
