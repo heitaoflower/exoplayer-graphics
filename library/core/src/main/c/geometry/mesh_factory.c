@@ -10,7 +10,7 @@
 #include <string.h>
 #include <math.h>
 
-struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, uint32_t v_segments, enum axis up_axis) {
+struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, uint32_t v_segments, enum axis up_axis, bool mirror_uvs) {
 
     struct mesh *plane_mesh;
     plane_mesh = (struct mesh *)malloc(sizeof(struct mesh));
@@ -55,10 +55,10 @@ struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, u
             }
 
             float u = (float) i / (float) v_segments;
-            plane_mesh->uvs[uv_counter++] = (1.0f - u);
+            plane_mesh->uvs[uv_counter++] = mirror_uvs ? 1.0f - u : u;
 
             float v = (float) j / (float) h_segments;
-            plane_mesh->uvs[uv_counter++] = (1.0f - v);
+            plane_mesh->uvs[uv_counter++] = 1.0f - v;
 
             vertex_counter += 3;
         }
@@ -95,7 +95,6 @@ struct mesh *create_sphere_mesh(void)
     sphere_mesh = (struct mesh *)malloc(sizeof(struct mesh));
     memset(sphere_mesh, 0, sizeof(struct mesh));
 
-    LOGI("create_sphere_mesh");
     int segment_width = 15, segment_height = 15;
     float radius = 1.0f;
 

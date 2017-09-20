@@ -19,6 +19,6 @@ struct mesh {
 
 struct mesh *create_sphere_mesh(void);
 struct mesh *create_cube_mesh(void);
-struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, uint32_t v_segments, enum axis up_axis);
+struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, uint32_t v_segments, enum axis up_axis, bool mirror_uvs);
 
 #endif //EXOGFX_GEOMETRY_MESH_FACTORY_H
