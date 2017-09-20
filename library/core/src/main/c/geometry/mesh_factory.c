@@ -4,8 +4,6 @@
 
 #include "mesh_factory.h"
 
-#include "../utils/log_util.h"
-
 #include <malloc.h>
 #include <string.h>
 #include <math.h>
