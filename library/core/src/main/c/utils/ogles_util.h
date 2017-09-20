@@ -18,9 +18,9 @@ GLuint createProgram(GLuint vertexShader, GLuint fragmentShader);
 
 GLuint loadShader(GLenum shaderType, const char* shaderSource);
 
-GLuint createBuffer(const GLfloat *data, GLsizei size);
+GLuint createBuffer(GLenum target, const void *data, GLsizei size);
 
-void updateBuffer(GLuint buffer,const GLfloat *data, GLsizei size);
+void updateBuffer(GLenum target, GLuint buffer,const void *data, GLsizei size);
 
 GLboolean checkGLError(const char* message);
 

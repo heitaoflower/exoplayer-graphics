@@ -405,9 +405,9 @@ JNI_METHOD(OGLESUtil, jint, createProgram)
 }
 
 JNI_METHOD(OGLESUtil, jint, createBuffer)
-(JNIEnv *env, jobject obj, jobject data)
+(JNIEnv *env, jobject obj, jobject data, jint target)
 {
     GLfloat *nativeData = (*env)->GetDirectBufferAddress(env, data);
     GLsizei nativeSize = (GLsizei)(*env)->GetDirectBufferCapacity(env, data);
-    return createBuffer(nativeData, nativeSize * sizeof(GLfloat));
+    return createBuffer((GLenum)target, nativeData, nativeSize * sizeof(GLfloat));
 }

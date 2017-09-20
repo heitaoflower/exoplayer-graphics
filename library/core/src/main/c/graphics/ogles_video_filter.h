@@ -8,13 +8,17 @@
 #include "ogles.h"
 #include "ogles_fbo.h"
 #include "ogles_filter.h"
+#include "../geometry/primitive.h"
 
 struct ogles_video_filter
 {
     GLuint program;
     GLuint vertex_shader;
     GLuint fragment_shader;
-    GLuint vertex_buffer;
+    GLuint vbo_vertices;
+    GLuint vbo_uvs;
+    GLuint vbo_indices;
+    GLuint elements_count;
     GLuint target;
 
     struct
@@ -33,7 +37,7 @@ struct ogles_video_filter
 };
 
 ogles_filter_init(video)
-(struct ogles_video_filter *filter);
+(struct ogles_video_filter *filter, struct primitive *primitive);
 
 ogles_filter_release(video)
 (struct ogles_video_filter *filter);
@@ -51,9 +55,6 @@ ogles_filter_draw_cb(video)
 (struct ogles_video_filter *filter);
 
 ogles_filter_use_program(video)
-(struct ogles_video_filter *filter);
-
-ogles_filter_get_vertex_buffer(video)
 (struct ogles_video_filter *filter);
 
 ogles_filter_register_handle(video)

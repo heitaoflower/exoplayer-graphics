@@ -5,6 +5,7 @@
 #ifndef EXOGFX_GEOMETRY_PRIMITIVE_H
 #define EXOGFX_GEOMETRY_PRIMITIVE_H
 
+#include <GLES2/gl2.h>
 #include "primitive_type.h"
 #include "mesh_factory.h"
 

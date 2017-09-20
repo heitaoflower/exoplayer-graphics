@@ -12,12 +12,12 @@
 
 struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, uint32_t v_segments, enum axis up_axis) {
 
+    struct mesh *plane_mesh;
+    plane_mesh = (struct mesh *)malloc(sizeof(struct mesh));
+    memset(plane_mesh, 0, sizeof(struct mesh));
+
     uint32_t num_vertices , num_uvs;
     num_vertices = num_uvs = (v_segments + 1) * (h_segments + 1);
-
-    mesh *plane_mesh;
-    plane_mesh = (mesh *)malloc(sizeof(mesh));
-    memset(plane_mesh, 0, sizeof(mesh));
 
     plane_mesh->vertice_size = num_vertices * 3;
     plane_mesh->uv_size = num_uvs * 2;
@@ -55,7 +55,7 @@ struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, u
             }
 
             float u = (float) i / (float) v_segments;
-            plane_mesh->uvs[uv_counter++] = u;
+            plane_mesh->uvs[uv_counter++] = (1.0f - u);
 
             float v = (float) j / (float) h_segments;
             plane_mesh->uvs[uv_counter++] = (1.0f - v);
@@ -86,15 +86,14 @@ struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, u
         }
     }
 
-    // TODO
-    return NULL;
+    return plane_mesh;
 }
 
 struct mesh *create_sphere_mesh(void)
 {
-    mesh *sphere_mesh;
-    sphere_mesh = (mesh *)malloc(sizeof(mesh));
-    memset(sphere_mesh, 0, sizeof(mesh));
+    struct mesh *sphere_mesh;
+    sphere_mesh = (struct mesh *)malloc(sizeof(struct mesh));
+    memset(sphere_mesh, 0, sizeof(struct mesh));
 
     LOGI("create_sphere_mesh");
     int segment_width = 15, segment_height = 15;

@@ -7,7 +7,6 @@
 #include "ogles_presentation_filter.h"
 #include "../utils/ogles_util.h"
 #include "../math/mat4.h"
-#include "../geometry/primitive.h"
 
 #pragma pack(1)
 
@@ -30,18 +29,16 @@ static struct ogles_presentation_filter presentation_filter = {
 
 static void create(GLuint texture)
 {
-    create_primitive(Plane);
-
     glDisable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     ogles_presentation_filter_init(&presentation_filter);
-    ogles_video_filter_init(&video_filter);
+    ogles_video_filter_init(&video_filter, create_primitive(Plane));
 
     glBindTexture(video_filter.target, texture);
     initSampler(video_filter.target, GL_LINEAR, GL_NEAREST);
 
-    mat4_lookat(&view_mat, 0.0f, 0.0f, 0.3f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
+    mat4_lookat(&view_mat, 0.0f, 0.0f, 0.3f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f);
 }
 
 static void resize(GLsizei width, GLsizei height)

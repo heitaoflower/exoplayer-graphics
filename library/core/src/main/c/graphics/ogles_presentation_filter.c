@@ -29,7 +29,7 @@ ogles_filter_init(presentation)
     filter->vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader);
     filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader);
     filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);
-    filter->vertex_buffer = createBuffer(VERTICES_DATA, sizeof(VERTICES_DATA));
+    filter->vertex_buffer = createBuffer(GL_ARRAY_BUFFER, VERTICES_DATA, sizeof(VERTICES_DATA));
 
     ogles_presentation_filter_register_handle(filter);
 }

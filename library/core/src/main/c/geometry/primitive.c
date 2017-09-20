@@ -5,13 +5,14 @@
 #include "plane.h"
 #include "../utils/log_util.h"
 
+#include <malloc.h>
+
 struct primitive *create_primitive(primitive_type type)
 {
     switch (type)
     {
         case Sphere:
         {
-            create_sphere_mesh();
             return NULL;
         }
         case Cube:
@@ -27,5 +28,9 @@ struct primitive *create_primitive(primitive_type type)
 
 void free_primitive(struct primitive *primitive)
 {
-    LOGI("free_model");
+    if (primitive != NULL)
+    {
+        free(primitive);
+    }
+
 }

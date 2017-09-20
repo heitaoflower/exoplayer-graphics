@@ -8,14 +8,14 @@
 #include "../utils/math_util.h"
 #include <stdint.h>
 
-typedef struct {
+struct mesh {
     float* vertices;
     float* uvs;
     uint32_t *indices;
     uint32_t vertice_size;
     uint32_t uv_size;
     uint32_t index_size;
-} mesh;
+};
 
 struct mesh *create_sphere_mesh(void);
 struct mesh *create_cube_mesh(void);

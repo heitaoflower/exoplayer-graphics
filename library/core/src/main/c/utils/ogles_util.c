@@ -105,21 +105,21 @@ GLuint loadShader(GLenum shaderType, const char* shaderSource)
     return shader;
 }
 
-GLuint createBuffer(const GLfloat *data, GLsizei size)
+GLuint createBuffer(GLenum target, const void *data, GLsizei size)
 {
     GLuint buffers[1];
 
     glGenBuffers(1, buffers);
-    updateBuffer(buffers[0], data, size);
+    updateBuffer(target, buffers[0], data, size);
 
     return buffers[0];
 }
 
-void updateBuffer(GLuint buffer, const GLfloat *data, GLsizei size)
+void updateBuffer(GLenum target, GLuint buffer, const void *data, GLsizei size)
 {
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(target, buffer);
+    glBufferData(target, size, data, GL_STATIC_DRAW);
+    glBindBuffer(target, 0);
 }
 
 GLboolean checkGLError(const char* message)

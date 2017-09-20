@@ -20,11 +20,11 @@ public class OGLESUtil extends NativeLibrary {
 
     public static native int createProgram(int vertexShader, int fragmentShader);
 
-    public static native int createBuffer(final FloatBuffer buffer);
+    public static native int createBuffer(int target, final FloatBuffer buffer);
 
-    public static int createBuffer(float[] data)
+    public static int createBuffer(int target, float[] data)
     {
-        return createBuffer(toFloatBuffer(data));
+        return createBuffer(target, toFloatBuffer(data));
     }
 
     private static FloatBuffer toFloatBuffer(final float[] data)
