@@ -5,17 +5,22 @@
 #ifndef EXOGFX_GEOMETRY_PRIMITIVE_H
 #define EXOGFX_GEOMETRY_PRIMITIVE_H
 
-#include <GLES2/gl2.h>
+#include "../graphics/ogles.h"
 #include "primitive_type.h"
 #include "mesh_factory.h"
 
 struct primitive
 {
     primitive_type type;
-    struct mesh *mesh;
+    GLuint vbo_vertices;
+    GLuint vbo_uvs;
+    GLuint vbo_indices;
+    GLuint elements_count;
 };
 
 struct primitive* create_primitive(primitive_type type);
+
+void safe_free_primitive(struct primitive *primitive);
 
 void free_primitive(struct primitive *primitive);
 

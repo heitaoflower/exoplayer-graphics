@@ -15,10 +15,7 @@ struct ogles_video_filter
     GLuint program;
     GLuint vertex_shader;
     GLuint fragment_shader;
-    GLuint vbo_vertices;
-    GLuint vbo_uvs;
-    GLuint vbo_indices;
-    GLuint elements_count;
+    struct primitive *primitive;
     GLuint target;
 
     struct

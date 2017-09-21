@@ -25,4 +25,6 @@ struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, u
 
 struct mesh *create_quad_mesh(void);
 
+void destroy_mesh(struct mesh *mesh);
+
 #endif //EXOGFX_GEOMETRY_MESH_FACTORY_H

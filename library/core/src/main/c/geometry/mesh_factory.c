@@ -159,3 +159,11 @@ struct mesh *create_cube_mesh(void)
     // TODO
     return NULL;
 }
+
+void destroy_mesh(struct mesh *mesh)
+{
+    free(mesh->vertices);
+    free(mesh->uvs);
+    free(mesh->indices);
+    free(mesh);
+}
