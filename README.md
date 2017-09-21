@@ -1,4 +1,4 @@
-![exogfx logo](./documents/exogfx_logo_1.jpg "Graphics for ExoPlayer")
+![exogfx logo](./documents/exogfx_logo.jpg "Graphics for ExoPlayer")
 # exoplayer-graphics
 [![platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
 <img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat">
