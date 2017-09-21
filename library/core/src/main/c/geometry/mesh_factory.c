@@ -87,6 +87,42 @@ struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, u
     return plane_mesh;
 }
 
+struct mesh *create_quad_mesh(void)
+{
+    struct mesh *quad_mesh;
+    quad_mesh = (struct mesh *)malloc(sizeof(struct mesh));
+    memset(quad_mesh, 0, sizeof(struct mesh));
+
+    const float vertices[] =
+            {      -1.0f,   1.0f,  0.0f,
+                    1.0f,   1.0f,  0.0f,
+                   -1.0f,  -1.0f,  0.0f,
+                    1.0f,  -1.0f,  0.0f };
+
+    const float uvs[] =
+            {
+                    0.0f, 1.0f,
+                    1.0f, 1.0f,
+                    0.0f, 0.0f,
+                    1.0f, 0.0f };
+
+    const int indices[] = { 1, 0, 2, 1, 2, 3 };
+
+    quad_mesh->vertice_size = sizeof(vertices)/sizeof(float) * 3;
+    quad_mesh->uv_size = sizeof(uvs)/sizeof(float) * 2;
+    quad_mesh->index_size = 6;
+
+    quad_mesh->vertices = (float *)malloc(sizeof(vertices));
+    quad_mesh->uvs = (float *)malloc((size_t)(sizeof(uvs)));
+    quad_mesh->indices = (uint32_t *)malloc(sizeof(indices));
+
+    memcpy(quad_mesh->vertices, vertices, sizeof(vertices));
+    memcpy(quad_mesh->uvs, uvs, sizeof(uvs));
+    memcpy(quad_mesh->indices, indices, sizeof(indices));
+
+    return quad_mesh;
+}
+
 struct mesh *create_sphere_mesh(void)
 {
     struct mesh *sphere_mesh;

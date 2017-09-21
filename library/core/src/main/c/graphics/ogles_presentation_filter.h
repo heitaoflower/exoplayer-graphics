@@ -8,14 +8,17 @@
 #include "ogles.h"
 #include "ogles_fbo.h"
 #include "ogles_filter.h"
+#include "../geometry/primitive.h"
 
 struct ogles_presentation_filter
 {
     GLuint program;
     GLuint vertex_shader;
     GLuint fragment_shader;
-    GLuint vertex_buffer;
-
+    GLuint vbo_vertices;
+    GLuint vbo_uvs;
+    GLuint vbo_indices;
+    GLuint elements_count;
     struct
     {
         struct uniform sTexture;
@@ -29,7 +32,7 @@ struct ogles_presentation_filter
 };
 
 ogles_filter_init(presentation)
-(struct ogles_presentation_filter *filter);
+(struct ogles_presentation_filter *filter, struct primitive *primitive);
 
 ogles_filter_release(presentation)
 (struct ogles_presentation_filter *filter);
@@ -47,9 +50,6 @@ ogles_filter_draw_cb(presentation)
 (struct ogles_presentation_filter *filter);
 
 ogles_filter_use_program(presentation)
-(struct ogles_presentation_filter *filter);
-
-ogles_filter_get_vertex_buffer(presentation)
 (struct ogles_presentation_filter *filter);
 
 ogles_filter_register_handle(presentation)

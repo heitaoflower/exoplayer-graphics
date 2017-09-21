@@ -3,6 +3,7 @@
 //
 #include "primitive.h"
 #include "plane.h"
+#include "quad.h"
 #include "../utils/log_util.h"
 
 #include <malloc.h>
@@ -16,11 +17,21 @@ struct primitive *create_primitive(primitive_type type)
             return NULL;
         }
         case Cube:
+        {
             return NULL;
+        }
         case Plane:
+        {
             return primitive_plane_create();
+        }
+        case Quad:
+        {
+            return primitive_quad_create();
+        }
         default:
+        {
             LOGE("invalid mesh type input.");
+        }
     }
 
     return NULL;
