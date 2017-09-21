@@ -53,6 +53,7 @@ ogles_filter_release(video)
     glDeleteShader(filter->fragment_shader);
 
     free_primitive(filter->primitive);
+    filter->primitive = NULL;
 
     ogles_video_filter_safe_release(filter);
 }

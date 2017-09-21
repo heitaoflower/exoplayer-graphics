@@ -95,9 +95,9 @@ ogles_filter_release(presentation)
     glDeleteShader(filter->fragment_shader);
 
     free_primitive(filter->primitive);
+    filter->primitive = NULL;
 
     ogles_presentation_filter_safe_release(filter);
-
 }
 
 ogles_filter_use_program(presentation)(struct ogles_presentation_filter *filter)
