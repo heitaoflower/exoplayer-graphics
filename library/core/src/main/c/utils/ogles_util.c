@@ -34,7 +34,7 @@ GLuint createProgram(GLuint vertexShader, GLuint fragmentShader)
 
             if (bufLength)
             {
-                char* buf = (char*) malloc(bufLength);
+                char* buf = (char*) malloc((size_t)bufLength);
 
                 if (buf)
                 {
@@ -87,7 +87,7 @@ GLuint loadShader(GLenum shaderType, const char* shaderSource)
 
             if (infoLen)
             {
-                char * buf = (char*) malloc(infoLen);
+                char * buf = (char*) malloc((size_t)infoLen);
 
                 if (buf)
                 {

@@ -32,13 +32,13 @@ static void create(GLuint texture)
     glDisable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    ogles_video_filter_init(&video_filter, create_primitive(Plane));
+    ogles_video_filter_init(&video_filter, create_primitive(Sphere));
     ogles_presentation_filter_init(&presentation_filter, create_primitive(Quad));
 
     glBindTexture(video_filter.target, texture);
     initSampler(video_filter.target, GL_LINEAR, GL_NEAREST);
 
-    mat4_lookat(&view_mat, 0.0f, 0.0f, 0.3f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f);
+    mat4_lookat(&view_mat, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f);
 }
 
 static void resize(GLsizei width, GLsizei height)

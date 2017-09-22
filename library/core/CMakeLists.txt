@@ -40,6 +40,7 @@ SET( SOURCES
     ${GEOMETRY_SOURCE_DIR}/mesh_factory.c
     ${GEOMETRY_SOURCE_DIR}/plane.c
     ${GEOMETRY_SOURCE_DIR}/quad.c
+    ${GEOMETRY_SOURCE_DIR}/sphere.c
 
     # Math source dir.
     ${MATH_SOURCE_DIR}/mat4.c )
@@ -59,6 +60,7 @@ SET( HEADERS
      ${GEOMETRY_SOURCE_DIR}/mesh_factory.h
      ${GEOMETRY_SOURCE_DIR}/plane.h
      ${GEOMETRY_SOURCE_DIR}/quad.h
+     ${GEOMETRY_SOURCE_DIR}/sphere.h
 
      # Math source dir.
      ${MATH_SOURCE_DIR}/mat4.h

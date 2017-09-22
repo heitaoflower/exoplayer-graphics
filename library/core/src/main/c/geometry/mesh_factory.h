@@ -17,13 +17,13 @@ struct mesh {
     uint32_t index_size;
 };
 
-struct mesh *create_sphere_mesh(void);
+struct mesh *create_sphere_mesh(float radius, uint32_t h_segments, uint32_t v_segments, bool mirror_uvs);
 
 struct mesh *create_cube_mesh(void);
 
 struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, uint32_t v_segments, enum axis up_axis, bool mirror_uvs);
 
-struct mesh *create_quad_mesh(void);
+struct mesh *create_quad_mesh(float width, float height);
 
 void destroy_mesh(struct mesh *mesh);
 

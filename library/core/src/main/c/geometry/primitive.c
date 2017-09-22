@@ -4,6 +4,7 @@
 #include "primitive.h"
 #include "plane.h"
 #include "quad.h"
+#include "sphere.h"
 #include "../utils/log_util.h"
 
 #include <malloc.h>
@@ -14,7 +15,7 @@ struct primitive *create_primitive(primitive_type type)
     {
         case Sphere:
         {
-            return NULL;
+            return primitive_sphere_create();
         }
         case Cube:
         {
