@@ -16,6 +16,8 @@ struct primitive
     GLuint vbo_uvs;
     GLuint vbo_indices;
     GLuint elements_count;
+
+    mat4 model_matrix;
 };
 
 struct primitive* create_primitive(primitive_type type);

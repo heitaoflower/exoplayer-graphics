@@ -3,9 +3,15 @@
 //
 
 #include "quad.h"
+#include "../math/mat4.h"
 #include "../utils/ogles_util.h"
 
 #include <malloc.h>
+
+static void update_model_matrix(struct primitive *primitive)
+{
+
+}
 
 struct primitive *primitive_quad_create(void)
 {
@@ -18,6 +24,8 @@ struct primitive *primitive_quad_create(void)
     primitive->vbo_indices = createBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_mesh->indices, quad_mesh->index_size * sizeof(uint32_t));
     primitive->elements_count = quad_mesh->index_size;
     destroy_mesh(quad_mesh);
+
+    mat4_identity(&primitive->model_matrix);
 
     return primitive;
 }

@@ -7,14 +7,11 @@
 #include "ogles_presentation_filter.h"
 #include "../utils/ogles_util.h"
 #include "../math/mat4.h"
+#include "camera.h"
 
 #pragma pack(1)
 
-static mat4 mvp_mat;
-static mat4 model_mat;
-static mat4 view_mat;
-static mat4 projection_mat;
-
+struct camera camera;
 static struct ogles_fbo fbo;
 static struct ogles_video_filter video_filter = {
         .uniforms = {UNIFORM(uMVPMatrix), UNIFORM(uSTMatrix), UNIFORM(uCRatio), UNIFORM(sTexture)},
@@ -38,7 +35,7 @@ static void create(GLuint texture)
     glBindTexture(video_filter.target, texture);
     initSampler(video_filter.target, GL_LINEAR, GL_NEAREST);
 
-    mat4_lookat(&view_mat, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f);
+    camera_set_lookat(&camera);
 }
 
 static void resize(GLsizei width, GLsizei height)
@@ -49,26 +46,25 @@ static void resize(GLsizei width, GLsizei height)
 
     ogles_video_filter_resize(&video_filter, width, height);
 
-    mat4_perspective_default(&projection_mat);
-
-    mat4_identity(&model_mat);
+    mat4_perspective_default(&camera.projection_mat);
 }
 
 static void draw(GLuint texture, const float st_mat[])
 {
-    mat4_multiply(&mvp_mat, &view_mat, &model_mat);
-    mat4_multiply(&mvp_mat, &projection_mat, &mvp_mat);
+    camera_update(&camera);
 
     ogles_fbo_enable(&fbo);
     glViewport(0, 0, fbo.width, fbo.height);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    ogles_video_filter_draw(&video_filter, texture, (float *)mvp_mat, st_mat, 1.7);
+    // Render video.
+    ogles_video_filter_draw(&video_filter, texture, &camera.vp_mat, st_mat, 1.0f);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, fbo.width, fbo.height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    // Present final fbo.
     ogles_presentation_filter_draw(&presentation_filter, fbo.rendertexture);
 }
 

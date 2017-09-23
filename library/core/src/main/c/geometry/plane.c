@@ -3,6 +3,7 @@
 //
 
 #include "plane.h"
+#include "../math/mat4.h"
 #include "../utils/ogles_util.h"
 
 #include <malloc.h>
@@ -19,5 +20,6 @@ struct primitive *primitive_plane_create(void)
     primitive->elements_count = plane_mesh->index_size;
     destroy_mesh(plane_mesh);
 
+    mat4_identity(&primitive->model_matrix);
     return primitive;
 }

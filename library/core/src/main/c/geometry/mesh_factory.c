@@ -3,7 +3,6 @@
 //
 
 #include "mesh_factory.h"
-#include "../utils/log_util.h"
 
 #include <malloc.h>
 #include <string.h>
@@ -208,7 +207,6 @@ struct mesh *create_sphere_mesh(float radius, uint32_t h_segments, uint32_t v_se
 
 struct mesh *create_cube_mesh(void)
 {
-    // TODO
     return NULL;
 }
 

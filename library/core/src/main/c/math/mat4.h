@@ -22,6 +22,8 @@ void mat4_frustum(mat4 *mat, float left, float right, float bottom, float top, f
 
 void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ);
 
+void mat4_set_translate(mat4 *mat, float x, float y, float z);
+
 void mat4_translate(mat4 *mat, float x, float y, float z);
 
 void mat4_rotate(mat4 *mat, float angle, float x, float y, float z);

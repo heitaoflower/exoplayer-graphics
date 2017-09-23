@@ -16,6 +16,7 @@ struct ogles_video_filter
     GLuint vertex_shader;
     GLuint fragment_shader;
     struct primitive *primitive;
+    mat4 mvp_matrix;
     GLuint target;
 
     struct
@@ -46,7 +47,7 @@ ogles_filter_resize(video)
 (struct ogles_video_filter *filter, GLint width, GLint height);
 
 ogles_filter_draw(video)
-(struct ogles_video_filter *filter, GLuint texture, const float mvp_matrix[], const float st_matrix[], const float aspect_ratio);
+(struct ogles_video_filter *filter, GLuint texture, mat4 *vp_matrix, const float st_matrix[], const float aspect_ratio);
 
 ogles_filter_draw_cb(video)
 (struct ogles_video_filter *filter);

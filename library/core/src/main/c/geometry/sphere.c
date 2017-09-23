@@ -3,6 +3,7 @@
 //
 
 #include "sphere.h"
+#include "../math/mat4.h"
 #include "../utils/ogles_util.h"
 
 #include <malloc.h>
@@ -18,6 +19,8 @@ struct primitive *primitive_sphere_create(void)
     primitive->vbo_indices = createBuffer(GL_ELEMENT_ARRAY_BUFFER, sphere_mesh->indices, sphere_mesh->index_size * sizeof(uint32_t));
     primitive->elements_count = sphere_mesh->index_size;
     destroy_mesh(sphere_mesh);
+
+    mat4_identity(&primitive->model_matrix);
 
     return primitive;
 }

@@ -2,6 +2,7 @@
 // Created by showtime on 9/10/2017.
 //
 #include "ogles_video_filter.h"
+#include "../math/mat4.h"
 #include "../utils/ogles_util.h"
 
 #define L(s) s "\n"
@@ -74,11 +75,12 @@ ogles_filter_resize(video)
 }
 
 ogles_filter_draw(video)
-(struct ogles_video_filter *filter, GLuint texture, const float mvp_matrix[], const float st_matrix[], const float aspect_ratio)
+(struct ogles_video_filter *filter, GLuint texture, mat4 *vp_matrix, const float st_matrix[], const float aspect_ratio)
 {
     ogles_video_filter_use_program(filter);
+    mat4_multiply(&filter->mvp_matrix, &filter->primitive->model_matrix, vp_matrix);
 
-    glUniformMatrix4fv(filter->uniforms.uMVPMatrix.location, 1, GL_FALSE, mvp_matrix);
+    glUniformMatrix4fv(filter->uniforms.uMVPMatrix.location, 1, GL_FALSE, (const float*)&filter->mvp_matrix);
     glUniformMatrix4fv(filter->uniforms.uSTMatrix.location, 1, GL_FALSE, st_matrix);
     glUniform1f(filter->uniforms.uCRatio.location, aspect_ratio);
 

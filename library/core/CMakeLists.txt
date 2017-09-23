@@ -26,6 +26,7 @@ SET( SOURCES
     ${GRAPHICS_SOURCE_DIR}/context.c
     ${GRAPHICS_SOURCE_DIR}/ogles_renderer.c
     ${GRAPHICS_SOURCE_DIR}/ogles_fbo.c
+    ${GRAPHICS_SOURCE_DIR}/camera.c
     ${GRAPHICS_SOURCE_DIR}/ogles_presentation_filter.c
     ${GRAPHICS_SOURCE_DIR}/ogles_video_filter.c
 
@@ -71,6 +72,7 @@ SET( HEADERS
      ${GRAPHICS_SOURCE_DIR}/ogles.h
      ${GRAPHICS_SOURCE_DIR}/ogles_func.h
      ${GRAPHICS_SOURCE_DIR}/ogles_fbo.h
+     ${GRAPHICS_SOURCE_DIR}/camera.h
      ${GRAPHICS_SOURCE_DIR}/ogles_filter.h
      ${GRAPHICS_SOURCE_DIR}/ogles_presentation_filter.h
      ${GRAPHICS_SOURCE_DIR}/ogles_video_filter.h )

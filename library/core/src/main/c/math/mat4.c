@@ -183,11 +183,7 @@ void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, f
     *mat4_get(mat, 3, 2) = 0.0f;
     *mat4_get(mat, 3, 3) = 1.0f;
 
-    for (int i = 0 ; i < 4 ; i++)
-    {
-        *mat4_get(mat, i, 3) = *mat4_get(mat, 0, i) * -eyeX + *mat4_get(mat, 1, i) * -eyeY + *mat4_get(mat, 2, i) * -eyeZ;
-    }
-
+    mat4_translate(mat, -eyeX, -eyeY, -eyeZ);
 }
 
 
@@ -204,7 +200,7 @@ void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, f
 * \              /
 *
 */
-void mat4_translate(mat4 *mat, float x, float y, float z)
+void mat4_set_translate(mat4 *mat, float x, float y, float z)
 {
     memset(mat, 0, sizeof(*mat) * 4 * 4);
     *mat4_get(mat, 0, 0) = 1.0;
@@ -214,6 +210,14 @@ void mat4_translate(mat4 *mat, float x, float y, float z)
     *mat4_get(mat, 0, 3) = x;
     *mat4_get(mat, 1, 3) = y;
     *mat4_get(mat, 2, 3) = z;
+}
+
+void mat4_translate(mat4 *mat, float x, float y, float z)
+{
+    for (int i = 0 ; i < 4 ; i++)
+    {
+        *mat4_get(mat, i, 3) = *mat4_get(mat, 0, i) * x + *mat4_get(mat, 1, i) * y + *mat4_get(mat, 2, i) * z;
+    }
 }
 
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glRotate.xml
