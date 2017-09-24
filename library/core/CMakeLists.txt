@@ -26,7 +26,6 @@ SET( SOURCES
     ${GRAPHICS_SOURCE_DIR}/context.c
     ${GRAPHICS_SOURCE_DIR}/ogles_renderer.c
     ${GRAPHICS_SOURCE_DIR}/ogles_fbo.c
-    ${GRAPHICS_SOURCE_DIR}/camera.c
     ${GRAPHICS_SOURCE_DIR}/ogles_presentation_filter.c
     ${GRAPHICS_SOURCE_DIR}/ogles_video_filter.c
 
@@ -44,6 +43,7 @@ SET( SOURCES
     ${GEOMETRY_SOURCE_DIR}/sphere.c
 
     # Math source dir.
+    ${MATH_SOURCE_DIR}/camera.c
     ${MATH_SOURCE_DIR}/mat4.c )
 
 SET( HEADERS
@@ -64,6 +64,7 @@ SET( HEADERS
      ${GEOMETRY_SOURCE_DIR}/sphere.h
 
      # Math source dir.
+     ${MATH_SOURCE_DIR}/camera.h
      ${MATH_SOURCE_DIR}/mat4.h
 
      # Graphics source dir.
@@ -72,7 +73,6 @@ SET( HEADERS
      ${GRAPHICS_SOURCE_DIR}/ogles.h
      ${GRAPHICS_SOURCE_DIR}/ogles_func.h
      ${GRAPHICS_SOURCE_DIR}/ogles_fbo.h
-     ${GRAPHICS_SOURCE_DIR}/camera.h
      ${GRAPHICS_SOURCE_DIR}/ogles_filter.h
      ${GRAPHICS_SOURCE_DIR}/ogles_presentation_filter.h
      ${GRAPHICS_SOURCE_DIR}/ogles_video_filter.h )

@@ -6,8 +6,7 @@
 #include "ogles_video_filter.h"
 #include "ogles_presentation_filter.h"
 #include "../utils/ogles_util.h"
-#include "../math/mat4.h"
-#include "camera.h"
+#include "../math/camera.h"
 
 #pragma pack(1)
 
@@ -46,7 +45,7 @@ static void resize(GLsizei width, GLsizei height)
 
     ogles_video_filter_resize(&video_filter, width, height);
 
-    mat4_perspective_default(&camera.projection_mat);
+    camera_set_perspective(&camera, width, height);
 }
 
 static void draw(GLuint texture, const float st_mat[])

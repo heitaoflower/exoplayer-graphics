@@ -16,7 +16,7 @@ void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2);
 
 void mat4_perspective(mat4 *mat, float fovy, float aspect, float zNear, float zFar);
 
-void mat4_perspective_default(mat4 *mat);
+void mat4_perspective_default(mat4 *mat, float aspect);
 
 void mat4_frustum(mat4 *mat, float left, float right, float bottom, float top, float nearVal, float farVal);
 

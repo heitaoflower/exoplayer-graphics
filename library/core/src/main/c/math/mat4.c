@@ -130,9 +130,9 @@ void mat4_perspective(mat4 *mat, float fovy, float aspect, float zNear, float zF
     *mat4_get(mat, 3, 2) = -1.0f;
 }
 
-void mat4_perspective_default(mat4 *mat)
+void mat4_perspective_default(mat4 *mat, float aspect)
 {
-    mat4_perspective(mat, deg2rad(60), 1, 0.03f, 1000);
+    mat4_perspective(mat, deg2rad(60), aspect, 0.03f, 1000);
 }
 
 void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ)
