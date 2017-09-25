@@ -22,5 +22,7 @@ struct primitive *primitive_sphere_create(void)
 
     mat4_identity(&primitive->model_matrix);
 
+    mat4_scale(&primitive->model_matrix, 100, 100, 100);
+
     return primitive;
 }

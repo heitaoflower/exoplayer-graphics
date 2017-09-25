@@ -12,6 +12,8 @@ float* mat4_get(mat4 *mat, int row, int col);
 
 void mat4_identity(mat4 *mat);
 
+void mat4_clear(mat4 *mat);
+
 void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2);
 
 void mat4_perspective(mat4 *mat, float fovy, float aspect, float zNear, float zFar);
@@ -27,5 +29,13 @@ void mat4_set_translate(mat4 *mat, float x, float y, float z);
 void mat4_translate(mat4 *mat, float x, float y, float z);
 
 void mat4_rotate(mat4 *mat, float angle, float x, float y, float z);
+
+void mat4_set_rotate(mat4 *mat, float angle, float x, float y, float z);
+
+void mat4_scale(mat4 *mat, float x, float y, float z);
+
+void mat4_set_scale(mat4 *mat, float x, float y, float z);
+
+void mat4_print(mat4 *mat);
 
 #endif //EXOGFX_MATH_MAT4_H

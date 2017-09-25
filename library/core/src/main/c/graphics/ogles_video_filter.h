@@ -46,6 +46,9 @@ ogles_filter_safe_release(video)
 ogles_filter_resize(video)
 (struct ogles_video_filter *filter, GLint width, GLint height);
 
+ogles_filter_update(video)
+(struct ogles_video_filter *filter);
+
 ogles_filter_draw(video)
 (struct ogles_video_filter *filter, GLuint texture, mat4 *vp_matrix, const float st_matrix[], const float aspect_ratio);
 

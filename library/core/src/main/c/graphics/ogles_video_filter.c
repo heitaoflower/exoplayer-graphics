@@ -74,11 +74,17 @@ ogles_filter_resize(video)
 
 }
 
+ogles_filter_update(video)
+(struct ogles_video_filter *filter)
+{
+
+}
+
 ogles_filter_draw(video)
 (struct ogles_video_filter *filter, GLuint texture, mat4 *vp_matrix, const float st_matrix[], const float aspect_ratio)
 {
     ogles_video_filter_use_program(filter);
-    mat4_multiply(&filter->mvp_matrix, &filter->primitive->model_matrix, vp_matrix);
+    mat4_multiply(&filter->mvp_matrix, vp_matrix, &filter->primitive->model_matrix);
 
     glUniformMatrix4fv(filter->uniforms.uMVPMatrix.location, 1, GL_FALSE, (const float*)&filter->mvp_matrix);
     glUniformMatrix4fv(filter->uniforms.uSTMatrix.location, 1, GL_FALSE, st_matrix);

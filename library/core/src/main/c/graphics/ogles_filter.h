@@ -20,6 +20,9 @@
 #define ogles_filter_resize(name)  \
         void ogles_##name##_filter_resize
 
+#define ogles_filter_update(name)       \
+        void ogles_##name##_filter_update
+
 #define ogles_filter_draw(name)    \
         void ogles_##name##_filter_draw
 

@@ -42,6 +42,12 @@ ogles_filter_resize(presentation)
 
 }
 
+ogles_filter_update(presentation)
+(struct ogles_presentation_filter *filter)
+{
+
+}
+
 ogles_filter_draw(presentation)
 (struct ogles_presentation_filter *filter, GLuint texture)
 {

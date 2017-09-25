@@ -42,6 +42,9 @@ ogles_filter_safe_release(presentation)
 ogles_filter_resize(presentation)
 (struct ogles_presentation_filter *filter, GLint width, GLint height);
 
+ogles_filter_update(presentation)
+(struct ogles_presentation_filter *filter);
+
 ogles_filter_draw(presentation)
 (struct ogles_presentation_filter *filter, GLuint texture);
 

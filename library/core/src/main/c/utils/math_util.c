@@ -8,7 +8,7 @@
 
 float length(float x, float y, float z)
 {
-    return (float) sqrt(x * x + y * y + z * z);
+    return sqrtf(x * x + y * y + z * z);
 }
 
 float deg2rad(float deg)

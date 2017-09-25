@@ -3,6 +3,7 @@
 //
 
 #include "mat4.h"
+#include "../utils/log_util.h"
 
 #include <string.h>
 #include <math.h>
@@ -21,6 +22,11 @@ void mat4_identity(mat4 *mat)
     {
         *mat4_get(mat, i, i) = 1.0f;
     }
+}
+
+void mat4_clear(mat4 *mat)
+{
+    memset(mat, 0, sizeof(*mat) * 4 * 4);
 }
 
 void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2)
@@ -118,7 +124,7 @@ void mat4_frustum(mat4 *mat, float left, float right, float bottom, float top, f
 */
 void mat4_perspective(mat4 *mat, float fovy, float aspect, float zNear, float zFar)
 {
-    float f = (1.0f / (float)tan(fovy / 2.0));
+    float f = (1.0f / tanf(fovy / 2.0f));
     memset(mat, 0, sizeof(*mat) * 4 * 4);
 
     assert(aspect != 0.0 && zNear != zFar);
@@ -126,8 +132,8 @@ void mat4_perspective(mat4 *mat, float fovy, float aspect, float zNear, float zF
     *mat4_get(mat, 0, 0) = f / aspect;
     *mat4_get(mat, 1, 1) = f;
     *mat4_get(mat, 2, 2) = (zFar + zNear) / (zNear - zFar);
-    *mat4_get(mat, 2, 3) = (2.0f * zFar * zNear) / (zNear - zFar);
     *mat4_get(mat, 3, 2) = -1.0f;
+    *mat4_get(mat, 2, 3) = (2.0f * zFar * zNear) / (zNear - zFar);
 }
 
 void mat4_perspective_default(mat4 *mat, float aspect)
@@ -216,13 +222,11 @@ void mat4_translate(mat4 *mat, float x, float y, float z)
 {
     for (int i = 0 ; i < 4 ; i++)
     {
-        *mat4_get(mat, i, 3) = *mat4_get(mat, 0, i) * x + *mat4_get(mat, 1, i) * y + *mat4_get(mat, 2, i) * z;
+        *mat4_get(mat, i, 3) += *mat4_get(mat, i, 0) * x + *mat4_get(mat, i, 1) * y + *mat4_get(mat, i, 2) * z;
     }
 }
 
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glRotate.xml
-*
-* perspective matrix:
 *
 * /                                                          \
 * | x^2*(1-c) + c     x*y*(1-c) - z*s   x*z*(1-c) + y*s   0  |
@@ -253,4 +257,62 @@ void mat4_rotate(mat4 *mat, float angle, float x, float y, float z)
     *mat4_get(mat, 2, 1) = (z * y * omc) + x * s;
     *mat4_get(mat, 2, 2) = (z * z * omc) + c;
     *mat4_get(mat, 3, 3) = 1.0;
+}
+
+void mat4_set_rotate(mat4 *mat, float angle, float x, float y, float z)
+{
+    memset(mat, 0, sizeof(*mat) * 4 * 4);
+}
+
+void mat4_scale(mat4 *mat, float x, float y, float z)
+{
+    *mat4_get(mat, 0, 0) *= x;
+    *mat4_get(mat, 0, 1) *= x;
+    *mat4_get(mat, 0, 2) *= x;
+    *mat4_get(mat, 0, 3) *= x;
+
+    *mat4_get(mat, 1, 0) *= y;
+    *mat4_get(mat, 1, 1) *= y;
+    *mat4_get(mat, 1, 2) *= y;
+    *mat4_get(mat, 1, 3) *= y;
+
+    *mat4_get(mat, 2, 0) *= z;
+    *mat4_get(mat, 2, 1) *= z;
+    *mat4_get(mat, 2, 2) *= z;
+    *mat4_get(mat, 2, 3) *= z;
+}
+
+
+/* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glScale.xml
+*
+* /              \
+* |  x  0  0  0  |
+* |              |
+* |  0  y  0  0  |
+* |              |
+* |  0  0  z  0  |
+* |              |
+* |  0  0  0  1  |
+* \              /
+*
+*/
+void mat4_set_scale(mat4 *mat, float x, float y, float z)
+{
+    memset(mat, 0, sizeof(*mat) * 4 * 4);
+
+    *mat4_get(mat, 0, 0) = x;
+    *mat4_get(mat, 1, 1) = y;
+    *mat4_get(mat, 2, 2) = z;
+    *mat4_get(mat, 3, 3) = 1;
+}
+
+void mat4_print(mat4 *mat)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            LOGI("row = %d , col = %d, value = %f ",j, i, *mat4_get(mat, j, i));
+        }
+    }
 }
