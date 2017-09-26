@@ -42,13 +42,13 @@ ogles_filter_safe_release(presentation)
 ogles_filter_resize(presentation)
 (struct ogles_presentation_filter *filter, GLint width, GLint height);
 
-ogles_filter_update(presentation)
+ogles_filter_pre_draw(presentation)
 (struct ogles_presentation_filter *filter);
 
 ogles_filter_draw(presentation)
 (struct ogles_presentation_filter *filter, GLuint texture);
 
-ogles_filter_draw_cb(presentation)
+ogles_filter_post_draw(presentation)
 (struct ogles_presentation_filter *filter);
 
 ogles_filter_use_program(presentation)

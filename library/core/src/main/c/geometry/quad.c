@@ -8,7 +8,7 @@
 
 #include <malloc.h>
 
-static void update_model_matrix(struct primitive *primitive)
+static void update(struct primitive *primitive)
 {
 
 }
@@ -26,6 +26,8 @@ struct primitive *primitive_quad_create(void)
     destroy_mesh(quad_mesh);
 
     mat4_identity(&primitive->model_matrix);
+
+    primitive->update = &update;
 
     return primitive;
 }

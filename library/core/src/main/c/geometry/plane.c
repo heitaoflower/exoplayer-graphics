@@ -8,6 +8,11 @@
 
 #include <malloc.h>
 
+static void update(struct primitive *primitive)
+{
+
+}
+
 struct primitive *primitive_plane_create(void)
 {
     struct primitive *primitive = (struct primitive *)malloc(sizeof(struct primitive));
@@ -21,5 +26,8 @@ struct primitive *primitive_plane_create(void)
     destroy_mesh(plane_mesh);
 
     mat4_identity(&primitive->model_matrix);
+
+    primitive->update = &update;
+
     return primitive;
 }

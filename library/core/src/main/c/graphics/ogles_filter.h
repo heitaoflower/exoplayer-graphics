@@ -20,14 +20,14 @@
 #define ogles_filter_resize(name)  \
         void ogles_##name##_filter_resize
 
-#define ogles_filter_update(name)       \
-        void ogles_##name##_filter_update
+#define ogles_filter_pre_draw(name)       \
+        void ogles_##name##_filter_pre_draw
 
 #define ogles_filter_draw(name)    \
         void ogles_##name##_filter_draw
 
-#define ogles_filter_draw_cb(name) \
-        void ogles_##name##_filter_draw_cb
+#define ogles_filter_post_draw(name) \
+        void ogles_##name##_filter_post_draw
 
 #define ogles_filter_use_program(name) \
         void ogles_##name##_filter_use_program

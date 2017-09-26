@@ -9,6 +9,4 @@
 
 struct primitive *primitive_plane_create(void);
 
-void primitive_plane_destroy(void);
-
 #endif //EXOGFX_GEOMETRY_PLANE_H

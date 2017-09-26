@@ -7,7 +7,6 @@
 
 #include "../utils/math_util.h"
 
-
 float* mat4_get(mat4 *mat, int row, int col);
 
 void mat4_identity(mat4 *mat);

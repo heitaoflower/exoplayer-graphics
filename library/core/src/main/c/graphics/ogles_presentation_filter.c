@@ -42,15 +42,15 @@ ogles_filter_resize(presentation)
 
 }
 
-ogles_filter_update(presentation)
+ogles_filter_pre_draw(presentation)
 (struct ogles_presentation_filter *filter)
 {
-
 }
 
 ogles_filter_draw(presentation)
 (struct ogles_presentation_filter *filter, GLuint texture)
 {
+    ogles_presentation_filter_pre_draw(filter);
     ogles_presentation_filter_use_program(filter);
 
     glBindBuffer(GL_ARRAY_BUFFER, filter->primitive->vbo_vertices);
@@ -65,8 +65,6 @@ ogles_filter_draw(presentation)
     glBindTexture(GL_TEXTURE_2D, texture);
     glUniform1i(filter->uniforms.sTexture.location, 0);
 
-    ogles_presentation_filter_draw_cb(filter);
-
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, filter->primitive->vbo_indices);
     glDrawElements(GL_TRIANGLES, filter->primitive->elements_count, GL_UNSIGNED_INT, 0);
 
@@ -75,9 +73,11 @@ ogles_filter_draw(presentation)
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    ogles_presentation_filter_post_draw(filter);
 }
 
-ogles_filter_draw_cb(presentation)
+ogles_filter_post_draw(presentation)
 (struct ogles_presentation_filter *filter)
 {
 

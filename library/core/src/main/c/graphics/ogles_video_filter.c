@@ -74,15 +74,20 @@ ogles_filter_resize(video)
 
 }
 
-ogles_filter_update(video)
+ogles_filter_pre_draw(video)
 (struct ogles_video_filter *filter)
 {
-
+    if (filter->primitive != NULL)
+    {
+        (*filter->primitive->update)(filter->primitive);
+    }
 }
 
 ogles_filter_draw(video)
 (struct ogles_video_filter *filter, GLuint texture, mat4 *vp_matrix, const float st_matrix[], const float aspect_ratio)
 {
+    ogles_video_filter_pre_draw(filter);
+
     ogles_video_filter_use_program(filter);
     mat4_multiply(&filter->mvp_matrix, vp_matrix, &filter->primitive->model_matrix);
 
@@ -102,8 +107,6 @@ ogles_filter_draw(video)
     glBindTexture(filter->target, texture);
     glUniform1i(filter->uniforms.sTexture.location, 0);
 
-    ogles_video_filter_draw_cb(filter);
-
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, filter->primitive->vbo_indices);
     glDrawElements(GL_TRIANGLES, filter->primitive->elements_count, GL_UNSIGNED_INT, 0);
 
@@ -113,9 +116,11 @@ ogles_filter_draw(video)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    ogles_video_filter_post_draw(filter);
 }
 
-ogles_filter_draw_cb(video)
+ogles_filter_post_draw(video)
 (struct ogles_video_filter *filter)
 {
 

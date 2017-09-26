@@ -25,7 +25,10 @@ static struct ogles_presentation_filter presentation_filter = {
 
 static void create(GLuint texture)
 {
-    glDisable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_SCISSOR_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     ogles_video_filter_init(&video_filter, create_primitive(Sphere));
@@ -55,8 +58,6 @@ static void draw(GLuint texture, const float st_mat[])
     //ogles_fbo_enable(&fbo);
     glViewport(0, 0, fbo.width, fbo.height);
     glClear(GL_COLOR_BUFFER_BIT);
-
-    ogles_video_filter_update(&video_filter);
 
     ogles_video_filter_draw(&video_filter, texture, &camera.vp_mat, st_mat, 1.0f);
 

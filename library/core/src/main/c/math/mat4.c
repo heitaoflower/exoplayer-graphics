@@ -16,7 +16,7 @@ float* mat4_get(mat4 *mat, int row, int col)
 
 void mat4_identity(mat4 *mat)
 {
-    memset(mat, 0, sizeof(*mat) * 4 * 4);
+    mat4_clear(mat);
 
     for (int i = 0; i < 4; i++)
     {
@@ -26,7 +26,7 @@ void mat4_identity(mat4 *mat)
 
 void mat4_clear(mat4 *mat)
 {
-    memset(mat, 0, sizeof(*mat) * 4 * 4);
+    memset(mat, 0, sizeof(*mat));
 }
 
 void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2)
@@ -92,7 +92,8 @@ void mat4_frustum(mat4 *mat, float left, float right, float bottom, float top, f
     float C = - (farVal + nearVal) / (farVal - nearVal);
     float D = - (2.0f * farVal * nearVal) / (farVal - nearVal);
 
-    memset(mat, 0, sizeof(*mat) * 4 * 4);
+    mat4_clear(mat);
+
     *mat4_get(mat, 0, 0) = (2.0f * nearVal) / (right - left);
     *mat4_get(mat, 0, 2) = A;
     *mat4_get(mat, 1, 1) = (2.0f * nearVal) / (top - bottom);
@@ -125,7 +126,7 @@ void mat4_frustum(mat4 *mat, float left, float right, float bottom, float top, f
 void mat4_perspective(mat4 *mat, float fovy, float aspect, float zNear, float zFar)
 {
     float f = (1.0f / tanf(fovy / 2.0f));
-    memset(mat, 0, sizeof(*mat) * 4 * 4);
+    mat4_clear(mat);
 
     assert(aspect != 0.0 && zNear != zFar);
 
@@ -208,7 +209,8 @@ void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, f
 */
 void mat4_set_translate(mat4 *mat, float x, float y, float z)
 {
-    memset(mat, 0, sizeof(*mat) * 4 * 4);
+    mat4_clear(mat);
+
     *mat4_get(mat, 0, 0) = 1.0;
     *mat4_get(mat, 1, 1) = 1.0;
     *mat4_get(mat, 2, 2) = 1.0;
@@ -243,10 +245,19 @@ void mat4_translate(mat4 *mat, float x, float y, float z)
 */
 void mat4_rotate(mat4 *mat, float angle, float x, float y, float z)
 {
+    mat4 tmp;
+    mat4_set_rotate(&tmp, angle, x, y, z);
+    mat4_multiply(mat, mat, &tmp);
+}
+
+void mat4_set_rotate(mat4 *mat, float angle, float x, float y, float z)
+{
     float c = (float)cos(angle);
     float omc = 1.0f - c;
     float s = (float)sin(angle);
-    memset(mat, 0, sizeof(*mat) * 4 * 4);
+
+    mat4_clear(mat);
+
     *mat4_get(mat, 0, 0) = (x * x * omc) + c;
     *mat4_get(mat, 0, 1) = (x * y * omc) - z * s;
     *mat4_get(mat, 0, 2) = (x * z * omc) + y * s;
@@ -257,11 +268,6 @@ void mat4_rotate(mat4 *mat, float angle, float x, float y, float z)
     *mat4_get(mat, 2, 1) = (z * y * omc) + x * s;
     *mat4_get(mat, 2, 2) = (z * z * omc) + c;
     *mat4_get(mat, 3, 3) = 1.0;
-}
-
-void mat4_set_rotate(mat4 *mat, float angle, float x, float y, float z)
-{
-    memset(mat, 0, sizeof(*mat) * 4 * 4);
 }
 
 void mat4_scale(mat4 *mat, float x, float y, float z)
@@ -298,7 +304,7 @@ void mat4_scale(mat4 *mat, float x, float y, float z)
 */
 void mat4_set_scale(mat4 *mat, float x, float y, float z)
 {
-    memset(mat, 0, sizeof(*mat) * 4 * 4);
+    mat4_clear(mat);
 
     *mat4_get(mat, 0, 0) = x;
     *mat4_get(mat, 1, 1) = y;
