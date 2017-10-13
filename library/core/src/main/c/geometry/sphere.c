@@ -10,7 +10,6 @@
 
 static void update(struct primitive *primitive)
 {
-
 }
 
 struct primitive *primitive_sphere_create(void)

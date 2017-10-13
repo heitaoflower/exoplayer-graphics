@@ -75,6 +75,7 @@ ogles_filter_draw(presentation)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     ogles_presentation_filter_post_draw(filter);
+
 }
 
 ogles_filter_post_draw(presentation)
@@ -91,6 +92,7 @@ ogles_filter_safe_release(presentation)
     filter->fragment_shader = 0;
 
     safe_free_primitive(filter->primitive);
+    filter->primitive = NULL;
 }
 
 ogles_filter_release(presentation)
@@ -99,9 +101,6 @@ ogles_filter_release(presentation)
     glDeleteProgram(filter->program);
     glDeleteShader(filter->vertex_shader);
     glDeleteShader(filter->fragment_shader);
-
-    free_primitive(filter->primitive);
-    filter->primitive = NULL;
 
     ogles_presentation_filter_safe_release(filter);
 }

@@ -2,6 +2,7 @@ package com.heitao.exogfx.core;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.Surface;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -72,13 +73,13 @@ public class ExogfxVideoRenderer implements GLSurfaceView.Renderer {
 
     public void onPause() {
 
-        if (videoTexture != null) {
-            videoTexture.release();
-        }
-
         if (videoPlayer != null)
         {
             videoPlayer.clearVideoSurface();
+        }
+
+        if (videoTexture != null) {
+            videoTexture.release();
         }
 
         NativeLibrary.nativeOnPause(nativeRenderer);

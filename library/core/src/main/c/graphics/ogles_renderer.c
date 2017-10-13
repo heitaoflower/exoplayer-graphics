@@ -13,7 +13,7 @@
 struct camera camera;
 static struct ogles_fbo fbo;
 static struct ogles_video_filter video_filter = {
-        .uniforms = {UNIFORM(uMVPMatrix), UNIFORM(uSTMatrix), UNIFORM(uCRatio), UNIFORM(sTexture)},
+        .uniforms = {UNIFORM(uMVPMatrix), UNIFORM(uSTMatrix), UNIFORM(sTexture)},
         .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aTextureCoord)}
 };
 static struct ogles_presentation_filter presentation_filter = {
@@ -54,18 +54,17 @@ static void resize(GLsizei width, GLsizei height)
 static void draw(GLuint texture, const float st_mat[])
 {
     camera_update(&camera);
+    ogles_fbo_enable(&fbo);
 
-    //ogles_fbo_enable(&fbo);
     glViewport(0, 0, fbo.width, fbo.height);
     glClear(GL_COLOR_BUFFER_BIT);
+    ogles_video_filter_draw(&video_filter, texture, &camera.vp_mat, st_mat);
 
-    ogles_video_filter_draw(&video_filter, texture, &camera.vp_mat, st_mat, 1.0f);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    //glViewport(0, 0, fbo.width, fbo.height);
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    //ogles_presentation_filter_draw(&presentation_filter, fbo.rendertexture);
+    glViewport(0, 0, fbo.width, fbo.height);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ogles_presentation_filter_draw(&presentation_filter, fbo.rendertexture);
 }
 
 static void destroy(void)

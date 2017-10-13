@@ -7,7 +7,7 @@
 
 void camera_set_lookat(struct camera *camera)
 {
-    mat4_lookat(&camera->view_mat, 0.0f, 0.0f, 4.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f);
+    mat4_lookat(&camera->view_mat, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f);
 }
 
 void camera_set_perspective(struct camera *camera, GLint width, GLint height)

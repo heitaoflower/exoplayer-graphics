@@ -47,7 +47,7 @@ public class ExogfxVideoPlayer implements SimpleExoPlayer.VideoListener  {
         dataSourceFactory = new DefaultDataSourceFactory(context, Util.getUserAgent(context, ExogfxView.class.getSimpleName()), defaultBandwidthMeter);
         extractorsFactory = new DefaultExtractorsFactory();
 
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
+        exoPlayer = ExoPlayerFactory.newSimpleInstance(new ExogfxRenderersFactory(context), trackSelector);
         exoPlayer.setPlayWhenReady(true);
         exoPlayer.addVideoListener(this);
     }

@@ -23,7 +23,6 @@ struct ogles_video_filter
     {
         struct uniform uMVPMatrix;
         struct uniform uSTMatrix;
-        struct uniform uCRatio;
         struct uniform sTexture;
     } uniforms;
 
@@ -50,7 +49,7 @@ ogles_filter_pre_draw(video)
 (struct ogles_video_filter *filter);
 
 ogles_filter_draw(video)
-(struct ogles_video_filter *filter, GLuint texture, mat4 *vp_matrix, const float st_matrix[], const float aspect_ratio);
+(struct ogles_video_filter *filter, GLuint texture, mat4 *vp_matrix, const float st_matrix[]);
 
 ogles_filter_post_draw(video)
 (struct ogles_video_filter *filter);

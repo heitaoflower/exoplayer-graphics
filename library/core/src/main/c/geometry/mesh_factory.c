@@ -106,7 +106,7 @@ struct mesh *create_quad_mesh(float width, float height)
                     0.0f, 0.0f,
                     1.0f, 0.0f };
 
-    const int indices[] = { 1, 0, 2, 1, 2, 3 };
+    const int indices[] = { 3, 2, 1, 2, 0, 1 };
 
     quad_mesh->vertice_size = sizeof(vertices)/sizeof(float) * 3;
     quad_mesh->uv_size = sizeof(uvs)/sizeof(float) * 2;
