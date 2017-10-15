@@ -11,19 +11,26 @@ cmake_minimum_required(VERSION 3.4.1)
 # Gradle automatically packages shared libraries with your APK.
 
 set (SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/main/c")
+set (CONTEXT_SOURCE_DIR "${SOURCE_DIR}/context")
 set (GRAPHICS_SOURCE_DIR "${SOURCE_DIR}/graphics")
 set (MATH_SOURCE_DIR "${SOURCE_DIR}/math")
 set (UTILS_SOURCE_DIR "${SOURCE_DIR}/utils")
 set (GEOMETRY_SOURCE_DIR "${SOURCE_DIR}/geometry")
+set (SENSOR_SOURCE_DIR "${SOURCE_DIR}/sensor")
 
 SET( SOURCES
 
     # Root source dir.
     ${SOURCE_DIR}/exogfx_jni.c
 
+    # Context source dir.
+    ${CONTEXT_SOURCE_DIR}/context.c
+
+    # Sensor source dir.
+    ${SENSOR_SOURCE_DIR}/tracker.c
+
     # Graphics source dir.
     ${GRAPHICS_SOURCE_DIR}/gfx.c
-    ${GRAPHICS_SOURCE_DIR}/context.c
     ${GRAPHICS_SOURCE_DIR}/ogles_renderer.c
     ${GRAPHICS_SOURCE_DIR}/ogles_fbo.c
     ${GRAPHICS_SOURCE_DIR}/ogles_presentation_filter.c
@@ -44,6 +51,7 @@ SET( SOURCES
 
     # Math source dir.
     ${MATH_SOURCE_DIR}/camera.c
+    ${MATH_SOURCE_DIR}/vec3.c
     ${MATH_SOURCE_DIR}/mat4.c )
 
 SET( HEADERS
@@ -66,10 +74,17 @@ SET( HEADERS
      # Math source dir.
      ${MATH_SOURCE_DIR}/camera.h
      ${MATH_SOURCE_DIR}/mat4.h
+     ${MATH_SOURCE_DIR}/vec3.h
+
+     # Context source dir.
+     ${CONTEXT_SOURCE_DIR}/context.h
+
+     # Sensor source dir.
+
+     ${SENSOR_SOURCE_DIR}/tracker.h
 
      # Graphics source dir.
      ${GRAPHICS_SOURCE_DIR}/gfx.h
-     ${GRAPHICS_SOURCE_DIR}/context.h
      ${GRAPHICS_SOURCE_DIR}/ogles.h
      ${GRAPHICS_SOURCE_DIR}/ogles_func.h
      ${GRAPHICS_SOURCE_DIR}/ogles_fbo.h
@@ -97,6 +112,7 @@ add_library( # Sets the name of the library.
 # completing its build.
 
 find_library( log-lib log )
+find_library( android-lib android )
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
@@ -104,6 +120,7 @@ find_library( log-lib log )
 
 target_link_libraries( # Specifies the target library.
                        exogfx_jni
-                       # Links the target library to the log library
+                       # Links the target library to the log and android libraries
                        # included in the NDK.
+                       ${android-lib}
                        ${log-lib} )

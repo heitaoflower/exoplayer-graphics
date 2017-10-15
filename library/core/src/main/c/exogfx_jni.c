@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "graphics/context.h"
+#include "context/context.h"
 #include "utils/log_util.h"
 #include "utils/ogles_util.h"
 

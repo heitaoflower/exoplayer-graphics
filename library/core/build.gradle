@@ -24,7 +24,7 @@ android {
             path 'CMakeLists.txt'
         }
     }
-    sourceSets { main { jni.srcDirs = ['src/main/c', 'src/main/jni', 'src/main/c/model'] } }
+    sourceSets { main { jni.srcDirs = ['src/main/c', 'src/main/jni', 'src/main/c/model', 'src/main/c/sensor', 'src/main/c/context'] } }
 }
 
 dependencies {
