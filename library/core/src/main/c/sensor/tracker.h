@@ -8,6 +8,7 @@
 #include <android/looper.h>
 #include <android/sensor.h>
 #include <time.h>
+#include <pthread.h>
 
 enum {LOOPER_ID_USER = 3};
 

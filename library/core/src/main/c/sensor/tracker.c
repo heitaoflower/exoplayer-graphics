@@ -6,7 +6,6 @@
 #include "../utils/math_util.h"
 #include "../math/vec3.h"
 
-#include <pthread.h>
 #include <malloc.h>
 #include <sys/prctl.h>
 

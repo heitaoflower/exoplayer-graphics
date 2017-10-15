@@ -6,5 +6,5 @@
 
 float* mat3_get(mat3 *mat, int row, int col)
 {
-    return (float*)mat + (row + (col << 2 - 1));
+    return (float*)mat + (row + (col << 2) - 1);
 }
