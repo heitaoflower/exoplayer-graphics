@@ -32,6 +32,7 @@ struct vec4
     float x, y, z, w;
 };
 
+typedef struct vec3 mat3[3];
 typedef struct vec4 mat4[4];
 
 #pragma pack()

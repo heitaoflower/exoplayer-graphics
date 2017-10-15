@@ -52,6 +52,7 @@ SET( SOURCES
     # Math source dir.
     ${MATH_SOURCE_DIR}/camera.c
     ${MATH_SOURCE_DIR}/vec3.c
+    ${MATH_SOURCE_DIR}/mat3.c
     ${MATH_SOURCE_DIR}/mat4.c )
 
 SET( HEADERS
@@ -74,6 +75,7 @@ SET( HEADERS
      # Math source dir.
      ${MATH_SOURCE_DIR}/camera.h
      ${MATH_SOURCE_DIR}/mat4.h
+     ${MATH_SOURCE_DIR}/mat3.h
      ${MATH_SOURCE_DIR}/vec3.h
 
      # Context source dir.

@@ -85,9 +85,9 @@ void cross(struct vec3 *src1, struct vec3 *src2, struct vec3 *dst)
 
 void vec3_ortho(struct vec3 *src, struct vec3 *dst)
 {
-    int k = vec3_largest_component_abs(src) - 1;
+    int index = vec3_largest_component_abs(src) - 1;
     vec3_zero(dst);
-    vec3_set_component(dst, k < 0 ? 2 : k, 1.0);
+    vec3_set_component(dst, index < 0 ? 2 : index, 1.0);
     cross(src, dst, dst);
     vec3_normalize(dst);
 }
