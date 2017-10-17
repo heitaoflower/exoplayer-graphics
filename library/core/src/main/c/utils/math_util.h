@@ -37,8 +37,6 @@ typedef struct vec4 mat4[4];
 
 #pragma pack()
 
-float length(float x, float y, float z);
-
 float deg2rad(float deg);
 
 float rad2deg(float rad);

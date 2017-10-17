@@ -9,22 +9,27 @@
 #include <math.h>
 #include <assert.h>
 
-float* mat4_get(mat4 *mat, int row, int col)
+inline static float length(float x, float y, float z)
+{
+    return sqrtf(x * x + y * y + z * z);
+}
+
+float* mat4_element(mat4 *mat, int row, int col)
 {
     return (float*)mat + (row + (col << 2));
 }
 
 void mat4_identity(mat4 *mat)
 {
-    mat4_clear(mat);
+    mat4_zero(mat);
 
     for (int i = 0; i < 4; i++)
     {
-        *mat4_get(mat, i, i) = 1.0f;
+        *mat4_element(mat, i, i) = 1.0f;
     }
 }
 
-void mat4_clear(mat4 *mat)
+void mat4_zero(mat4 *mat)
 {
     memset(mat, 0, sizeof(*mat));
 }
@@ -37,11 +42,11 @@ void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2)
     {
         for (int j = 0; j < 4; j++)
         {
-            *mat4_get(&mat, i, j) =
-                    *mat4_get(src1, i, 0) * *mat4_get(src2, 0, j) +
-                    *mat4_get(src1, i, 1) * *mat4_get(src2, 1, j) +
-                    *mat4_get(src1, i, 2) * *mat4_get(src2, 2, j) +
-                    *mat4_get(src1, i, 3) * *mat4_get(src2, 3, j);
+            *mat4_element(&mat, i, j) =
+                    *mat4_element(src1, i, 0) * *mat4_element(src2, 0, j) +
+                    *mat4_element(src1, i, 1) * *mat4_element(src2, 1, j) +
+                    *mat4_element(src1, i, 2) * *mat4_element(src2, 2, j) +
+                    *mat4_element(src1, i, 3) * *mat4_element(src2, 3, j);
         }
 
     }
@@ -92,15 +97,15 @@ void mat4_frustum(mat4 *mat, float left, float right, float bottom, float top, f
     float C = - (farVal + nearVal) / (farVal - nearVal);
     float D = - (2.0f * farVal * nearVal) / (farVal - nearVal);
 
-    mat4_clear(mat);
+    mat4_zero(mat);
 
-    *mat4_get(mat, 0, 0) = (2.0f * nearVal) / (right - left);
-    *mat4_get(mat, 0, 2) = A;
-    *mat4_get(mat, 1, 1) = (2.0f * nearVal) / (top - bottom);
-    *mat4_get(mat, 1, 2) = B;
-    *mat4_get(mat, 2, 2) = C;
-    *mat4_get(mat, 2, 3) = D;
-    *mat4_get(mat, 3, 2) = -1.0f;
+    *mat4_element(mat, 0, 0) = (2.0f * nearVal) / (right - left);
+    *mat4_element(mat, 0, 2) = A;
+    *mat4_element(mat, 1, 1) = (2.0f * nearVal) / (top - bottom);
+    *mat4_element(mat, 1, 2) = B;
+    *mat4_element(mat, 2, 2) = C;
+    *mat4_element(mat, 2, 3) = D;
+    *mat4_element(mat, 3, 2) = -1.0f;
 }
 
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml
@@ -126,15 +131,15 @@ void mat4_frustum(mat4 *mat, float left, float right, float bottom, float top, f
 void mat4_perspective(mat4 *mat, float fovy, float aspect, float zNear, float zFar)
 {
     float f = (1.0f / tanf(fovy / 2.0f));
-    mat4_clear(mat);
+    mat4_zero(mat);
 
     assert(aspect != 0.0 && zNear != zFar);
 
-    *mat4_get(mat, 0, 0) = f / aspect;
-    *mat4_get(mat, 1, 1) = f;
-    *mat4_get(mat, 2, 2) = (zFar + zNear) / (zNear - zFar);
-    *mat4_get(mat, 3, 2) = -1.0f;
-    *mat4_get(mat, 2, 3) = (2.0f * zFar * zNear) / (zNear - zFar);
+    *mat4_element(mat, 0, 0) = f / aspect;
+    *mat4_element(mat, 1, 1) = f;
+    *mat4_element(mat, 2, 2) = (zFar + zNear) / (zNear - zFar);
+    *mat4_element(mat, 3, 2) = -1.0f;
+    *mat4_element(mat, 2, 3) = (2.0f * zFar * zNear) / (zNear - zFar);
 }
 
 void mat4_perspective_default(mat4 *mat, float aspect)
@@ -170,25 +175,25 @@ void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, f
     float uy = sz * fx - sx * fz;
     float uz = sx * fy - sy * fx;
 
-    *mat4_get(mat, 0, 0) = sx;
-    *mat4_get(mat, 0, 1) = ux;
-    *mat4_get(mat, 0, 2) = -fx;
-    *mat4_get(mat, 0, 3) = 0.0f;
+    *mat4_element(mat, 0, 0) = sx;
+    *mat4_element(mat, 0, 1) = ux;
+    *mat4_element(mat, 0, 2) = -fx;
+    *mat4_element(mat, 0, 3) = 0.0f;
 
-    *mat4_get(mat, 1, 0) = sy;
-    *mat4_get(mat, 1, 1) = uy;
-    *mat4_get(mat, 1, 2) = -fy;
-    *mat4_get(mat, 1, 3) = 0.0f;
+    *mat4_element(mat, 1, 0) = sy;
+    *mat4_element(mat, 1, 1) = uy;
+    *mat4_element(mat, 1, 2) = -fy;
+    *mat4_element(mat, 1, 3) = 0.0f;
 
-    *mat4_get(mat, 2, 0) = sz;
-    *mat4_get(mat, 2, 1) = uz;
-    *mat4_get(mat, 2, 2) = -fz;
-    *mat4_get(mat, 2, 3) = 0.0f;
+    *mat4_element(mat, 2, 0) = sz;
+    *mat4_element(mat, 2, 1) = uz;
+    *mat4_element(mat, 2, 2) = -fz;
+    *mat4_element(mat, 2, 3) = 0.0f;
 
-    *mat4_get(mat, 3, 0) = 0.0f;
-    *mat4_get(mat, 3, 1) = 0.0f;
-    *mat4_get(mat, 3, 2) = 0.0f;
-    *mat4_get(mat, 3, 3) = 1.0f;
+    *mat4_element(mat, 3, 0) = 0.0f;
+    *mat4_element(mat, 3, 1) = 0.0f;
+    *mat4_element(mat, 3, 2) = 0.0f;
+    *mat4_element(mat, 3, 3) = 1.0f;
 
     mat4_translate(mat, -eyeX, -eyeY, -eyeZ);
 }
@@ -209,22 +214,22 @@ void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, f
 */
 void mat4_set_translate(mat4 *mat, float x, float y, float z)
 {
-    mat4_clear(mat);
+    mat4_zero(mat);
 
-    *mat4_get(mat, 0, 0) = 1.0;
-    *mat4_get(mat, 1, 1) = 1.0;
-    *mat4_get(mat, 2, 2) = 1.0;
-    *mat4_get(mat, 3, 3) = 1.0;
-    *mat4_get(mat, 0, 3) = x;
-    *mat4_get(mat, 1, 3) = y;
-    *mat4_get(mat, 2, 3) = z;
+    *mat4_element(mat, 0, 0) = 1.0;
+    *mat4_element(mat, 1, 1) = 1.0;
+    *mat4_element(mat, 2, 2) = 1.0;
+    *mat4_element(mat, 3, 3) = 1.0;
+    *mat4_element(mat, 0, 3) = x;
+    *mat4_element(mat, 1, 3) = y;
+    *mat4_element(mat, 2, 3) = z;
 }
 
 void mat4_translate(mat4 *mat, float x, float y, float z)
 {
     for (int i = 0 ; i < 4 ; i++)
     {
-        *mat4_get(mat, i, 3) += *mat4_get(mat, i, 0) * x + *mat4_get(mat, i, 1) * y + *mat4_get(mat, i, 2) * z;
+        *mat4_element(mat, i, 3) += *mat4_element(mat, i, 0) * x + *mat4_element(mat, i, 1) * y + *mat4_element(mat, i, 2) * z;
     }
 }
 
@@ -256,36 +261,36 @@ void mat4_set_rotate(mat4 *mat, float angle, float x, float y, float z)
     float omc = 1.0f - c;
     float s = (float)sin(angle);
 
-    mat4_clear(mat);
+    mat4_zero(mat);
 
-    *mat4_get(mat, 0, 0) = (x * x * omc) + c;
-    *mat4_get(mat, 0, 1) = (x * y * omc) - z * s;
-    *mat4_get(mat, 0, 2) = (x * z * omc) + y * s;
-    *mat4_get(mat, 1, 0) = (y * x * omc) + z * s;
-    *mat4_get(mat, 1, 1) = (y * y * omc) + c;
-    *mat4_get(mat, 1, 2) = (y * z * omc) - x * s;
-    *mat4_get(mat, 2, 0) = (z * x * omc) - y * s;
-    *mat4_get(mat, 2, 1) = (z * y * omc) + x * s;
-    *mat4_get(mat, 2, 2) = (z * z * omc) + c;
-    *mat4_get(mat, 3, 3) = 1.0;
+    *mat4_element(mat, 0, 0) = (x * x * omc) + c;
+    *mat4_element(mat, 0, 1) = (x * y * omc) - z * s;
+    *mat4_element(mat, 0, 2) = (x * z * omc) + y * s;
+    *mat4_element(mat, 1, 0) = (y * x * omc) + z * s;
+    *mat4_element(mat, 1, 1) = (y * y * omc) + c;
+    *mat4_element(mat, 1, 2) = (y * z * omc) - x * s;
+    *mat4_element(mat, 2, 0) = (z * x * omc) - y * s;
+    *mat4_element(mat, 2, 1) = (z * y * omc) + x * s;
+    *mat4_element(mat, 2, 2) = (z * z * omc) + c;
+    *mat4_element(mat, 3, 3) = 1.0;
 }
 
 void mat4_scale(mat4 *mat, float x, float y, float z)
 {
-    *mat4_get(mat, 0, 0) *= x;
-    *mat4_get(mat, 0, 1) *= x;
-    *mat4_get(mat, 0, 2) *= x;
-    *mat4_get(mat, 0, 3) *= x;
+    *mat4_element(mat, 0, 0) *= x;
+    *mat4_element(mat, 0, 1) *= x;
+    *mat4_element(mat, 0, 2) *= x;
+    *mat4_element(mat, 0, 3) *= x;
 
-    *mat4_get(mat, 1, 0) *= y;
-    *mat4_get(mat, 1, 1) *= y;
-    *mat4_get(mat, 1, 2) *= y;
-    *mat4_get(mat, 1, 3) *= y;
+    *mat4_element(mat, 1, 0) *= y;
+    *mat4_element(mat, 1, 1) *= y;
+    *mat4_element(mat, 1, 2) *= y;
+    *mat4_element(mat, 1, 3) *= y;
 
-    *mat4_get(mat, 2, 0) *= z;
-    *mat4_get(mat, 2, 1) *= z;
-    *mat4_get(mat, 2, 2) *= z;
-    *mat4_get(mat, 2, 3) *= z;
+    *mat4_element(mat, 2, 0) *= z;
+    *mat4_element(mat, 2, 1) *= z;
+    *mat4_element(mat, 2, 2) *= z;
+    *mat4_element(mat, 2, 3) *= z;
 }
 
 
@@ -304,12 +309,12 @@ void mat4_scale(mat4 *mat, float x, float y, float z)
 */
 void mat4_set_scale(mat4 *mat, float x, float y, float z)
 {
-    mat4_clear(mat);
+    mat4_zero(mat);
 
-    *mat4_get(mat, 0, 0) = x;
-    *mat4_get(mat, 1, 1) = y;
-    *mat4_get(mat, 2, 2) = z;
-    *mat4_get(mat, 3, 3) = 1;
+    *mat4_element(mat, 0, 0) = x;
+    *mat4_element(mat, 1, 1) = y;
+    *mat4_element(mat, 2, 2) = z;
+    *mat4_element(mat, 3, 3) = 1;
 }
 
 void mat4_print(mat4 *mat)
@@ -318,7 +323,7 @@ void mat4_print(mat4 *mat)
     {
         for (int j = 0; j < 4; j++)
         {
-            LOGI("row = %d , col = %d, value = %f ",j, i, *mat4_get(mat, j, i));
+            LOGI("row = %d , col = %d, value = %f ",j, i, *mat4_element(mat, j, i));
         }
     }
 }

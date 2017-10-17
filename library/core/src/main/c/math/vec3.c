@@ -78,7 +78,7 @@ void vec3_sub(struct vec3 *src1, struct vec3 *src2, struct vec3 *dst)
     vec3_set(dst, src1->x - src2->x, src1->y - src2->y, src1->z - src2->z);
 }
 
-void cross(struct vec3 *src1, struct vec3 *src2, struct vec3 *dst)
+void vec3_cross(struct vec3 *src1, struct vec3 *src2, struct vec3 *dst)
 {
     vec3_set(dst, src1->y * src2->z - src1->z * src2->y, src1->z * src2->x - src1->x * src2->z, src1->x * src2->y - src1->y * src2->x);
 }
@@ -88,7 +88,7 @@ void vec3_ortho(struct vec3 *src, struct vec3 *dst)
     int index = vec3_largest_component_abs(src) - 1;
     vec3_zero(dst);
     vec3_set_component(dst, index < 0 ? 2 : index, 1.0);
-    cross(src, dst, dst);
+    vec3_cross(src, dst, dst);
     vec3_normalize(dst);
 }
 

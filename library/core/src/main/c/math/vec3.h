@@ -27,7 +27,7 @@ void vec3_add(struct vec3 *src1, struct vec3 *src2, struct vec3* dst);
 
 void vec3_sub(struct vec3 *src1, struct vec3 *src2, struct vec3* dst);
 
-void cross(struct vec3 *src1, struct vec3 *src2, struct vec3 *dst);
+void vec3_cross(struct vec3 *src1, struct vec3 *src2, struct vec3 *dst);
 
 void vec3_ortho(struct vec3 *src, struct vec3* dst);
 

@@ -7,11 +7,11 @@
 
 #include "../utils/math_util.h"
 
-float* mat4_get(mat4 *mat, int row, int col);
+float* mat4_element(mat4 *mat, int row, int col);
 
 void mat4_identity(mat4 *mat);
 
-void mat4_clear(mat4 *mat);
+void mat4_zero(mat4 *mat);
 
 void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2);
 
