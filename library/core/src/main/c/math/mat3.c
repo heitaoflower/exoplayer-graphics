@@ -11,6 +11,21 @@ float* mat3_element(mat3 *mat, int row, int col)
     return (float*)mat + (row + col *3);
 }
 
+void mat3_set(mat3* mat, float e00, float e01, float e02, float e10, float e11, float e12, float e20, float e21, float e22)
+{
+    *mat3_element(mat, 0, 0) = e00;
+    *mat3_element(mat, 0, 1) = e01;
+    *mat3_element(mat, 0, 2) = e02;
+
+    *mat3_element(mat, 1, 0) = e10;
+    *mat3_element(mat, 1, 1) = e11;
+    *mat3_element(mat, 1, 2) = e12;
+
+    *mat3_element(mat, 2, 0) = e20;
+    *mat3_element(mat, 2, 1) = e21;
+    *mat3_element(mat, 2, 2) = e22;
+}
+
 void mat3_zero(mat3 *mat)
 {
     memset(mat, 0, sizeof(*mat));
@@ -81,7 +96,26 @@ void mat3_mulv(mat3 *src1, struct vec3 *src2, struct vec3 *dst)
     dst->z = *mat3_element(src1, 0, 2) * src2->x + *mat3_element(src1, 1, 2) * src2->y + *mat3_element(src1, 2, 2) * src2->z;
 }
 
-void mat3_transpose(mat3 *src, mat3 *dst)
+void mat3_transpose(mat3 *mat)
+{
+    mat3 tmp;
+
+    *mat3_element(&tmp, 0, 1) = *mat3_element(mat, 1, 0);
+    *mat3_element(&tmp, 0, 2) = *mat3_element(mat, 2, 0);
+    *mat3_element(&tmp, 1, 0) = *mat3_element(mat, 0, 1);
+    *mat3_element(&tmp, 1, 2) = *mat3_element(mat, 2, 1);
+    *mat3_element(&tmp, 2, 0) = *mat3_element(mat, 0, 2);
+    *mat3_element(&tmp, 2, 1) = *mat3_element(mat, 1, 2);
+
+    *mat3_element(mat, 0, 1) = *mat3_element(&tmp, 0, 1);
+    *mat3_element(mat, 0, 2) = *mat3_element(&tmp, 0, 2);
+    *mat3_element(mat, 1, 0) = *mat3_element(&tmp, 1, 0);
+    *mat3_element(mat, 1, 2) = *mat3_element(&tmp, 1, 2);
+    *mat3_element(mat, 2, 0) = *mat3_element(&tmp, 2, 0);
+    *mat3_element(mat, 2, 1) = *mat3_element(&tmp, 2, 1);
+}
+
+void mat3_transpose_to(mat3 *src, mat3 *dst)
 {
     *mat3_element(dst, 0, 0) = *mat3_element(src, 0, 0);
     *mat3_element(dst, 0, 1) = *mat3_element(src, 1, 0);
@@ -106,9 +140,9 @@ float mat3_determinant(mat3 *mat)
 
 void mat3_invert(mat3 *src, mat3 *dst)
 {
-    float a = *mat3_element(dst, 0, 0), b = *mat3_element(dst, 0, 1), c = *mat3_element(dst, 0, 2),
-          d = *mat3_element(dst, 1, 0), e = *mat3_element(dst, 1, 1), f = *mat3_element(dst, 1, 2),
-          g = *mat3_element(dst, 2, 0), h = *mat3_element(dst, 2, 1), i = *mat3_element(dst, 2, 2);
+    float a = *mat3_element(src, 0, 0), b = *mat3_element(src, 0, 1), c = *mat3_element(src, 0, 2),
+          d = *mat3_element(src, 1, 0), e = *mat3_element(src, 1, 1), f = *mat3_element(src, 1, 2),
+          g = *mat3_element(src, 2, 0), h = *mat3_element(src, 2, 1), i = *mat3_element(src, 2, 2);
 
     *mat3_element(dst, 0, 0) = e * i - f * h;
     *mat3_element(dst, 0, 1) = -(b * i - h * c);

@@ -9,6 +9,8 @@
 
 float* mat3_element(mat3 *mat, int row, int col);
 
+void mat3_set(mat3* mat, float e00, float e01, float e02, float e10, float e11, float e12, float e20, float e21, float e22);
+
 void mat3_zero(mat3 *mat);
 
 void mat3_identity(mat3 *mat);
@@ -23,7 +25,9 @@ void mat3_mul(mat3 *src1, mat3 *src2, mat3 *dst);
 
 void mat3_mulv(mat3 *mat, struct vec3 *vec, struct vec3 *dst);
 
-void mat3_transpose(mat3 *src, mat3 *dst);
+void mat3_transpose(mat3 *mat);
+
+void mat3_transpose_to(mat3 *src, mat3 *dst);
 
 float mat3_determinant(mat3 *mat);
 
