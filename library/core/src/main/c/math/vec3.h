@@ -31,6 +31,4 @@ void vec3_cross(struct vec3 *src1, struct vec3 *src2, struct vec3 *dst);
 
 void vec3_ortho(struct vec3 *src, struct vec3* dst);
 
-int vec3_largest_component_abs(struct vec3 *vec);
-
 #endif //EXOPLAYER_MATH_VEC3_H

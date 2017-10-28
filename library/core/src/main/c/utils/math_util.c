@@ -15,3 +15,8 @@ float rad2deg(float rad)
 {
     return rad / 2.0F / PI * 360.0F;
 }
+
+int sign(int value)
+{
+    return ((value >> 31) - (-value >> 31));
+}

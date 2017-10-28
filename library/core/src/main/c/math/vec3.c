@@ -3,6 +3,7 @@
 //
 
 #include "vec3.h"
+#include "vec3-ext.h"
 
 #include <math.h>
 
@@ -85,35 +86,9 @@ void vec3_cross(struct vec3 *src1, struct vec3 *src2, struct vec3 *dst)
 
 void vec3_ortho(struct vec3 *src, struct vec3 *dst)
 {
-    int index = vec3_largest_component_abs(src) - 1;
+    int index = vec3_max_index(src, true) - 1;
     vec3_zero(dst);
     vec3_set_component(dst, index < 0 ? 2 : index, 1.0);
     vec3_cross(src, dst, dst);
     vec3_normalize(dst);
-}
-
-int vec3_largest_component_abs(struct vec3 *vec)
-{
-    float x_abs = fabsf(vec->x);
-    float y_abs = fabsf(vec->y);
-    float z_abs = fabsf(vec->z);
-
-    if (x_abs > y_abs)
-    {
-        if (x_abs > z_abs)
-        {
-            return 0;
-        }
-
-        return 2;
-    }
-    else
-    {
-        if (y_abs > z_abs)
-        {
-            return 1;
-        }
-
-        return 2;
-    }
 }
