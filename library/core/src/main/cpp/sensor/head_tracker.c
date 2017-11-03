@@ -5,6 +5,7 @@
 #include "head_tracker.h"
 #include "../utils/math_util.h"
 #include "../math/vec3.h"
+#include "../utils/log_util.h"
 
 #include <malloc.h>
 #include <sys/prctl.h>
@@ -27,7 +28,7 @@ static void head_tracker_process_gyro(float x, float y, float z, int64_t timesta
 {
     struct vec3 vec3;
     vec3_set(&vec3, x, y, z);
-
+    LOGI("process_gyro");
     //ekf.process_gyro(vec3, timestamp);
 }
 

@@ -28,6 +28,7 @@ SET( SOURCES
 
     # Sensor source dir.
     ${SENSOR_SOURCE_DIR}/head_tracker.c
+    ${SENSOR_SOURCE_DIR}/so3.c
 
     # Graphics source dir.
     ${GRAPHICS_SOURCE_DIR}/gfx.c
@@ -85,6 +86,7 @@ SET( HEADERS
 
      # Sensor source dir.
      ${SENSOR_SOURCE_DIR}/head_tracker.h
+     ${SENSOR_SOURCE_DIR}/so3.h
 
      # Graphics source dir.
      ${GRAPHICS_SOURCE_DIR}/gfx.h
