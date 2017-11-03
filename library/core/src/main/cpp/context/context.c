@@ -3,7 +3,7 @@
 //
 #include "context.h"
 #include "../graphics/gfx.h"
-#include "../sensor/tracker.h"
+#include "../sensor/head_tracker.h"
 
 struct exogfx_renderer *renderer;
 
@@ -13,7 +13,7 @@ bool context_init(void)
 
     renderer = &ogles_renderer;
 
-    tracker_start();
+    head_tracker_start();
 
     return true;
 }

@@ -2,8 +2,8 @@
 // Created by showtime on 10/14/2017.
 //
 
-#ifndef EXOGFX_TRACKER_H
-#define EXOGFX_TRACKER_H
+#ifndef EXOGFX_HEAD_TRACKER_H
+#define EXOGFX_HEAD_TRACKER_H
 
 #include <android/looper.h>
 #include <android/sensor.h>
@@ -12,7 +12,7 @@
 
 enum {LOOPER_ID_USER = 3};
 
-struct tracker_context
+struct head_tracker_context
 {
     ASensorManager *sensor_manager;
     ASensor const *acc;
@@ -25,8 +25,10 @@ struct tracker_context
     struct timeval last_gyro_time;
 };
 
-void tracker_start(void);
+void head_tracker_start(void);
 
-void tracker_stop(void);
+void head_tracker_stop(void);
 
-#endif //EXOGFX_TRACKER_H
+void head_tracker_get_last_view(float *matrix);
+
+#endif //EXOGFX_HEAD_TRACKER_H

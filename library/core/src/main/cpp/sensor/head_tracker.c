@@ -2,7 +2,7 @@
 // Created by showtime on 10/14/2017.
 //
 
-#include "tracker.h"
+#include "head_tracker.h"
 #include "../utils/math_util.h"
 #include "../math/vec3.h"
 
@@ -12,10 +12,10 @@
 #define SENSOR_REFRESH_PERIOD_US 20000
 
 static bool running = false;
-static struct tracker_context *context;
+static struct head_tracker_context *context;
 static pthread_t tracker_tid;
 
-static void tracker_process_acc(float x, float y, float z, int64_t timestamp)
+static void head_tracker_process_acc(float x, float y, float z, int64_t timestamp)
 {
     struct vec3 vec3;
     vec3_set(&vec3, x, y, z);
@@ -23,7 +23,7 @@ static void tracker_process_acc(float x, float y, float z, int64_t timestamp)
     //ekf.process_acc(vec3, timestamp);
 }
 
-static void tracker_process_gyro(float x, float y, float z, int64_t timestamp)
+static void head_tracker_process_gyro(float x, float y, float z, int64_t timestamp)
 {
     struct vec3 vec3;
     vec3_set(&vec3, x, y, z);
@@ -31,10 +31,10 @@ static void tracker_process_gyro(float x, float y, float z, int64_t timestamp)
     //ekf.process_gyro(vec3, timestamp);
 }
 
-static struct tracker_context * tracker_context_create()
+static struct head_tracker_context * tracker_context_create()
 {
-    struct tracker_context *context = (struct tracker_context*)malloc(sizeof(struct tracker_context));
-    memset(context, 0, sizeof(struct tracker_context));
+    struct head_tracker_context *context = (struct head_tracker_context*)malloc(sizeof(struct head_tracker_context));
+    memset(context, 0, sizeof(struct head_tracker_context));
     context->sensor_manager = ASensorManager_getInstance();
     context->acc = ASensorManager_getDefaultSensor(context->sensor_manager, ASENSOR_TYPE_ACCELEROMETER);
     context->gyro = ASensorManager_getDefaultSensor(context->sensor_manager, ASENSOR_TYPE_GYROSCOPE);
@@ -68,7 +68,7 @@ static struct tracker_context * tracker_context_create()
 
 }
 
-static void tracker_context_release(struct tracker_context *context)
+static void head_tracker_context_release(struct head_tracker_context *context)
 {
     ASensorManager_destroyEventQueue(context->sensor_manager, context->event_queue);
     pthread_mutex_destroy(context->lock);
@@ -76,7 +76,7 @@ static void tracker_context_release(struct tracker_context *context)
     free(context);
 }
 
-static void* tracker_thread(__attribute__((unused)) void *data)
+static void* head_tracker_worker(__attribute__((unused)) void *data)
 {
     prctl(PR_SET_NAME, __func__);
     context = tracker_context_create();
@@ -99,7 +99,7 @@ static void* tracker_thread(__attribute__((unused)) void *data)
                     {
                         pthread_mutex_lock(context->lock);
 
-                        tracker_process_acc(
+                        head_tracker_process_acc(
                                 -event.data[1],
                                 event.data[0],
                                 event.data[2],
@@ -111,7 +111,7 @@ static void* tracker_thread(__attribute__((unused)) void *data)
                     {
                         pthread_mutex_lock(context->lock);
                         gettimeofday(&context->last_gyro_time, NULL);
-                        tracker_process_gyro(
+                        head_tracker_process_gyro(
                                 -event.data[1],
                                 event.data[0],
                                 event.data[2],
@@ -124,17 +124,33 @@ static void* tracker_thread(__attribute__((unused)) void *data)
         }
     }
 
-    tracker_context_release(context);
+
+    head_tracker_context_release(context);
 
     return NULL;
 }
 
-void tracker_start(void)
+void head_tracker_start(void)
 {
-    pthread_create(&tracker_tid, NULL, tracker_thread, NULL);
+    pthread_create(&tracker_tid, NULL, head_tracker_worker, NULL);
 }
 
-void tracker_stop(void)
+void head_tracker_stop(void)
+{
+    if (!running) return;
+
+    if (context != NULL)
+    {
+        ASensorEventQueue_disableSensor(context->event_queue, context->acc);
+        ASensorEventQueue_disableSensor(context->event_queue, context->gyro);
+        ALooper_wake(context->looper);
+    }
+    running = false;
+
+    pthread_join(tracker_tid, NULL);
+}
+
+void head_tracker_get_last_view(float *matrix)
 {
 
 }

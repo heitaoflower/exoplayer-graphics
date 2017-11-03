@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 3.4.1)
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
 
-set (SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/main/c")
+set (SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/main/cpp")
 set (CONTEXT_SOURCE_DIR "${SOURCE_DIR}/context")
 set (GRAPHICS_SOURCE_DIR "${SOURCE_DIR}/graphics")
 set (MATH_SOURCE_DIR "${SOURCE_DIR}/math")
@@ -27,7 +27,7 @@ SET( SOURCES
     ${CONTEXT_SOURCE_DIR}/context.c
 
     # Sensor source dir.
-    ${SENSOR_SOURCE_DIR}/tracker.c
+    ${SENSOR_SOURCE_DIR}/head_tracker.c
 
     # Graphics source dir.
     ${GRAPHICS_SOURCE_DIR}/gfx.c
@@ -84,8 +84,7 @@ SET( HEADERS
      ${CONTEXT_SOURCE_DIR}/context.h
 
      # Sensor source dir.
-
-     ${SENSOR_SOURCE_DIR}/tracker.h
+     ${SENSOR_SOURCE_DIR}/head_tracker.h
 
      # Graphics source dir.
      ${GRAPHICS_SOURCE_DIR}/gfx.h

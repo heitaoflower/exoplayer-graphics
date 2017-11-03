@@ -24,7 +24,8 @@ android {
             path 'CMakeLists.txt'
         }
     }
-    sourceSets { main { jni.srcDirs = ['src/main/c', 'src/main/jni', 'src/main/c/model', 'src/main/c/sensor', 'src/main/c/context'] } }
+    sourceSets { main { jni.srcDirs = ['src/main/cpp', 'src/main/cpp/model', 'src/main/cpp/sensor', 'src/main/cpp/context'] } }
+    buildToolsVersion '26.0.2'
 }
 
 dependencies {
