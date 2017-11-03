@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.heitao.exogfx.core.ExogfxVideoPlayer;
 import com.heitao.exogfx.core.ExogfxVideoRenderer;
 import com.heitao.exogfx.core.GLThreadScheduler;
@@ -15,9 +16,19 @@ import com.heitao.exogfx.egl.DefaultEGLContextFactory;
  * Created by showtime on 9/3/2017.
  */
 
-public class ExogfxView extends GLSurfaceView {
+public class ExogfxView extends GLSurfaceView{
+
+    public enum PlayerScaleType {
+        RESIZE_FIT_WIDTH,
+        RESIZE_FIT_HEIGHT,
+        RESIZE_NONE
+    }
 
     private final static String TAG = ExogfxView.class.getSimpleName();
+
+    private float videoAspect = 1f;
+
+    private PlayerScaleType playerScaleType = PlayerScaleType.RESIZE_FIT_WIDTH;
 
     private ExogfxVideoRenderer renderer;
 
@@ -39,14 +50,14 @@ public class ExogfxView extends GLSurfaceView {
             }
         };
 
-        initializeRendering();
+        initializeVideoRendering();
 
-        initializeExoPlayer(context);
+        initializeVideoPlayer(context);
 
         renderer.bindPlayer(player);
     }
 
-    private void initializeRendering()
+    private void initializeVideoRendering()
     {
         setEGLContextFactory(new DefaultEGLContextFactory());
         setEGLConfigChooser(new DefaultEGLConfigChooser());
@@ -55,9 +66,21 @@ public class ExogfxView extends GLSurfaceView {
         setRenderer(renderer);
     }
 
-    private void initializeExoPlayer(Context context) {
+    private void initializeVideoPlayer(Context context) {
 
         player = new ExogfxVideoPlayer(context);
+        player.getExoPlayer().addVideoListener(new SimpleExoPlayer.VideoListener() {
+            @Override
+            public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+                videoAspect = ((float) width / height) * pixelWidthHeightRatio;
+                requestLayout();
+            }
+
+            @Override
+            public void onRenderedFirstFrame() {
+
+            }
+        });
     }
 
     public void loadVideo(Uri uri)
@@ -93,6 +116,23 @@ public class ExogfxView extends GLSurfaceView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int measuredWidth = getMeasuredWidth();
+        int measuredHeight = getMeasuredHeight();
+
+        int viewWidth = measuredWidth;
+        int viewHeight = measuredHeight;
+
+        switch (playerScaleType) {
+            case RESIZE_FIT_WIDTH:
+                viewHeight = (int) (measuredWidth / videoAspect);
+                break;
+            case RESIZE_FIT_HEIGHT:
+                viewWidth = (int) (measuredHeight * videoAspect);
+                break;
+        }
+
+        setMeasuredDimension(viewWidth, viewHeight);
     }
 
     @Override

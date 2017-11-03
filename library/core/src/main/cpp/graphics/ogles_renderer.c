@@ -13,7 +13,7 @@
 struct camera camera;
 static struct ogles_fbo fbo;
 static struct ogles_video_filter video_filter = {
-        .uniforms = {UNIFORM(uMVPMatrix), UNIFORM(uSTMatrix), UNIFORM(sTexture)},
+        .uniforms = {UNIFORM(uMVPMatrix), UNIFORM(uSTMatrix), UNIFORM(sTexture), UNIFORM(uAspect)},
         .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aTextureCoord)}
 };
 static struct ogles_presentation_filter presentation_filter = {
@@ -58,7 +58,7 @@ static void draw(GLuint texture, const float st_mat[])
 
     glViewport(0, 0, fbo.width, fbo.height);
     glClear(GL_COLOR_BUFFER_BIT);
-    ogles_video_filter_draw(&video_filter, texture, &camera.vp_mat, st_mat);
+    ogles_video_filter_draw(&video_filter, texture, &camera.mvp_mat, st_mat, camera.aspect);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

@@ -16,7 +16,6 @@ struct ogles_video_filter
     GLuint vertex_shader;
     GLuint fragment_shader;
     struct primitive *primitive;
-    mat4 mvp_matrix;
     GLuint target;
 
     struct
@@ -24,6 +23,7 @@ struct ogles_video_filter
         struct uniform uMVPMatrix;
         struct uniform uSTMatrix;
         struct uniform sTexture;
+        struct uniform uAspect;
     } uniforms;
 
     struct
@@ -49,7 +49,7 @@ ogles_filter_pre_draw(video)
 (struct ogles_video_filter *filter);
 
 ogles_filter_draw(video)
-(struct ogles_video_filter *filter, GLuint texture, mat4 *vp_matrix, const float st_matrix[]);
+(struct ogles_video_filter *filter, GLuint texture, mat4 *mvp_mat, const float st_mat[], float aspect);
 
 ogles_filter_post_draw(video)
 (struct ogles_video_filter *filter);

@@ -14,11 +14,13 @@ typedef enum
 } projection_type;
 
 struct camera{
+    mat4 model_mat;
     mat4 view_mat;
     mat4 projection_mat;
-    mat4 vp_mat;
+    mat4 mvp_mat;
     GLint viewport_width;
     GLint viewport_height;
+    GLfloat aspect;
 };
 
 void camera_set_lookat(struct camera *camera);

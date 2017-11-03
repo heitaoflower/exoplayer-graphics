@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.SimpleExoPlayer.VideoListener;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -20,6 +21,9 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.heitao.exogfx.view.ExogfxView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by showtime on 9/14/2017.
  */
@@ -31,8 +35,12 @@ public class ExogfxVideoPlayer implements SimpleExoPlayer.VideoListener  {
     private DataSource.Factory dataSourceFactory;
     private ExtractorsFactory extractorsFactory;
 
+    private List<VideoListener> videoListeners = null;
+
     public ExogfxVideoPlayer(Context context)
     {
+        videoListeners = new ArrayList<>();
+
         initializeExoPlayer(context);
     }
 
@@ -84,11 +92,26 @@ public class ExogfxVideoPlayer implements SimpleExoPlayer.VideoListener  {
     @Override
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
 
+        for (final VideoListener listener : ExogfxVideoPlayer.this.videoListeners) {
+            listener.onVideoSizeChanged(width, height, unappliedRotationDegrees, pixelWidthHeightRatio);
+        }
     }
 
     @Override
     public void onRenderedFirstFrame() {
+        for (final VideoListener listener : ExogfxVideoPlayer.this.videoListeners) {
+            listener.onRenderedFirstFrame();
+        }
+    }
 
+    public void registerVideoListener(final VideoListener listener)
+    {
+        videoListeners.add(listener);
+    }
+
+    public void unregisterVideoListener(final VideoListener listener)
+    {
+        videoListeners.remove(listener);
     }
 
     public synchronized MediaSource buildMediaSource(final Uri uri)

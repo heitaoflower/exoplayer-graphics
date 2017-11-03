@@ -106,6 +106,30 @@ void mat4_frustum(mat4 *mat, float left, float right, float bottom, float top, f
     *mat4_element(mat, 3, 2) = -1.0f;
 }
 
+void mat4_frustum_default(mat4 *mat, float aspect)
+{
+    if (aspect >= 1.0f)
+    {
+        mat4_frustum(mat,
+                   -1.0f * aspect,
+                    1.0f * aspect,
+                   -1.0f,
+                    1.0f,
+                    0.3f,
+                    1000.0f);
+    }
+    else
+    {
+        mat4_frustum(mat,
+                   -1.0f,
+                    1.0f,
+                   -1.0f * aspect,
+                    1.0f * aspect,
+                    0.3f,
+                    1000.0f);
+    }
+}
+
 void mat4_ortho(mat4 *mat, float left, float right, float bottom, float top, float nearVal, float farVal)
 {
     float r_width  = 1.0f / (right - left);
@@ -123,9 +147,9 @@ void mat4_ortho(mat4 *mat, float left, float right, float bottom, float top, flo
     *mat4_element(mat, 0, 0) = x;
     *mat4_element(mat, 1, 1) = y;
     *mat4_element(mat, 2, 2) = z;
-    *mat4_element(mat, 3, 0) = tx;
-    *mat4_element(mat, 3, 1) = ty;
-    *mat4_element(mat, 3, 2) = tz;
+    *mat4_element(mat, 0, 3) = tx;
+    *mat4_element(mat, 1, 3) = ty;
+    *mat4_element(mat, 2, 3) = tz;
     *mat4_element(mat, 3, 3) = 1.0f;
 }
 
@@ -138,7 +162,7 @@ void mat4_ortho_default(mat4 *mat, float aspect)
                     1.0f * aspect,
                    -1.0f,
                     1.0f,
-                   -1000.0f,
+                    0.3f,
                     1000.0f);
     }
     else
@@ -148,10 +172,11 @@ void mat4_ortho_default(mat4 *mat, float aspect)
                     1.0f,
                    -1.0f * aspect,
                     1.0f * aspect,
-                   -1000.0f,
+                    0.3f,
                     1000.0f);
     }
 }
+
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml
 *
 * f = cotangent(fovy / 2)
@@ -188,7 +213,7 @@ void mat4_perspective(mat4 *mat, float fovy, float aspect, float zNear, float zF
 
 void mat4_perspective_default(mat4 *mat, float aspect)
 {
-    mat4_perspective(mat, deg2rad(60), aspect, 0.03f, 1000);
+    mat4_perspective(mat, deg2rad(60), aspect, 0.3f, 1000);
 }
 
 void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ)

@@ -2,20 +2,22 @@
 // Created by showtime on 9/10/2017.
 //
 #include "ogles_video_filter.h"
-#include "../math/mat4.h"
 #include "../utils/ogles_util.h"
 
 #define L(s) s "\n"
 static const char *vertex_shader =
         L("uniform mat4 uMVPMatrix;")
         L("uniform mat4 uSTMatrix;")
+        L("uniform float uAspect;")
 
         L("attribute vec4 aPosition;")
         L("attribute vec4 aTextureCoord;")
         L("varying highp vec2 vTextureCoord;")
 
         L("void main() {")
-        L("gl_Position = uMVPMatrix * aPosition;")
+        L("vec4 scaledPosition = aPosition;")
+        L("scaledPosition.x = scaledPosition.x * uAspect;")
+        L("gl_Position = uMVPMatrix * scaledPosition;")
         L("vTextureCoord = (uSTMatrix * aTextureCoord).xy;")
         L("}");
 
@@ -79,15 +81,15 @@ ogles_filter_pre_draw(video)
 }
 
 ogles_filter_draw(video)
-(struct ogles_video_filter *filter, GLuint texture, mat4 *vp_matrix, const float st_matrix[])
+(struct ogles_video_filter *filter, GLuint texture, mat4 *mvp_mat, const float st_mat[], float aspect)
 {
     ogles_video_filter_pre_draw(filter);
 
     ogles_video_filter_use_program(filter);
-    mat4_multiply(&filter->mvp_matrix, vp_matrix, &filter->primitive->model_matrix);
 
-    glUniformMatrix4fv(filter->uniforms.uMVPMatrix.location, 1, GL_FALSE, (const float*)&filter->mvp_matrix);
-    glUniformMatrix4fv(filter->uniforms.uSTMatrix.location, 1, GL_FALSE, st_matrix);
+    glUniformMatrix4fv(filter->uniforms.uMVPMatrix.location, 1, GL_FALSE, (const float*)mvp_mat);
+    glUniformMatrix4fv(filter->uniforms.uSTMatrix.location, 1, GL_FALSE, st_mat);
+    glUniform1f(filter->uniforms.uAspect.location, aspect);
 
     glBindBuffer(GL_ARRAY_BUFFER, filter->primitive->vbo_vertices);
     glEnableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
@@ -136,6 +138,8 @@ ogles_filter_register_handle(video)
     if (filter->uniforms.uSTMatrix.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.uSTMatrix.name); }
     filter->uniforms.sTexture.location = glGetUniformLocation(filter->program, filter->uniforms.sTexture.name);
     if (filter->uniforms.sTexture.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.sTexture.name); }
+    filter->uniforms.uAspect.location = glGetUniformLocation(filter->program, filter->uniforms.uAspect.name);
+    if (filter->uniforms.uAspect.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.uAspect.name); }
 
     // Attributes
     filter->attributes.aPosition.location = glGetAttribLocation(filter->program, filter->attributes.aPosition.name);
