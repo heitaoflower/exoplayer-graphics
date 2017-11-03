@@ -90,8 +90,6 @@ void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2)
 */
 void mat4_frustum(mat4 *mat, float left, float right, float bottom, float top, float nearVal, float farVal)
 {
-    assert(left != right && top != bottom && farVal != nearVal);
-
     float A = (right + left) / (right - left);
     float B = (top + bottom) / (top - bottom);
     float C = - (farVal + nearVal) / (farVal - nearVal);
@@ -108,6 +106,52 @@ void mat4_frustum(mat4 *mat, float left, float right, float bottom, float top, f
     *mat4_element(mat, 3, 2) = -1.0f;
 }
 
+void mat4_ortho(mat4 *mat, float left, float right, float bottom, float top, float nearVal, float farVal)
+{
+    float r_width  = 1.0f / (right - left);
+    float r_height = 1.0f / (top - bottom);
+    float r_depth  = 1.0f / (farVal - nearVal);
+    float x =  2.0f * (r_width);
+    float y =  2.0f * (r_height);
+    float z = -2.0f * (r_depth);
+    float tx = -(right + left) * r_width;
+    float ty = -(top + bottom) * r_height;
+    float tz = -(farVal + nearVal) * r_depth;
+
+    mat4_zero(mat);
+
+    *mat4_element(mat, 0, 0) = x;
+    *mat4_element(mat, 1, 1) = y;
+    *mat4_element(mat, 2, 2) = z;
+    *mat4_element(mat, 3, 0) = tx;
+    *mat4_element(mat, 3, 1) = ty;
+    *mat4_element(mat, 3, 2) = tz;
+    *mat4_element(mat, 3, 3) = 1.0f;
+}
+
+void mat4_ortho_default(mat4 *mat, float aspect)
+{
+    if (aspect >= 1.0f)
+    {
+        mat4_ortho(mat,
+                   -1.0f * aspect,
+                    1.0f * aspect,
+                   -1.0f,
+                    1.0f,
+                   -1000.0f,
+                    1000.0f);
+    }
+    else
+    {
+        mat4_ortho(mat,
+                   -1.0f,
+                    1.0f,
+                   -1.0f * aspect,
+                    1.0f * aspect,
+                   -1000.0f,
+                    1000.0f);
+    }
+}
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml
 *
 * f = cotangent(fovy / 2)

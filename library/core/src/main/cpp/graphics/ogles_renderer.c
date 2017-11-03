@@ -31,8 +31,8 @@ static void create(GLuint texture)
     glDisable(GL_SCISSOR_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    ogles_video_filter_init(&video_filter, create_primitive(Sphere));
-    ogles_presentation_filter_init(&presentation_filter, create_primitive(Quad));
+    ogles_video_filter_init(&video_filter, create_primitive(PrimitiveTypeQuad));
+    ogles_presentation_filter_init(&presentation_filter, create_primitive(PrimitiveTypeQuad));
 
     glBindTexture(video_filter.target, texture);
     initSampler(video_filter.target, GL_LINEAR, GL_NEAREST);
@@ -48,7 +48,7 @@ static void resize(GLsizei width, GLsizei height)
 
     ogles_video_filter_resize(&video_filter, width, height);
 
-    camera_set_perspective(&camera, width, height);
+    camera_set_projection(&camera, ProjectionTypeOrtho, width, height);
 }
 
 static void draw(GLuint texture, const float st_mat[])

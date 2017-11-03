@@ -19,6 +19,10 @@ void mat4_perspective(mat4 *mat, float fovy, float aspect, float zNear, float zF
 
 void mat4_perspective_default(mat4 *mat, float aspect);
 
+void mat4_ortho(mat4 *mat, float left, float right, float bottom, float top, float nearVal, float farVal);
+
+void mat4_ortho_default(mat4 *mat, float aspect);
+
 void mat4_frustum(mat4 *mat, float left, float right, float bottom, float top, float nearVal, float farVal);
 
 void mat4_lookat(mat4 *mat, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ);

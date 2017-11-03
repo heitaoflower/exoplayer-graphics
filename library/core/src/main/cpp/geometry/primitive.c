@@ -13,19 +13,19 @@ struct primitive *create_primitive(primitive_type type)
 {
     switch (type)
     {
-        case Sphere:
+        case PrimitiveTypeSphere:
         {
             return primitive_sphere_create();
         }
-        case Cube:
+        case PrimitiveTypeCube:
         {
             return NULL;
         }
-        case Plane:
+        case PrimitiveTypePlane:
         {
             return primitive_plane_create();
         }
-        case Quad:
+        case PrimitiveTypeQuad:
         {
             return primitive_quad_create();
         }
