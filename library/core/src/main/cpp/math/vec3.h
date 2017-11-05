@@ -7,6 +7,8 @@
 
 #include "../utils/math_util.h"
 
+void vec3_copy(struct vec3 *src, struct vec3 *dst);
+
 void vec3_set(struct vec3 *vec, float x, float y, float z);
 
 void vec3_set_component(struct vec3 *vec, int index, float value);

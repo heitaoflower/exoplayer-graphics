@@ -3,17 +3,17 @@
 //
 #include "camera.h"
 
-static void camera_set_perspective(struct camera *camera, GLint width, GLint height)
+static void camera_set_perspective(struct camera *camera)
 {
     mat4_perspective_default(&camera->projection_mat, camera->aspect);
 }
 
-static void camera_set_ortho(struct camera *camera, GLint width, GLint height)
+static void camera_set_ortho(struct camera *camera)
 {
     mat4_ortho_default(&camera->projection_mat, camera->aspect);
 }
 
-static void camera_set_frustum(struct camera *camera, GLint width, GLint height)
+static void camera_set_frustum(struct camera *camera)
 {
     mat4_frustum_default(&camera->projection_mat, camera->aspect);
 }
@@ -33,17 +33,17 @@ void camera_set_projection(struct camera *camera, projection_type projection_typ
     {
         case ProjectionTypePerspective:
         {
-            camera_set_perspective(camera, width, height);
+            camera_set_perspective(camera);
             break;
         }
         case ProjectionTypeOrtho:
         {
-            camera_set_ortho(camera, width, height);
+            camera_set_ortho(camera);
             break;
         }
         case ProjectionTypeFrustum:
         {
-            camera_set_frustum(camera, width, height);
+            camera_set_frustum(camera);
             break;
         }
     }

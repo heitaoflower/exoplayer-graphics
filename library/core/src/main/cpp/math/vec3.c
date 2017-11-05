@@ -7,7 +7,14 @@
 
 #include <math.h>
 
-void vec3_set(struct vec3 * vec, float x, float y, float z)
+void vec3_copy(struct vec3 *src, struct vec3 *dst)
+{
+    dst->x = src->x;
+    dst->y = src->y;
+    dst->z = src->z;
+}
+
+void vec3_set(struct vec3 *vec, float x, float y, float z)
 {
     vec->x = x;
     vec->y = y;
