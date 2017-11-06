@@ -8,7 +8,7 @@
 
 float* mat3_element(mat3 *mat, int row, int col)
 {
-    return (float*)mat + (row + col *3);
+    return (float*)mat + (row + col * 3);
 }
 
 void mat3_set(mat3* mat, float e00, float e01, float e02, float e10, float e11, float e12, float e20, float e21, float e22)
@@ -24,6 +24,20 @@ void mat3_set(mat3* mat, float e00, float e01, float e02, float e10, float e11, 
     *mat3_element(mat, 2, 0) = e20;
     *mat3_element(mat, 2, 1) = e21;
     *mat3_element(mat, 2, 2) = e22;
+}
+
+void mat3_set_row(mat3 *mat, int row, struct vec3 *vec)
+{
+    *mat3_element(mat, row, 0) = vec->x;
+    *mat3_element(mat, row, 1) = vec->y;
+    *mat3_element(mat, row, 2) = vec->z;
+}
+
+void mat3_get_row(mat3 *mat, int row, struct vec3 *vec)
+{
+    vec->x = *mat3_element(mat, row, 0);
+    vec->y = *mat3_element(mat, row, 1);
+    vec->z = *mat3_element(mat, row, 2);
 }
 
 void mat3_zero(mat3 *mat)
@@ -80,11 +94,10 @@ void mat3_mul(mat3 *src1, mat3 *src2, mat3 *dst)
     {
         for (int j = 0; j < 3; j++)
         {
-            *mat3_element(dst, i, j) =
-                *mat3_element(src1, i, 0) * *mat3_element(src2, 0, j) +
-                *mat3_element(src1, i, 1) * *mat3_element(src2, 1, j) +
-                *mat3_element(src1, i, 2) * *mat3_element(src2, 2, j) +
-                *mat3_element(src1, i, 3) * *mat3_element(src2, 3, j);
+            *mat3_element(dst, j, i) =
+                *mat3_element(src1, 0, i) * *mat3_element(src2, j, 0) +
+                *mat3_element(src1, 1, i) * *mat3_element(src2, j, 1) +
+                *mat3_element(src1, 2, i) * *mat3_element(src2, j, 2);
         }
     }
 }
