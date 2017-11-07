@@ -25,7 +25,6 @@ android {
         }
     }
     sourceSets { main { jni.srcDirs = ['src/main/cpp', 'src/main/cpp/model', 'src/main/cpp/sensor', 'src/main/cpp/context'] } }
-    buildToolsVersion '26.0.2'
 }
 
 dependencies {

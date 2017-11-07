@@ -10,7 +10,7 @@
 #include <malloc.h>
 #include <sys/prctl.h>
 
-#define SENSOR_REFRESH_PERIOD_US 20000
+#define SENSOR_REFRESH_PERIOD_US 1000000L / 60
 
 static bool running = false;
 static struct head_tracker_context *context;
