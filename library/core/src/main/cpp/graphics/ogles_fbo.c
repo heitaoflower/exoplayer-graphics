@@ -21,6 +21,7 @@ void ogles_fbo_resize(struct ogles_fbo *fbo, GLsizei width, GLsizei height)
         LOGE("GL_MAX_RENDERBUFFER_SIZE: %d", params[0]);
     }
 
+
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, params);
     GLuint current_framebuffer = (GLuint)params[0];
     glGetIntegerv(GL_RENDERBUFFER_BINDING, params);

@@ -17,7 +17,6 @@ static void camera_set_frustum(struct camera *camera)
 {
     mat4_frustum_default(&camera->projection_mat, camera->aspect);
 }
-
 void camera_set_lookat(struct camera *camera)
 {
     mat4_lookat(&camera->view_mat, 0.0f, 0.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);

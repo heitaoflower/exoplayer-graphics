@@ -117,6 +117,54 @@ void so3_from_mu(struct vec3 *w, mat3 *result)
 
 void so3_to_mu(mat3 *so3, struct vec3 *result)
 {
+    const float cos_angle = (*mat3_element(so3, 0, 0) + *mat3_element(so3, 1, 1) + *mat3_element(so3, 2, 2) - 1.0f) * 0.5f;
+    vec3_set(result,
+             (*mat3_element(so3, 2, 1) - *mat3_element(so3, 1, 2)) / 2.0f,
+             (*mat3_element(so3, 0, 2) - *mat3_element(so3, 2, 0)) / 2.0f,
+             (*mat3_element(so3, 1, 0) - *mat3_element(so3, 0, 1)) / 2.0f);
 
+    const float sin_angle_abs = vec3_distance(result);
+    if (cos_angle > 0.7071067811865476f)
+    {
+        if (sin_angle_abs > 0.0)
+        {
+            vec3_scale(result, asinf(sin_angle_abs) / sin_angle_abs);
+        }
+    }
+    else if (cos_angle > -0.7071067811865476)
+    {
+        const float angle = acosf(cos_angle);
+        vec3_scale(result, angle / sin_angle_abs);
+    }
+    else
+    {
+        const float angle = PI - asinf(sin_angle_abs);
+        const float d0 = *mat3_element(so3, 0, 0) - cos_angle;
+        const float d1 = *mat3_element(so3, 1, 1) - cos_angle;
+        const float d2 = *mat3_element(so3, 2, 2) - cos_angle;
+        struct vec3 r2;
+        vec3_zero(&r2);
+        if ((d0 * d0 > d1 * d1) && (d0 * d0 > d2 * d2))
+        {
+            vec3_set(&r2, d0, (*mat3_element(so3, 1, 0) + *mat3_element(so3, 0, 1)) / 2.0f, (*mat3_element(so3, 0, 2) + *mat3_element(so3, 2, 0)) / 2.0f);
+        }
+        else if (d1 * d1 > d2 * d2)
+        {
+            vec3_set(&r2, (*mat3_element(so3, 1, 0) + *mat3_element(so3, 0, 1)) / 2.0f, d1, (*mat3_element(so3, 2, 1) + *mat3_element(so3, 1, 2)) / 2.0f);
+        }
+        else
+        {
+            vec3_set(&r2,(*mat3_element(so3, 0, 2) + *mat3_element(so3, 2, 0)) / 2.0f, (*mat3_element(so3, 2, 1) + *mat3_element(so3, 1, 2)) / 2.0f, d2);
+        }
+
+        if (vec3_dot(&r2, result) < 0.0f)
+        {
+            vec3_scale(&r2, -1.0f);
+        }
+
+        vec3_normalize(&r2);
+        vec3_scale(&r2, angle);
+        vec3_copy(&r2, result);
+    }
 }
 
