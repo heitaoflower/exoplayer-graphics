@@ -4,40 +4,40 @@
 #include "ogles_video_filter.h"
 #include "../utils/ogles_util.h"
 
-#define L(s) s "\n"
-static const char *vertex_shader =
-        L("uniform mat4 uMVPMatrix;")
-        L("uniform mat4 uSTMatrix;")
-        L("uniform float uAspect;")
+#define STR(s) s "\n"
+static const char *vertex_shader_source =
+        STR("uniform mat4 uMVPMatrix;")
+        STR("uniform mat4 uSTMatrix;")
+        STR("uniform float uAspect;")
 
-        L("attribute vec4 aPosition;")
-        L("attribute vec4 aTextureCoord;")
-        L("varying highp vec2 vTextureCoord;")
+        STR("attribute vec4 aPosition;")
+        STR("attribute vec4 aTextureCoord;")
+        STR("varying highp vec2 vTextureCoord;")
 
-        L("void main() {")
-        L("vec4 scaledPosition = aPosition;")
-        L("scaledPosition.x = scaledPosition.x * uAspect;")
-        L("gl_Position = uMVPMatrix * scaledPosition;")
-        L("vTextureCoord = (uSTMatrix * aTextureCoord).xy;")
-        L("}");
+        STR("void main() {")
+        STR("vec4 scaledPosition = aPosition;")
+        STR("scaledPosition.x = scaledPosition.x * uAspect;")
+        STR("gl_Position = uMVPMatrix * scaledPosition;")
+        STR("vTextureCoord = (uSTMatrix * aTextureCoord).xy;")
+        STR("}");
 
-static const char *fragment_shader =
-        L("#extension GL_OES_EGL_image_external : require")
-        L("precision mediump float;")
-        L("varying highp vec2 vTextureCoord;")
-        L("uniform lowp samplerExternalOES sTexture;")
-        L("void main() {")
-        L("gl_FragColor = texture2D(sTexture, vTextureCoord);")
-        L("}");
-#undef L
+static const char *fragment_shader_source =
+        STR("#extension GL_OES_EGL_image_external : require")
+        STR("precision mediump float;")
+        STR("varying highp vec2 vTextureCoord;")
+        STR("uniform lowp samplerExternalOES sTexture;")
+        STR("void main() {")
+        STR("gl_FragColor = texture2D(sTexture, vTextureCoord);")
+        STR("}");
+#undef STR
 
 ogles_filter_init(video)
 (struct ogles_video_filter *filter, struct primitive *primitive)
 {
     ogles_video_filter_safe_release(filter);
 
-    filter->vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader);
-    filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader);
+    filter->vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
+    filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
     filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);
     filter->primitive = primitive;
     filter->target = GL_TEXTURE_EXTERNAL_OES;
