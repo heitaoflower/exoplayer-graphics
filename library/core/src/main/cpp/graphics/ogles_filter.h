@@ -5,8 +5,16 @@
 #ifndef EXOGFX_GRAPHICS_OGLES_FILTER_H
 #define EXOGFX_GRAPHICS_OGLES_FILTER_H
 
+#define FILTER_TYPE_VIDEO               0xF000
+#define FILTER_TYPE_GRAY                0xF001
+#define FILTER_TYPE_YUV                 0xF002
+#define FILTER_TYPE_PRESENTATION        0xFFFF
+
 #define VERTICES_DATA_POSITION_SIZE 3
 #define VERTICES_DATA_UV_SIZE 2
+
+#define ogles_filter_create(name) \
+        struct ogles_##name##_filter* ogles_##name##_filter_create
 
 #define ogles_filter_init(name)    \
         void ogles_##name##_filter_init
@@ -38,6 +46,15 @@
 #define UNIFORM(u) .u = {-1, #u}
 
 #define ATTRIBUTE(a) .a = {-1, #a}
+
+struct ogles_filter_base
+{
+    uint32_t type;
+
+    GLuint program;
+    GLuint vertex_shader;
+    GLuint fragment_shader;
+};
 
 struct uniform
 {

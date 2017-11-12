@@ -36,12 +36,15 @@ SET( SOURCES
     ${GRAPHICS_SOURCE_DIR}/ogles_fbo.c
     ${GRAPHICS_SOURCE_DIR}/ogles_presentation_filter.c
     ${GRAPHICS_SOURCE_DIR}/ogles_video_filter.c
+    ${GRAPHICS_SOURCE_DIR}/ogles_gray_filter.c
+    ${GRAPHICS_SOURCE_DIR}/ogles_filter_group.c
 
     # Utils source dir.
     ${UTILS_SOURCE_DIR}/lib_loader.c
     ${UTILS_SOURCE_DIR}/ogles_util.c
     ${UTILS_SOURCE_DIR}/math_util.c
     ${UTILS_SOURCE_DIR}/map.c
+    ${UTILS_SOURCE_DIR}/vec.c
 
     # Geometry source dir.
     ${GEOMETRY_SOURCE_DIR}/primitive.c
@@ -65,6 +68,7 @@ SET( HEADERS
      ${UTILS_SOURCE_DIR}/math_util.h
      ${UTILS_SOURCE_DIR}/lib_loader.h
      ${UTILS_SOURCE_DIR}/map.h
+     ${UTILS_SOURCE_DIR}/vec.h
 
      # Geometry source dir.
      ${GEOMETRY_SOURCE_DIR}/primitive_type.h
@@ -95,7 +99,9 @@ SET( HEADERS
      ${GRAPHICS_SOURCE_DIR}/ogles_fbo.h
      ${GRAPHICS_SOURCE_DIR}/ogles_filter.h
      ${GRAPHICS_SOURCE_DIR}/ogles_presentation_filter.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_video_filter.h )
+     ${GRAPHICS_SOURCE_DIR}/ogles_video_filter.h
+     ${GRAPHICS_SOURCE_DIR}/ogles_gray_filter.h
+     ${GRAPHICS_SOURCE_DIR}/ogles_filter_group.h )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 

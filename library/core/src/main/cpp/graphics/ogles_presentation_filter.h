@@ -12,9 +12,7 @@
 
 struct ogles_presentation_filter
 {
-    GLuint program;
-    GLuint vertex_shader;
-    GLuint fragment_shader;
+    struct ogles_filter_base base;
 
     struct primitive *primitive;
 

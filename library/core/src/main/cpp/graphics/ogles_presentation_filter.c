@@ -4,33 +4,33 @@
 #include "ogles_presentation_filter.h"
 #include "../utils/ogles_util.h"
 
-#define STR(s) s "\n"
+#define LINE(s) s "\n"
 static const char *vertex_shader_source =
-        STR("attribute vec4 aPosition;")
-        STR("attribute vec4 aTextureCoord;")
-        STR("varying highp vec2 vTextureCoord;")
-        STR("void main() {")
-        STR("gl_Position = aPosition;")
-        STR("vTextureCoord = aTextureCoord.xy;")
-        STR("}");
+        LINE("attribute vec4 aPosition;")
+        LINE("attribute vec4 aTextureCoord;")
+        LINE("varying highp vec2 vTextureCoord;")
+        LINE("void main() {")
+        LINE("gl_Position = aPosition;")
+        LINE("vTextureCoord = aTextureCoord.xy;")
+        LINE("}");
 
 static const char *fragment_shader_source =
-        STR("precision mediump float;")
-        STR("varying highp vec2 vTextureCoord;")
-        STR("uniform lowp sampler2D sTexture;")
-        STR("void main() {")
-        STR("gl_FragColor = texture2D(sTexture, vTextureCoord);")
-        STR("}");
-#undef STR
+        LINE("precision mediump float;")
+        LINE("varying highp vec2 vTextureCoord;")
+        LINE("uniform lowp sampler2D sTexture;")
+        LINE("void main() {")
+        LINE("gl_FragColor = texture2D(sTexture, vTextureCoord);")
+        LINE("}");
+#undef LINE
 
 ogles_filter_init(presentation)
 (struct ogles_presentation_filter *filter, struct primitive *primitive)
 {
     ogles_presentation_filter_safe_release(filter);
 
-    filter->vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
-    filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
-    filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);
+    filter->base.vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
+    filter->base.fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
+    filter->base.program = createProgram(filter->base.vertex_shader, filter->base.fragment_shader);
     filter->primitive = primitive;
 
     ogles_presentation_filter_register_handle(filter);
@@ -87,9 +87,9 @@ ogles_filter_post_draw(presentation)
 ogles_filter_safe_release(presentation)
 (struct ogles_presentation_filter *filter)
 {
-    filter->program = 0;
-    filter->vertex_shader = 0;
-    filter->fragment_shader = 0;
+    filter->base.program = 0;
+    filter->base.vertex_shader = 0;
+    filter->base.fragment_shader = 0;
 
     safe_free_primitive(filter->primitive);
     filter->primitive = NULL;
@@ -98,28 +98,28 @@ ogles_filter_safe_release(presentation)
 ogles_filter_release(presentation)
 (struct ogles_presentation_filter *filter)
 {
-    glDeleteProgram(filter->program);
-    glDeleteShader(filter->vertex_shader);
-    glDeleteShader(filter->fragment_shader);
+    glDeleteProgram(filter->base.program);
+    glDeleteShader(filter->base.vertex_shader);
+    glDeleteShader(filter->base.fragment_shader);
 
     ogles_presentation_filter_safe_release(filter);
 }
 
 ogles_filter_use_program(presentation)(struct ogles_presentation_filter *filter)
 {
-    glUseProgram(filter->program);
+    glUseProgram(filter->base.program);
 }
 
 ogles_filter_register_handle(presentation)
 (struct ogles_presentation_filter *filter)
 {
     // Uniforms
-    filter->uniforms.sTexture.location = glGetUniformLocation(filter->program, filter->uniforms.sTexture.name);
+    filter->uniforms.sTexture.location = glGetUniformLocation(filter->base.program, filter->uniforms.sTexture.name);
     if (filter->uniforms.sTexture.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.sTexture.name); }
 
     // Attributes
-    filter->attributes.aPosition.location = glGetAttribLocation(filter->program, filter->attributes.aPosition.name);
+    filter->attributes.aPosition.location = glGetAttribLocation(filter->base.program, filter->attributes.aPosition.name);
     if (filter->attributes.aPosition.location == -1) { LOGE("could not get attribute location for %s", filter->attributes.aPosition.name); }
-    filter->attributes.aTextureCoord.location = glGetAttribLocation(filter->program, filter->attributes.aTextureCoord.name);
+    filter->attributes.aTextureCoord.location = glGetAttribLocation(filter->base.program, filter->attributes.aTextureCoord.name);
     if (filter->attributes.aTextureCoord.location == -1) { LOGE("could not get attribute location for %s", filter->attributes.aTextureCoord.name); }
 }

@@ -12,9 +12,7 @@
 
 struct ogles_gray_filter
 {
-    GLuint program;
-    GLuint vertex_shader;
-    GLuint fragment_shader;
+    struct ogles_filter_base base;
 
     struct primitive *primitive;
 
@@ -29,6 +27,9 @@ struct ogles_gray_filter
         struct attribute aTextureCoord;
     } attributes;
 };
+
+ogles_filter_create(gray)
+(void);
 
 ogles_filter_init(gray)
 (struct ogles_gray_filter *filter, struct primitive *primitive);

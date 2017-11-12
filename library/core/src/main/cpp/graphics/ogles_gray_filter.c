@@ -5,33 +5,55 @@
 #include "ogles_gray_filter.h"
 #include "../utils/ogles_util.h"
 
-#define STR(s) s "\n"
+#include <malloc.h>
+
+#define LINE(s) s "\n"
 static const char *vertex_shader_source =
-        STR("attribute vec4 aPosition;")
-                STR("attribute vec4 aTextureCoord;")
-                STR("varying highp vec2 vTextureCoord;")
-                STR("void main() {")
-                STR("gl_Position = aPosition;")
-                STR("vTextureCoord = aTextureCoord.xy;")
-                STR("}");
+        LINE("attribute vec4 aPosition;")
+                LINE("attribute vec4 aTextureCoord;")
+                LINE("varying highp vec2 vTextureCoord;")
+                LINE("void main() {")
+                LINE("gl_Position = aPosition;")
+                LINE("vTextureCoord = aTextureCoord.xy;")
+                LINE("}");
+
 
 static const char *fragment_shader_source =
-        STR("precision mediump float;")
-                STR("varying highp vec2 vTextureCoord;")
-                STR("uniform lowp sampler2D sTexture;")
-                STR("void main() {")
-                STR("gl_FragColor = texture2D(sTexture, vTextureCoord);")
-                STR("}");
+        LINE("precision mediump float;")
+                LINE("varying vec2 vTextureCoord;")
+                LINE("uniform lowp sampler2D sTexture;")
+                LINE("const highp vec3 weight = vec3(0.2125, 0.7154, 0.0721);")
+                LINE("void main() {")
+                LINE("float luminance = dot(texture2D(sTexture, vTextureCoord).rgb, weight);")
+                LINE("gl_FragColor = vec4(vec3(luminance), 1.0);")
+                LINE("}");
+#undef LINE
+
+ogles_filter_create(gray)
+(void)
+{
+#define STR(s) #s
+    struct ogles_gray_filter *filter = malloc(sizeof(struct ogles_gray_filter));
+    filter->base.type = FILTER_TYPE_GRAY;
+    filter->primitive = NULL;
+    filter->uniforms.sTexture.name = STR(sTexture);
+    filter->uniforms.sTexture.location = -1;
+    filter->attributes.aPosition.location = -1;
+    filter->attributes.aPosition.name = STR(aPosition);
+    filter->attributes.aTextureCoord.location = -1;
+    filter->attributes.aTextureCoord.name = STR(aTextureCoord);
 #undef STR
+    return filter;
+}
 
 ogles_filter_init(gray)
 (struct ogles_gray_filter *filter, struct primitive *primitive)
 {
     ogles_gray_filter_safe_release(filter);
 
-    filter->vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
-    filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
-    filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);
+    filter->base.vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
+    filter->base.fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
+    filter->base.program = createProgram(filter->base.vertex_shader, filter->base.fragment_shader);
     filter->primitive = primitive;
 
     ogles_gray_filter_register_handle(filter);
@@ -88,10 +110,9 @@ ogles_filter_post_draw(gray)
 ogles_filter_safe_release(gray)
 (struct ogles_gray_filter *filter)
 {
-    filter->program = 0;
-    filter->vertex_shader = 0;
-    filter->fragment_shader = 0;
-
+    filter->base.program = 0;
+    filter->base.vertex_shader = 0;
+    filter->base.fragment_shader = 0;
     safe_free_primitive(filter->primitive);
     filter->primitive = NULL;
 }
@@ -99,9 +120,9 @@ ogles_filter_safe_release(gray)
 ogles_filter_release(gray)
 (struct ogles_gray_filter *filter)
 {
-    glDeleteProgram(filter->program);
-    glDeleteShader(filter->vertex_shader);
-    glDeleteShader(filter->fragment_shader);
+    glDeleteProgram(filter->base.program);
+    glDeleteShader(filter->base.vertex_shader);
+    glDeleteShader(filter->base.fragment_shader);
 
     ogles_gray_filter_safe_release(filter);
 }
@@ -109,19 +130,19 @@ ogles_filter_release(gray)
 ogles_filter_use_program(gray)
 (struct ogles_gray_filter *filter)
 {
-    glUseProgram(filter->program);
+    glUseProgram(filter->base.program);
 }
 
 ogles_filter_register_handle(gray)
 (struct ogles_gray_filter *filter)
 {
     // Uniforms
-    filter->uniforms.sTexture.location = glGetUniformLocation(filter->program, filter->uniforms.sTexture.name);
+    filter->uniforms.sTexture.location = glGetUniformLocation(filter->base.program, filter->uniforms.sTexture.name);
     if (filter->uniforms.sTexture.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.sTexture.name);}
 
     // Attributes
-    filter->attributes.aPosition.location = glGetAttribLocation(filter->program, filter->attributes.aPosition.name);
+    filter->attributes.aPosition.location = glGetAttribLocation(filter->base.program, filter->attributes.aPosition.name);
     if (filter->attributes.aPosition.location == -1) { LOGE("could not get attribute location for %s", filter->attributes.aPosition.name); }
-    filter->attributes.aTextureCoord.location = glGetAttribLocation(filter->program, filter->attributes.aTextureCoord.name);
+    filter->attributes.aTextureCoord.location = glGetAttribLocation(filter->base.program, filter->attributes.aTextureCoord.name);
     if (filter->attributes.aTextureCoord.location == -1) { LOGE("could not get attribute location for %s", filter->attributes.aTextureCoord.name); }
 }

@@ -12,7 +12,7 @@
 enum api_type
 {
     API_UNKNOWN,
-    API_OGLES,
+    API_OGLES20,
     API_VULKAN
 };
 
@@ -37,7 +37,7 @@ static inline bool api_is_ogles(void)
 {
     switch (renderer->api_type)
     {
-        case API_OGLES:
+        case API_OGLES20:
         {
             return true;
         }
