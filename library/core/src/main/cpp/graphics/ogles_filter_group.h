@@ -15,9 +15,9 @@ struct ogles_filter_group
 
 void ogles_filter_group_init(struct ogles_filter_group *group);
 
-void ogles_filter_group_add(struct ogles_filter_group *group);
+void ogles_filter_group_add(struct ogles_filter_group *group, uint32_t filter_type);
 
-void ogles_filter_group_remove(struct ogles_filter_group *group);
+void ogles_filter_group_remove(struct ogles_filter_group *group, uint32_t filter_type);
 
 void ogles_filter_group_release(struct ogles_filter_group *group);
 

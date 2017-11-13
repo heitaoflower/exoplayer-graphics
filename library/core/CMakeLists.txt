@@ -34,8 +34,8 @@ SET( SOURCES
     ${GRAPHICS_SOURCE_DIR}/gfx.c
     ${GRAPHICS_SOURCE_DIR}/ogles_renderer.c
     ${GRAPHICS_SOURCE_DIR}/ogles_fbo.c
-    ${GRAPHICS_SOURCE_DIR}/ogles_presentation_filter.c
-    ${GRAPHICS_SOURCE_DIR}/ogles_video_filter.c
+    ${GRAPHICS_SOURCE_DIR}/ogles_present_filter.c
+    ${GRAPHICS_SOURCE_DIR}/ogles_preview_filter.c
     ${GRAPHICS_SOURCE_DIR}/ogles_gray_filter.c
     ${GRAPHICS_SOURCE_DIR}/ogles_filter_group.c
 
@@ -98,8 +98,8 @@ SET( HEADERS
      ${GRAPHICS_SOURCE_DIR}/ogles_func.h
      ${GRAPHICS_SOURCE_DIR}/ogles_fbo.h
      ${GRAPHICS_SOURCE_DIR}/ogles_filter.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_presentation_filter.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_video_filter.h
+     ${GRAPHICS_SOURCE_DIR}/ogles_present_filter.h
+     ${GRAPHICS_SOURCE_DIR}/ogles_preview_filter.h
      ${GRAPHICS_SOURCE_DIR}/ogles_gray_filter.h
      ${GRAPHICS_SOURCE_DIR}/ogles_filter_group.h )
 

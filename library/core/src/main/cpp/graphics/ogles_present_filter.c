@@ -1,7 +1,7 @@
 //
 // Created by showtime on 9/10/2017.
 //
-#include "ogles_presentation_filter.h"
+#include "ogles_present_filter.h"
 #include "../utils/ogles_util.h"
 
 #define LINE(s) s "\n"
@@ -23,35 +23,35 @@ static const char *fragment_shader_source =
         LINE("}");
 #undef LINE
 
-ogles_filter_init(presentation)
-(struct ogles_presentation_filter *filter, struct primitive *primitive)
+ogles_filter_init(present)
+(struct ogles_present_filter *filter, struct primitive *primitive)
 {
-    ogles_presentation_filter_safe_release(filter);
+    ogles_present_filter_safe_release(filter);
 
     filter->base.vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
     filter->base.fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
     filter->base.program = createProgram(filter->base.vertex_shader, filter->base.fragment_shader);
     filter->primitive = primitive;
 
-    ogles_presentation_filter_register_handle(filter);
+    ogles_present_filter_register_handle(filter);
 }
 
-ogles_filter_resize(presentation)
-(struct ogles_presentation_filter *filter, GLint width, GLint height)
+ogles_filter_resize(present)
+(struct ogles_present_filter *filter, GLint width, GLint height)
 {
 
 }
 
-ogles_filter_pre_draw(presentation)
-(struct ogles_presentation_filter *filter)
+ogles_filter_pre_draw(present)
+(struct ogles_present_filter *filter)
 {
 }
 
-ogles_filter_draw(presentation)
-(struct ogles_presentation_filter *filter, GLuint texture)
+ogles_filter_draw(present)
+(struct ogles_present_filter *filter, GLuint texture)
 {
-    ogles_presentation_filter_pre_draw(filter);
-    ogles_presentation_filter_use_program(filter);
+    ogles_present_filter_pre_draw(filter);
+    ogles_present_filter_use_program(filter);
 
     glBindBuffer(GL_ARRAY_BUFFER, filter->primitive->vbo_vertices);
     glEnableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
@@ -74,18 +74,18 @@ ogles_filter_draw(presentation)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    ogles_presentation_filter_post_draw(filter);
+    ogles_present_filter_post_draw(filter);
 
 }
 
-ogles_filter_post_draw(presentation)
-(struct ogles_presentation_filter *filter)
+ogles_filter_post_draw(present)
+(struct ogles_present_filter *filter)
 {
 
 }
 
-ogles_filter_safe_release(presentation)
-(struct ogles_presentation_filter *filter)
+ogles_filter_safe_release(present)
+(struct ogles_present_filter *filter)
 {
     filter->base.program = 0;
     filter->base.vertex_shader = 0;
@@ -95,23 +95,23 @@ ogles_filter_safe_release(presentation)
     filter->primitive = NULL;
 }
 
-ogles_filter_release(presentation)
-(struct ogles_presentation_filter *filter)
+ogles_filter_release(present)
+(struct ogles_present_filter *filter)
 {
     glDeleteProgram(filter->base.program);
     glDeleteShader(filter->base.vertex_shader);
     glDeleteShader(filter->base.fragment_shader);
 
-    ogles_presentation_filter_safe_release(filter);
+    ogles_present_filter_safe_release(filter);
 }
 
-ogles_filter_use_program(presentation)(struct ogles_presentation_filter *filter)
+ogles_filter_use_program(present)(struct ogles_present_filter *filter)
 {
     glUseProgram(filter->base.program);
 }
 
-ogles_filter_register_handle(presentation)
-(struct ogles_presentation_filter *filter)
+ogles_filter_register_handle(present)
+(struct ogles_present_filter *filter)
 {
     // Uniforms
     filter->uniforms.sTexture.location = glGetUniformLocation(filter->base.program, filter->uniforms.sTexture.name);

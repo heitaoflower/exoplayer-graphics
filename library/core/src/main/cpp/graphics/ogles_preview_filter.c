@@ -1,7 +1,7 @@
 //
 // Created by showtime on 9/10/2017.
 //
-#include "ogles_video_filter.h"
+#include "ogles_preview_filter.h"
 #include "../utils/ogles_util.h"
 
 #define LINE(s) s "\n"
@@ -31,10 +31,10 @@ static const char *fragment_shader_source =
         LINE("}");
 #undef LINE
 
-ogles_filter_init(video)
-(struct ogles_video_filter *filter, struct primitive *primitive)
+ogles_filter_init(preview)
+(struct ogles_preview_filter *filter, struct primitive *primitive)
 {
-    ogles_video_filter_safe_release(filter);
+    ogles_preview_filter_safe_release(filter);
 
     filter->base.vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
     filter->base.fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
@@ -42,20 +42,20 @@ ogles_filter_init(video)
     filter->primitive = primitive;
     filter->target = GL_TEXTURE_EXTERNAL_OES;
 
-    ogles_video_filter_register_handle(filter);
+    ogles_preview_filter_register_handle(filter);
 }
 
-ogles_filter_release(video)
-(struct ogles_video_filter *filter)
+ogles_filter_release(preview)
+(struct ogles_preview_filter *filter)
 {
     glDeleteProgram(filter->base.program);
     glDeleteShader(filter->base.vertex_shader);
     glDeleteShader(filter->base.fragment_shader);
 
-    ogles_video_filter_safe_release(filter);
+    ogles_preview_filter_safe_release(filter);
 }
-ogles_filter_safe_release(video)
-(struct ogles_video_filter *filter)
+ogles_filter_safe_release(preview)
+(struct ogles_preview_filter *filter)
 {
     filter->base.program = 0;
     filter->base.vertex_shader = 0;
@@ -65,14 +65,14 @@ ogles_filter_safe_release(video)
     filter->primitive = NULL;
 }
 
-ogles_filter_resize(video)
-(struct ogles_video_filter *filter, GLint width, GLint height)
+ogles_filter_resize(preview)
+(struct ogles_preview_filter *filter, GLint width, GLint height)
 {
 
 }
 
-ogles_filter_pre_draw(video)
-(struct ogles_video_filter *filter)
+ogles_filter_pre_draw(preview)
+(struct ogles_preview_filter *filter)
 {
     if (filter->primitive != NULL)
     {
@@ -80,12 +80,12 @@ ogles_filter_pre_draw(video)
     }
 }
 
-ogles_filter_draw(video)
-(struct ogles_video_filter *filter, GLuint texture, mat4 *mvp_mat, const float st_mat[], float aspect)
+ogles_filter_draw(preview)
+(struct ogles_preview_filter *filter, GLuint texture, mat4 *mvp_mat, const float st_mat[], float aspect)
 {
-    ogles_video_filter_pre_draw(filter);
+    ogles_preview_filter_pre_draw(filter);
 
-    ogles_video_filter_use_program(filter);
+    ogles_preview_filter_use_program(filter);
 
     glUniformMatrix4fv(filter->uniforms.uMVPMatrix.location, 1, GL_FALSE, (const float*)mvp_mat);
     glUniformMatrix4fv(filter->uniforms.uSTMatrix.location, 1, GL_FALSE, st_mat);
@@ -113,23 +113,23 @@ ogles_filter_draw(video)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    ogles_video_filter_post_draw(filter);
+    ogles_preview_filter_post_draw(filter);
 }
 
-ogles_filter_post_draw(video)
-(struct ogles_video_filter *filter)
+ogles_filter_post_draw(preview)
+(struct ogles_preview_filter *filter)
 {
 
 }
 
-ogles_filter_use_program(video)
-(struct ogles_video_filter *filter)
+ogles_filter_use_program(preview)
+(struct ogles_preview_filter *filter)
 {
     glUseProgram(filter->base.program);
 }
 
-ogles_filter_register_handle(video)
-(struct ogles_video_filter *filter)
+ogles_filter_register_handle(preview)
+(struct ogles_preview_filter *filter)
 {
     // Uniforms
     filter->uniforms.uMVPMatrix.location = glGetUniformLocation(filter->base.program, filter->uniforms.uMVPMatrix.name);
