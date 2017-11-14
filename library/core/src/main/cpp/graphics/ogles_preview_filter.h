@@ -14,7 +14,6 @@ struct ogles_preview_filter
 {
     struct ogles_filter_base base;
 
-    struct primitive *primitive;
     GLuint target;
 
     struct

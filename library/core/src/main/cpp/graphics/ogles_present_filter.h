@@ -14,8 +14,6 @@ struct ogles_present_filter
 {
     struct ogles_filter_base base;
 
-    struct primitive *primitive;
-
     struct
     {
         struct uniform sTexture;

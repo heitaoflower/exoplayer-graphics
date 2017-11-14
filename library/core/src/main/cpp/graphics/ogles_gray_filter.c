@@ -35,7 +35,14 @@ ogles_filter_create(gray)
 #define STR(s) #s
     struct ogles_gray_filter *filter = malloc(sizeof(struct ogles_gray_filter));
     filter->base.type = FILTER_TYPE_GRAY;
-    filter->primitive = NULL;
+    filter->base.init = ogles_gray_filter_init;
+    filter->base.resize = ogles_gray_filter_resize;
+    filter->base.release = ogles_gray_filter_release;
+    filter->base.safe_release = ogles_gray_filter_safe_release;
+    filter->base.primitive = NULL;
+    filter->base.program = NULL;
+    filter->base.vertex_shader = NULL;
+    filter->base.fragment_shader = NULL;
     filter->uniforms.sTexture.name = STR(sTexture);
     filter->uniforms.sTexture.location = -1;
     filter->attributes.aPosition.location = -1;
@@ -47,22 +54,73 @@ ogles_filter_create(gray)
 }
 
 ogles_filter_init(gray)
-(struct ogles_gray_filter *filter, struct primitive *primitive)
+(struct ogles_filter_base *filter, struct primitive *primitive)
 {
     ogles_gray_filter_safe_release(filter);
 
-    filter->base.vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
-    filter->base.fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
-    filter->base.program = createProgram(filter->base.vertex_shader, filter->base.fragment_shader);
+    filter->vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
+    filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
+    filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);
     filter->primitive = primitive;
 
-    ogles_gray_filter_register_handle(filter);
+    ogles_gray_filter_register_handle((struct ogles_gray_filter*)filter);
 }
 
 ogles_filter_resize(gray)
-(struct ogles_gray_filter *filter, GLint width, GLint height)
+(struct ogles_filter_base *filter, GLint width, GLint height)
 {
 
+}
+
+ogles_filter_safe_release(gray)
+(struct ogles_filter_base *filter)
+{
+    filter->program = 0;
+    filter->vertex_shader = 0;
+    filter->fragment_shader = 0;
+    safe_free_primitive(filter->primitive);
+    filter->primitive = NULL;
+}
+
+ogles_filter_release(gray)
+(struct ogles_filter_base *filter)
+{
+    glDeleteProgram(filter->program);
+    glDeleteShader(filter->vertex_shader);
+    glDeleteShader(filter->fragment_shader);
+
+    ogles_gray_filter_safe_release(filter);
+}
+
+ogles_filter_draw(gray)
+(struct ogles_filter_base *filter, GLuint texture)
+{
+    struct ogles_gray_filter *gray_filter = (struct ogles_gray_filter*)filter;
+    ogles_gray_filter_pre_draw(gray_filter);
+    ogles_gray_filter_use_program(gray_filter);
+
+    glBindBuffer(GL_ARRAY_BUFFER, gray_filter->base.primitive->vbo_vertices);
+    glEnableVertexAttribArray((GLuint)gray_filter->attributes.aPosition.location);
+    glVertexAttribPointer((GLuint)gray_filter->attributes.aPosition.location, VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, gray_filter->base.primitive->vbo_uvs);
+    glEnableVertexAttribArray((GLuint)gray_filter->attributes.aTextureCoord.location);
+    glVertexAttribPointer((GLuint)gray_filter->attributes.aTextureCoord.location, VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glUniform1i(gray_filter->uniforms.sTexture.location, 0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gray_filter->base.primitive->vbo_indices);
+    glDrawElements(GL_TRIANGLES, gray_filter->base.primitive->elements_count, GL_UNSIGNED_INT, 0);
+
+    glDisableVertexAttribArray((GLuint)gray_filter->attributes.aPosition.location);
+    glDisableVertexAttribArray((GLuint)gray_filter->attributes.aTextureCoord.location);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    ogles_gray_filter_post_draw(gray_filter);
 }
 
 ogles_filter_pre_draw(gray)
@@ -71,65 +129,16 @@ ogles_filter_pre_draw(gray)
 
 }
 
-ogles_filter_draw(gray)
-(struct ogles_gray_filter *filter, GLuint texture)
-{
-    ogles_gray_filter_pre_draw(filter);
-    ogles_gray_filter_use_program(filter);
-
-    glBindBuffer(GL_ARRAY_BUFFER, filter->primitive->vbo_vertices);
-    glEnableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
-    glVertexAttribPointer((GLuint)filter->attributes.aPosition.location, VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, filter->primitive->vbo_uvs);
-    glEnableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);
-    glVertexAttribPointer((GLuint)filter->attributes.aTextureCoord.location, VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glUniform1i(filter->uniforms.sTexture.location, 0);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, filter->primitive->vbo_indices);
-    glDrawElements(GL_TRIANGLES, filter->primitive->elements_count, GL_UNSIGNED_INT, 0);
-
-    glDisableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
-    glDisableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    ogles_gray_filter_post_draw(filter);
-}
-
 ogles_filter_post_draw(gray)
 (struct ogles_gray_filter *filter)
 {
 
 }
 
-ogles_filter_safe_release(gray)
-(struct ogles_gray_filter *filter)
-{
-    filter->base.program = 0;
-    filter->base.vertex_shader = 0;
-    filter->base.fragment_shader = 0;
-    safe_free_primitive(filter->primitive);
-    filter->primitive = NULL;
-}
-
-ogles_filter_release(gray)
-(struct ogles_gray_filter *filter)
-{
-    glDeleteProgram(filter->base.program);
-    glDeleteShader(filter->base.vertex_shader);
-    glDeleteShader(filter->base.fragment_shader);
-
-    ogles_gray_filter_safe_release(filter);
-}
-
 ogles_filter_use_program(gray)
 (struct ogles_gray_filter *filter)
 {
+
     glUseProgram(filter->base.program);
 }
 

@@ -54,6 +54,14 @@ struct ogles_filter_base
     GLuint program;
     GLuint vertex_shader;
     GLuint fragment_shader;
+
+    struct primitive *primitive;
+
+    void (*init)(struct ogles_filter_base *base, struct primitive *primitive);
+    void (*resize)(struct ogles_filter_base *base, GLint width, GLint height);
+    void (*draw)(struct ogles_filter_base *base, GLuint texture);
+    void (*release)(struct ogles_filter_base *base);
+    void (*safe_release)(struct ogles_filter_base *base);
 };
 
 struct uniform

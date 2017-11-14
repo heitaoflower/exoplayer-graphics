@@ -39,7 +39,7 @@ ogles_filter_init(preview)
     filter->base.vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
     filter->base.fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
     filter->base.program = createProgram(filter->base.vertex_shader, filter->base.fragment_shader);
-    filter->primitive = primitive;
+    filter->base.primitive = primitive;
     filter->target = GL_TEXTURE_EXTERNAL_OES;
 
     ogles_preview_filter_register_handle(filter);
@@ -61,8 +61,8 @@ ogles_filter_safe_release(preview)
     filter->base.vertex_shader = 0;
     filter->base.fragment_shader = 0;
 
-    safe_free_primitive(filter->primitive);
-    filter->primitive = NULL;
+    safe_free_primitive(filter->base.primitive);
+    filter->base.primitive = NULL;
 }
 
 ogles_filter_resize(preview)
@@ -74,9 +74,9 @@ ogles_filter_resize(preview)
 ogles_filter_pre_draw(preview)
 (struct ogles_preview_filter *filter)
 {
-    if (filter->primitive != NULL)
+    if (filter->base.primitive != NULL)
     {
-        (*filter->primitive->update)(filter->primitive);
+        (*filter->base.primitive->update)(filter->base.primitive);
     }
 }
 
@@ -91,11 +91,11 @@ ogles_filter_draw(preview)
     glUniformMatrix4fv(filter->uniforms.uSTMatrix.location, 1, GL_FALSE, st_mat);
     glUniform1f(filter->uniforms.uAspect.location, aspect);
 
-    glBindBuffer(GL_ARRAY_BUFFER, filter->primitive->vbo_vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, filter->base.primitive->vbo_vertices);
     glEnableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
     glVertexAttribPointer((GLuint)filter->attributes.aPosition.location, VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, filter->primitive->vbo_uvs);
+    glBindBuffer(GL_ARRAY_BUFFER, filter->base.primitive->vbo_uvs);
     glEnableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);
     glVertexAttribPointer((GLuint)filter->attributes.aTextureCoord.location, VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
 
@@ -103,8 +103,8 @@ ogles_filter_draw(preview)
     glBindTexture(filter->target, texture);
     glUniform1i(filter->uniforms.sTexture.location, 0);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, filter->primitive->vbo_indices);
-    glDrawElements(GL_TRIANGLES, filter->primitive->elements_count, GL_UNSIGNED_INT, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, filter->base.primitive->vbo_indices);
+    glDrawElements(GL_TRIANGLES, filter->base.primitive->elements_count, GL_UNSIGNED_INT, 0);
 
     glDisableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
     glDisableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);

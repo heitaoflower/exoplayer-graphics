@@ -3,7 +3,7 @@
 //
 #include "ogles_fbo.h"
 #include "ogles_preview_filter.h"
-#include "ogles_filter_group.h"
+#include "ogles_effects_filter.h"
 #include "ogles_present_filter.h"
 #include "../utils/ogles_util.h"
 #include "../math/camera.h"
@@ -13,13 +13,14 @@
 
 static struct camera camera;
 static struct ogles_fbo fbo;
-static struct ogles_filter_group filter_group;
 
 static struct ogles_preview_filter preview_filter = {
         .base = {.type = FILTER_TYPE_PREVIEW},
         .uniforms = {UNIFORM(uMVPMatrix), UNIFORM(uSTMatrix), UNIFORM(sTexture), UNIFORM(uAspect)},
         .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aTextureCoord)}
 };
+
+static struct ogles_effects_filter effects_filter;
 
 static struct ogles_present_filter present_filter = {
         .base = {.type = FILTER_TYPE_PRESENT},
@@ -39,10 +40,10 @@ static void create(GLuint texture)
 
     ogles_preview_filter_init(&preview_filter, create_primitive(PrimitiveTypeQuad));
     ogles_present_filter_init(&present_filter, create_primitive(PrimitiveTypeQuad));
-    ogles_filter_group_init(&filter_group);
+    ogles_effects_filter_init(&effects_filter);
 
-    ogles_filter_group_add(&filter_group, FILTER_TYPE_GRAY);
-    ogles_filter_group_remove(&filter_group, FILTER_TYPE_GRAY);
+    ogles_effects_filter_add(&effects_filter, FILTER_TYPE_GRAY);
+    ogles_effects_filter_remove(&effects_filter, FILTER_TYPE_GRAY);
 
     glBindTexture(preview_filter.target, texture);
     initSampler(preview_filter.target, GL_LINEAR, GL_NEAREST);
@@ -55,7 +56,7 @@ static void resize(GLsizei width, GLsizei height)
 
     ogles_preview_filter_resize(&preview_filter, width, height);
     ogles_present_filter_resize(&present_filter, width, height);
-    ogles_filter_group_resize(&filter_group, width, height);
+    ogles_effects_filter_resize(&effects_filter, width, height);
 
     camera_set_projection(&camera, ProjectionTypeOrtho, width, height);
 }
@@ -68,7 +69,7 @@ static void draw(GLuint texture, const float st_mat[])
     glViewport(0, 0, fbo.width, fbo.height);
     glClear(GL_COLOR_BUFFER_BIT);
     ogles_preview_filter_draw(&preview_filter, texture, &camera.mvp_mat, st_mat, camera.aspect);
-    ogles_filter_group_draw(&filter_group, fbo.rendertexture);
+    ogles_effects_filter_draw(&effects_filter, fbo.rendertexture);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, fbo.width, fbo.height);
@@ -81,11 +82,11 @@ static void destroy(void)
     ogles_fbo_safe_release(&fbo);
     ogles_preview_filter_safe_release(&preview_filter);
     ogles_present_filter_safe_release(&present_filter);
-    ogles_filter_group_safe_release(&filter_group);
+    ogles_effects_filter_safe_release(&effects_filter);
 }
 
 struct exogfx_renderer ogles_renderer = {
-        .name = "opengles",
+        .name = "OGLES",
         .api_type = API_OGLES20,
         .create = create,
         .resize = resize,

@@ -31,7 +31,7 @@ ogles_filter_init(present)
     filter->base.vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
     filter->base.fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
     filter->base.program = createProgram(filter->base.vertex_shader, filter->base.fragment_shader);
-    filter->primitive = primitive;
+    filter->base.primitive = primitive;
 
     ogles_present_filter_register_handle(filter);
 }
@@ -53,11 +53,11 @@ ogles_filter_draw(present)
     ogles_present_filter_pre_draw(filter);
     ogles_present_filter_use_program(filter);
 
-    glBindBuffer(GL_ARRAY_BUFFER, filter->primitive->vbo_vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, filter->base.primitive->vbo_vertices);
     glEnableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
     glVertexAttribPointer((GLuint)filter->attributes.aPosition.location, VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, filter->primitive->vbo_uvs);
+    glBindBuffer(GL_ARRAY_BUFFER, filter->base.primitive->vbo_uvs);
     glEnableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);
     glVertexAttribPointer((GLuint)filter->attributes.aTextureCoord.location, VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
 
@@ -65,8 +65,8 @@ ogles_filter_draw(present)
     glBindTexture(GL_TEXTURE_2D, texture);
     glUniform1i(filter->uniforms.sTexture.location, 0);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, filter->primitive->vbo_indices);
-    glDrawElements(GL_TRIANGLES, filter->primitive->elements_count, GL_UNSIGNED_INT, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, filter->base.primitive->vbo_indices);
+    glDrawElements(GL_TRIANGLES, filter->base.primitive->elements_count, GL_UNSIGNED_INT, 0);
 
     glDisableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
     glDisableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);
@@ -91,8 +91,8 @@ ogles_filter_safe_release(present)
     filter->base.vertex_shader = 0;
     filter->base.fragment_shader = 0;
 
-    safe_free_primitive(filter->primitive);
-    filter->primitive = NULL;
+    safe_free_primitive(filter->base.primitive);
+    filter->base.primitive = NULL;
 }
 
 ogles_filter_release(present)

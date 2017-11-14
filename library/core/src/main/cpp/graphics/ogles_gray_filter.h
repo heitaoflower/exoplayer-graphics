@@ -14,8 +14,6 @@ struct ogles_gray_filter
 {
     struct ogles_filter_base base;
 
-    struct primitive *primitive;
-
     struct
     {
         struct uniform sTexture;
@@ -32,22 +30,22 @@ ogles_filter_create(gray)
 (void);
 
 ogles_filter_init(gray)
-(struct ogles_gray_filter *filter, struct primitive *primitive);
+(struct ogles_filter_base *filter, struct primitive *primitive);
 
 ogles_filter_release(gray)
-(struct ogles_gray_filter *filter);
+(struct ogles_filter_base *filter);
 
 ogles_filter_safe_release(gray)
-(struct ogles_gray_filter *filter);
+(struct ogles_filter_base *filter);
 
 ogles_filter_resize(gray)
-(struct ogles_gray_filter *filter, GLint width, GLint height);
+(struct ogles_filter_base *filter, GLint width, GLint height);
+
+ogles_filter_draw(gray)
+(struct ogles_filter_base *filter, GLuint texture);
 
 ogles_filter_pre_draw(gray)
 (struct ogles_gray_filter *filter);
-
-ogles_filter_draw(gray)
-(struct ogles_gray_filter *filter, GLuint texture);
 
 ogles_filter_post_draw(gray)
 (struct ogles_gray_filter *filter);
