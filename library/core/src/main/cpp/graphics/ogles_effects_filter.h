@@ -11,6 +11,7 @@
 struct ogles_effects_filter
 {
     vec_void_t vec;
+    struct ogles_fbo *fbo;
 };
 
 void ogles_effects_filter_init(struct ogles_effects_filter *group);
