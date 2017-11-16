@@ -7,8 +7,8 @@
 
 #define FILTER_TYPE_PREVIEW             0xF000
 #define FILTER_TYPE_GRAY                0xF001
-#define FILTER_TYPE_YUV                 0xF002
-#define FILTER_TYPE_PRESENT        0xFFFF
+#define FILTER_TYPE_INVERT              0xF002
+#define FILTER_TYPE_PRESENT             0xFFFF
 
 #define VERTICES_DATA_POSITION_SIZE 3
 #define VERTICES_DATA_UV_SIZE 2
@@ -37,7 +37,7 @@
 #define ogles_filter_post_draw(name) \
         void ogles_##name##_filter_post_draw
 
-#define ogles_filter_use_program(name) \
+#define ogles_filter_use_program(name)  \
         void ogles_##name##_filter_use_program
 
 #define ogles_filter_register_handle(name)      \

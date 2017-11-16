@@ -143,7 +143,7 @@ struct mesh *create_sphere_mesh(float radius, uint32_t h_segments, uint32_t v_se
 
     uint32_t vertex_counter = 0, index_counter = 0;
 
-    for (uint32_t j = 0; j < v_segments; ++j)
+    for (uint32_t j = 0; j <= v_segments; ++j)
     {
         float h_angle = PI * j / v_segments;
         float z = radius * cosf(h_angle);

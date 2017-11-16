@@ -37,6 +37,7 @@ SET( SOURCES
     ${GRAPHICS_SOURCE_DIR}/ogles_present_filter.c
     ${GRAPHICS_SOURCE_DIR}/ogles_preview_filter.c
     ${GRAPHICS_SOURCE_DIR}/ogles_gray_filter.c
+    ${GRAPHICS_SOURCE_DIR}/ogles_invert_filter.c
     ${GRAPHICS_SOURCE_DIR}/ogles_effects_filter.c
 
     # Utils source dir.
@@ -101,6 +102,7 @@ SET( HEADERS
      ${GRAPHICS_SOURCE_DIR}/ogles_present_filter.h
      ${GRAPHICS_SOURCE_DIR}/ogles_preview_filter.h
      ${GRAPHICS_SOURCE_DIR}/ogles_gray_filter.h
+     ${GRAPHICS_SOURCE_DIR}/ogles_invert_filter.h
      ${GRAPHICS_SOURCE_DIR}/ogles_effects_filter.h )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")

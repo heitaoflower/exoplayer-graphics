@@ -42,8 +42,8 @@ static void create(GLuint texture)
     ogles_present_filter_init(&present_filter, create_primitive(PrimitiveTypeQuad));
     ogles_effects_filter_init(&effects_filter);
 
-    ogles_effects_filter_add(&effects_filter, FILTER_TYPE_GRAY);
-    ogles_effects_filter_remove(&effects_filter, FILTER_TYPE_GRAY);
+    //ogles_effects_filter_add(&effects_filter, FILTER_TYPE_INVERT);
+    //ogles_effects_filter_remove(&effects_filter, FILTER_TYPE_INVERT);
 
     glBindTexture(preview_filter.target, texture);
     initSampler(preview_filter.target, GL_LINEAR, GL_NEAREST);
@@ -69,6 +69,7 @@ static void draw(GLuint texture, const float st_mat[])
     glViewport(0, 0, fbo.width, fbo.height);
     glClear(GL_COLOR_BUFFER_BIT);
     ogles_preview_filter_draw(&preview_filter, texture, &camera.mvp_mat, st_mat, camera.aspect);
+
     ogles_effects_filter_draw(&effects_filter, fbo.rendertexture);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
