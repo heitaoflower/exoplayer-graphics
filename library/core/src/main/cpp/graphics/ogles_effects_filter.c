@@ -79,10 +79,24 @@ void ogles_effects_filter_resize(struct ogles_effects_filter *group, GLint width
         }
 }
 
+void ogles_effects_filter_pre_draw(struct ogles_effects_filter *group)
+{
+
+}
+
+void ogles_effects_filter_post_draw(struct ogles_effects_filter *group)
+{
+
+}
+
 void ogles_effects_filter_draw(struct ogles_effects_filter *group, GLuint texture)
 {
+    ogles_effects_filter_pre_draw(group);
+
     int i; struct ogles_filter_base* filter;
     vec_foreach(&group->vec, filter, i){
             filter->draw(filter, texture);
         }
+
+    ogles_effects_filter_post_draw(group);
 }

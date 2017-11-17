@@ -145,15 +145,15 @@ struct mesh *create_sphere_mesh(float radius, uint32_t h_segments, uint32_t v_se
 
     for (uint32_t j = 0; j <= v_segments; ++j)
     {
-        float h_angle = PI * j / v_segments;
-        float z = radius * cosf(h_angle);
-        float ring_radius = radius * sinf(h_angle);
+        float v_angle = PI * j / v_segments;
+        float z = radius * cosf(v_angle);
+        float ring_radius = radius * sinf(v_angle);
 
         for (uint32_t i = 0; i <= h_segments; i++)
         {
-            float v_angle = 2.0f * PI * i / h_segments;
-            float x = ring_radius * cosf(v_angle);
-            float y = ring_radius * sinf(v_angle);
+            float h_angle = 2.0f * PI * i / h_segments;
+            float x = ring_radius * cosf(h_angle);
+            float y = ring_radius * sinf(h_angle);
 
             sphere_mesh->vertices[vertex_counter++] = x;
             sphere_mesh->vertices[vertex_counter++] = z;
