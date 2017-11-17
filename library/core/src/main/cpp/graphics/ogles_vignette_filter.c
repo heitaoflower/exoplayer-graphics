@@ -147,7 +147,7 @@ ogles_filter_pre_draw(vignette)
 (struct ogles_vignette_filter *filter)
 {
     glUniform2f(filter->uniforms.uVignetteCenter.location, filter->vignette_center_x, filter->vignette_center_y);
-    glUniform3fv(filter->uniforms.uVignetteColor.location, 0, filter->vignette_color);
+    glUniform3fv(filter->uniforms.uVignetteColor.location, 1, filter->vignette_color);
     glUniform1f(filter->uniforms.uVignetteStart.location, filter->vignette_start);
     glUniform1f(filter->uniforms.uVignetteEnd.location, filter->vignette_end);
 }
