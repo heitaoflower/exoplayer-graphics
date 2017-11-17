@@ -8,6 +8,7 @@
 #define FILTER_TYPE_PREVIEW             0xF000
 #define FILTER_TYPE_GRAY                0xF001
 #define FILTER_TYPE_INVERT              0xF002
+#define FILTER_TYPE_VIGNETTE            0xF003
 #define FILTER_TYPE_PRESENT             0xFFFF
 
 #define VERTICES_DATA_POSITION_SIZE 3

@@ -50,8 +50,8 @@ ogles_filter_pre_draw(present)
 ogles_filter_draw(present)
 (struct ogles_present_filter *filter, GLuint texture)
 {
-    ogles_present_filter_pre_draw(filter);
     ogles_present_filter_use_program(filter);
+    ogles_present_filter_pre_draw(filter);
 
     glBindBuffer(GL_ARRAY_BUFFER, filter->base.primitive->vbo_vertices);
     glEnableVertexAttribArray((GLuint)filter->attributes.aPosition.location);

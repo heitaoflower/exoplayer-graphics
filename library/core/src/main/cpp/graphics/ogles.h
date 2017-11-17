@@ -68,6 +68,8 @@
 #define glTexParameteriv GL_FN(glTexParameteriv)
 #define glUniform1f GL_FN(glUniform1f)
 #define glUniform1i GL_FN(glUniform1i)
+#define glUniform2f GL_FN(glUniform2f)
+#define glUniform2fv GL_FN(glUniform2fv)
 #define glUniform3fv GL_FN(glUniform3fv)
 #define glUniform4fv GL_FN(glUniform4fv)
 #define glUniformMatrix4fv GL_FN(glUniformMatrix4fv)

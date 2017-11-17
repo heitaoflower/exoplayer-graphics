@@ -39,9 +39,9 @@ ogles_filter_create(invert)
     filter->base.release = ogles_invert_filter_release;
     filter->base.safe_release = ogles_invert_filter_safe_release;
     filter->base.primitive = NULL;
-    filter->base.program = NULL;
-    filter->base.vertex_shader = NULL;
-    filter->base.fragment_shader = NULL;
+    filter->base.program = 0;
+    filter->base.vertex_shader = 0;
+    filter->base.fragment_shader = 0;
     filter->uniforms.sTexture.name = STR(sTexture);
     filter->uniforms.sTexture.location = -1;
     filter->attributes.aPosition.location = -1;
@@ -95,8 +95,8 @@ ogles_filter_draw(invert)
 (struct ogles_filter_base *filter, GLuint texture)
 {
     struct ogles_invert_filter *invert_filter = (struct ogles_invert_filter*)filter;
-    ogles_invert_filter_pre_draw(invert_filter);
     ogles_invert_filter_use_program(invert_filter);
+    ogles_invert_filter_pre_draw(invert_filter);
 
     glBindBuffer(GL_ARRAY_BUFFER, invert_filter->base.primitive->vbo_vertices);
     glEnableVertexAttribArray((GLuint)invert_filter->attributes.aPosition.location);

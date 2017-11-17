@@ -83,9 +83,8 @@ ogles_filter_pre_draw(preview)
 ogles_filter_draw(preview)
 (struct ogles_preview_filter *filter, GLuint texture, mat4 *mvp_mat, const float st_mat[], float aspect)
 {
-    ogles_preview_filter_pre_draw(filter);
-
     ogles_preview_filter_use_program(filter);
+    ogles_preview_filter_pre_draw(filter);
 
     glUniformMatrix4fv(filter->uniforms.uMVPMatrix.location, 1, GL_FALSE, (const float*)mvp_mat);
     glUniformMatrix4fv(filter->uniforms.uSTMatrix.location, 1, GL_FALSE, st_mat);

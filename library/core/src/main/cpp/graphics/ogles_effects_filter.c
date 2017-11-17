@@ -6,9 +6,9 @@
 #include "ogles_filter.h"
 #include "ogles_gray_filter.h"
 #include "ogles_invert_filter.h"
+#include "ogles_vignette_filter.h"
 #include "../geometry/primitive.h"
 #include "../utils/vec.h"
-#include "../utils/log_util.h"
 
 void ogles_effects_filter_init(struct ogles_effects_filter *group)
 {
@@ -29,6 +29,12 @@ void ogles_effects_filter_add(struct ogles_effects_filter *group, uint32_t filte
         struct ogles_invert_filter *invert_filter = ogles_invert_filter_create();
         invert_filter->base.init((struct ogles_filter_base*)invert_filter, create_primitive(PrimitiveTypeQuad));
         vec_push(&group->vec, invert_filter);
+    }
+    else if (filter_type == FILTER_TYPE_VIGNETTE)
+    {
+        struct ogles_vignette_filter *vignette_filter = ogles_vignette_filter_create();
+        vignette_filter->base.init((struct ogles_filter_base*)vignette_filter, create_primitive(PrimitiveTypeQuad));
+        vec_push(&group->vec, vignette_filter);
     }
 }
 

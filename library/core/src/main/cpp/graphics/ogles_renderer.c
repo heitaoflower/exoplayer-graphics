@@ -42,7 +42,7 @@ static void create(GLuint texture)
     ogles_present_filter_init(&present_filter, create_primitive(PrimitiveTypeQuad));
     ogles_effects_filter_init(&effects_filter);
 
-    //ogles_effects_filter_add(&effects_filter, FILTER_TYPE_INVERT);
+    //ogles_effects_filter_add(&effects_filter, FILTER_TYPE_VIGNETTE);
     //ogles_effects_filter_remove(&effects_filter, FILTER_TYPE_INVERT);
 
     glBindTexture(preview_filter.target, texture);

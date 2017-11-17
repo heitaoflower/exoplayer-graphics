@@ -41,9 +41,9 @@ ogles_filter_create(gray)
     filter->base.release = ogles_gray_filter_release;
     filter->base.safe_release = ogles_gray_filter_safe_release;
     filter->base.primitive = NULL;
-    filter->base.program = NULL;
-    filter->base.vertex_shader = NULL;
-    filter->base.fragment_shader = NULL;
+    filter->base.program = 0;
+    filter->base.vertex_shader = 0;
+    filter->base.fragment_shader = 0;
     filter->uniforms.sTexture.name = STR(sTexture);
     filter->uniforms.sTexture.location = -1;
     filter->attributes.aPosition.location = -1;
@@ -97,8 +97,8 @@ ogles_filter_draw(gray)
 (struct ogles_filter_base *filter, GLuint texture)
 {
     struct ogles_gray_filter *gray_filter = (struct ogles_gray_filter*)filter;
-    ogles_gray_filter_pre_draw(gray_filter);
     ogles_gray_filter_use_program(gray_filter);
+    ogles_gray_filter_pre_draw(gray_filter);
 
     glBindBuffer(GL_ARRAY_BUFFER, gray_filter->base.primitive->vbo_vertices);
     glEnableVertexAttribArray((GLuint)gray_filter->attributes.aPosition.location);
