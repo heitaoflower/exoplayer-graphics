@@ -53,7 +53,7 @@ ogles_filter_create(invert)
 }
 
 ogles_filter_init(invert)
-(struct ogles_filter_base *filter, struct primitive *primitive)
+(struct ogles_filter_base *filter, struct primitive *primitive, bool create_fbo)
 {
     ogles_invert_filter_safe_release(filter);
 

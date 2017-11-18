@@ -55,7 +55,7 @@ ogles_filter_create(gray)
 }
 
 ogles_filter_init(gray)
-(struct ogles_filter_base *filter, struct primitive *primitive)
+(struct ogles_filter_base *filter, struct primitive *primitive, bool create_fbo)
 {
     ogles_gray_filter_safe_release(filter);
 

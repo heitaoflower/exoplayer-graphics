@@ -1,6 +1,9 @@
 //
 // Created by showtime on 9/11/2017.
 //
+#include "../geometry/primitive_type.h"
+
+#include <stdbool.h>
 
 #ifndef EXOGFX_GRAPHICS_OGLES_FILTER_H
 #define EXOGFX_GRAPHICS_OGLES_FILTER_H
@@ -57,8 +60,9 @@ struct ogles_filter_base
     GLuint fragment_shader;
 
     struct primitive *primitive;
+    struct ogles_fbo *fbo;
 
-    void (*init)(struct ogles_filter_base *base, struct primitive *primitive);
+    void (*init)(struct ogles_filter_base *base, primitive_type primitive_type, bool auto_fbo);
     void (*resize)(struct ogles_filter_base *base, GLint width, GLint height);
     void (*draw)(struct ogles_filter_base *base, GLuint texture);
     void (*release)(struct ogles_filter_base *base);

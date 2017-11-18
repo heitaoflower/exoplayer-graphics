@@ -5,6 +5,8 @@
 #include "../utils/log_util.h"
 #include "../utils/ogles_util.h"
 
+#include <malloc.h>
+
 void ogles_fbo_resize(struct ogles_fbo *fbo, GLsizei width, GLsizei height)
 {
     GLint params[1];
@@ -28,7 +30,9 @@ void ogles_fbo_resize(struct ogles_fbo *fbo, GLsizei width, GLsizei height)
     glGetIntegerv(GL_TEXTURE_BINDING_2D, params);
     GLuint current_rendertexture = (GLuint)params[0];
 
-    ogles_fbo_release(fbo);
+    glDeleteTextures(1, &fbo->rendertexture);
+    glDeleteRenderbuffers(1, &fbo->renderbuffer);
+    glDeleteFramebuffers(1, &fbo->framebuffer);
 
     fbo->width = width;
     fbo->height = height;
@@ -64,9 +68,14 @@ void ogles_fbo_resize(struct ogles_fbo *fbo, GLsizei width, GLsizei height)
 
 void ogles_fbo_safe_release(struct ogles_fbo *fbo)
 {
-    fbo->rendertexture = 0;
-    fbo->renderbuffer = 0;
-    fbo->framebuffer = 0;
+    if (fbo != NULL)
+    {
+        fbo->rendertexture = 0;
+        fbo->renderbuffer = 0;
+        fbo->framebuffer = 0;
+
+        free(fbo);
+    }
 }
 
 void ogles_fbo_release(struct ogles_fbo *fbo)

@@ -27,7 +27,7 @@ struct ogles_present_filter
 };
 
 ogles_filter_init(present)
-(struct ogles_present_filter *filter, struct primitive *primitive);
+(struct ogles_present_filter *filter, primitive_type primitive_type, bool create_fbo);
 
 ogles_filter_release(present)
 (struct ogles_present_filter *filter);

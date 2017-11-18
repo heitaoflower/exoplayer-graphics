@@ -74,7 +74,7 @@ ogles_filter_create(vignette)
 }
 
 ogles_filter_init(vignette)
-(struct ogles_filter_base *filter, struct primitive *primitive)
+(struct ogles_filter_base *filter, struct primitive *primitive, bool create_fbo)
 {
     ogles_vignette_filter_safe_release(filter);
 

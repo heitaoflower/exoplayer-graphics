@@ -21,19 +21,19 @@ void ogles_effects_filter_add(struct ogles_effects_filter *group, uint32_t filte
     if (filter_type == FILTER_TYPE_GRAY)
     {
         struct ogles_gray_filter *gray_filter = ogles_gray_filter_create();
-        gray_filter->base.init((struct ogles_filter_base*)gray_filter, create_primitive(PrimitiveTypeQuad));
+        gray_filter->base.init((struct ogles_filter_base*)gray_filter, create_primitive(PrimitiveTypeQuad), true);
         vec_push(&group->vec, gray_filter);
     }
     else if (filter_type == FILTER_TYPE_INVERT)
     {
         struct ogles_invert_filter *invert_filter = ogles_invert_filter_create();
-        invert_filter->base.init((struct ogles_filter_base*)invert_filter, create_primitive(PrimitiveTypeQuad));
+        invert_filter->base.init((struct ogles_filter_base*)invert_filter, create_primitive(PrimitiveTypeQuad), true);
         vec_push(&group->vec, invert_filter);
     }
     else if (filter_type == FILTER_TYPE_VIGNETTE)
     {
         struct ogles_vignette_filter *vignette_filter = ogles_vignette_filter_create();
-        vignette_filter->base.init((struct ogles_filter_base*)vignette_filter, create_primitive(PrimitiveTypeQuad));
+        vignette_filter->base.init((struct ogles_filter_base*)vignette_filter, create_primitive(PrimitiveTypeQuad), true);
         vec_push(&group->vec, vignette_filter);
     }
 }

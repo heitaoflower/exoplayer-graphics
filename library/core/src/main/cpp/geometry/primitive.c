@@ -46,7 +46,6 @@ void safe_free_primitive(struct primitive *primitive)
         primitive->vbo_uvs = 0;
         primitive->vbo_indices = 0;
         primitive->elements_count = 0;
-
         free(primitive);
     }
 }

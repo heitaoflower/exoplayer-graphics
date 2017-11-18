@@ -3,6 +3,9 @@
 //
 #include "ogles_preview_filter.h"
 #include "../utils/ogles_util.h"
+#include "../geometry/primitive.h"
+
+#include <malloc.h>
 
 #define LINE(s) s "\n"
 static const char *vertex_shader_source =
@@ -32,14 +35,15 @@ static const char *fragment_shader_source =
 #undef LINE
 
 ogles_filter_init(preview)
-(struct ogles_preview_filter *filter, struct primitive *primitive)
+(struct ogles_preview_filter *filter, primitive_type primitive_type, bool create_fbo)
 {
     ogles_preview_filter_safe_release(filter);
 
     filter->base.vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
     filter->base.fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
     filter->base.program = createProgram(filter->base.vertex_shader, filter->base.fragment_shader);
-    filter->base.primitive = primitive;
+    filter->base.primitive = create_primitive(primitive_type);
+    filter->base.fbo = create_fbo ? malloc(sizeof(struct ogles_fbo)) : NULL;
     filter->target = GL_TEXTURE_EXTERNAL_OES;
 
     ogles_preview_filter_register_handle(filter);
@@ -62,18 +66,21 @@ ogles_filter_safe_release(preview)
     filter->base.fragment_shader = 0;
 
     safe_free_primitive(filter->base.primitive);
-    filter->base.primitive = NULL;
+    ogles_fbo_safe_release(filter->base.fbo);
 }
 
 ogles_filter_resize(preview)
 (struct ogles_preview_filter *filter, GLint width, GLint height)
 {
-
+    ogles_fbo_resize(filter->base.fbo, width, height);
 }
 
 ogles_filter_pre_draw(preview)
 (struct ogles_preview_filter *filter)
 {
+    ogles_fbo_enable(filter->base.fbo);
+    glClear(GL_COLOR_BUFFER_BIT);
+
     if (filter->base.primitive != NULL)
     {
         (*filter->base.primitive->update)(filter->base.primitive);

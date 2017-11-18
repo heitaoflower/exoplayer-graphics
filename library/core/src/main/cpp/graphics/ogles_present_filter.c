@@ -24,14 +24,14 @@ static const char *fragment_shader_source =
 #undef LINE
 
 ogles_filter_init(present)
-(struct ogles_present_filter *filter, struct primitive *primitive)
+(struct ogles_present_filter *filter, primitive_type primitive_type, bool create_fbo)
 {
     ogles_present_filter_safe_release(filter);
 
     filter->base.vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
     filter->base.fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
     filter->base.program = createProgram(filter->base.vertex_shader, filter->base.fragment_shader);
-    filter->base.primitive = primitive;
+    filter->base.primitive = create_primitive(primitive_type);;
 
     ogles_present_filter_register_handle(filter);
 }
@@ -45,6 +45,13 @@ ogles_filter_resize(present)
 ogles_filter_pre_draw(present)
 (struct ogles_present_filter *filter)
 {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    if (filter->base.primitive != NULL)
+    {
+        (*filter->base.primitive->update)(filter->base.primitive);
+    }
 }
 
 ogles_filter_draw(present)

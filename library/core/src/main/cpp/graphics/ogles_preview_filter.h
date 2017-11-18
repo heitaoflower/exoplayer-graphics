@@ -8,7 +8,7 @@
 #include "ogles.h"
 #include "ogles_fbo.h"
 #include "ogles_filter.h"
-#include "../geometry/primitive.h"
+#include "../math/mat4.h"
 
 struct ogles_preview_filter
 {
@@ -32,7 +32,7 @@ struct ogles_preview_filter
 };
 
 ogles_filter_init(preview)
-(struct ogles_preview_filter *filter, struct primitive *primitive);
+(struct ogles_preview_filter *filter, primitive_type primitive_type, bool create_fbo);
 
 ogles_filter_release(preview)
 (struct ogles_preview_filter *filter);
