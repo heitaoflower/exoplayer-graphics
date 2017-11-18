@@ -7,6 +7,7 @@
 
 #include "ogles.h"
 #include "../utils/vec.h"
+#include "../geometry/primitive_type.h"
 
 struct ogles_effects_filter
 {
@@ -16,7 +17,7 @@ struct ogles_effects_filter
 
 void ogles_effects_filter_init(struct ogles_effects_filter *group);
 
-void ogles_effects_filter_add(struct ogles_effects_filter *group, uint32_t filter_type);
+void ogles_effects_filter_add(struct ogles_effects_filter *group, uint32_t filter_type, primitive_type primitive_type);
 
 void ogles_effects_filter_remove(struct ogles_effects_filter *group, uint32_t filter_type);
 

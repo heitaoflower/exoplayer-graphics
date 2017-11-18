@@ -30,7 +30,7 @@ ogles_filter_create(invert)
 (void);
 
 ogles_filter_init(invert)
-(struct ogles_filter_base *filter, struct primitive *primitive, bool create_fbo);
+(struct ogles_filter_base *filter, primitive_type primitive, bool create_fbo);
 
 ogles_filter_release(invert)
 (struct ogles_filter_base *filter);

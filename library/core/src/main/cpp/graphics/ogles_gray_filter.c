@@ -55,14 +55,14 @@ ogles_filter_create(gray)
 }
 
 ogles_filter_init(gray)
-(struct ogles_filter_base *filter, struct primitive *primitive, bool create_fbo)
+(struct ogles_filter_base *filter, primitive_type primitive_type, bool create_fbo)
 {
     ogles_gray_filter_safe_release(filter);
 
     filter->vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
     filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
     filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);
-    filter->primitive = primitive;
+    filter->primitive = create_primitive(primitive_type);
 
     ogles_gray_filter_register_handle((struct ogles_gray_filter*)filter);
 }
@@ -80,7 +80,6 @@ ogles_filter_safe_release(gray)
     filter->vertex_shader = 0;
     filter->fragment_shader = 0;
     safe_free_primitive(filter->primitive);
-    filter->primitive = NULL;
 }
 
 ogles_filter_release(gray)
