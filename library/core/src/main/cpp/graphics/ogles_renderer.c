@@ -19,7 +19,9 @@ static struct ogles_preview_filter preview_filter = {
         .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aTextureCoord)}
 };
 
-static struct ogles_effects_filter effects_filter;
+static struct ogles_effects_filter effects_filter = {
+        .base = {.type = FILTER_TYPE_EFFECTS}
+};
 
 static struct ogles_present_filter present_filter = {
         .base = {.type = FILTER_TYPE_PRESENT},
@@ -36,12 +38,12 @@ static void create(GLuint texture)
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_SCISSOR_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
     ogles_preview_filter_init(&preview_filter, PrimitiveTypeQuad, true);
-    ogles_present_filter_init(&present_filter, PrimitiveTypeQuad, false);
     ogles_effects_filter_init(&effects_filter);
+    ogles_present_filter_init(&present_filter, PrimitiveTypeQuad, false);
 
     ogles_effects_filter_add(&effects_filter, FILTER_TYPE_INVERT, PrimitiveTypeQuad);
-    ogles_effects_filter_add(&effects_filter, FILTER_TYPE_GRAY, PrimitiveTypeQuad);
 
     glBindTexture(preview_filter.target, texture);
     initSampler(preview_filter.target, GL_LINEAR, GL_NEAREST);
@@ -51,8 +53,8 @@ static void create(GLuint texture)
 static void resize(GLsizei width, GLsizei height)
 {
     ogles_preview_filter_resize(&preview_filter, width, height);
-    ogles_present_filter_resize(&present_filter, width, height);
     ogles_effects_filter_resize(&effects_filter, width, height);
+    ogles_present_filter_resize(&present_filter, width, height);
 
     // Update camera projection.
     camera_set_projection(&camera, ProjectionTypeOrtho, width, height);
@@ -72,8 +74,8 @@ static void draw(GLuint *texture, const float st_mat[])
 static void destroy(void)
 {
     ogles_preview_filter_release(&preview_filter);
-    ogles_present_filter_release(&present_filter);
     ogles_effects_filter_release(&effects_filter);
+    ogles_present_filter_release(&present_filter);
 }
 
 struct exogfx_renderer ogles_renderer = {

@@ -48,7 +48,7 @@ ogles_filter_pre_draw(gray)
 (struct ogles_gray_filter *filter);
 
 ogles_filter_post_draw(gray)
-(struct ogles_gray_filter *filter);
+(struct ogles_gray_filter *filter, GLuint *texture);
 
 ogles_filter_use_program(gray)
 (struct ogles_gray_filter *filter);

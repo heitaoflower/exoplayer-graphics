@@ -91,11 +91,9 @@ void ogles_effects_filter_post_draw(struct ogles_effects_filter *group)
 
 void ogles_effects_filter_draw(struct ogles_effects_filter *group, GLuint *texture)
 {
-    if (group->vec.length == 0)
-    {
-        return;
-    }
-    else
+    ogles_effects_filter_pre_draw(group);
+
+    if (group->vec.length != 0)
     {
         int i; struct ogles_filter_base* filter;
         vec_foreach(&group->vec, filter, i){

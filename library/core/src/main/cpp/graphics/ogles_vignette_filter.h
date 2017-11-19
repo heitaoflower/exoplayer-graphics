@@ -58,7 +58,7 @@ ogles_filter_pre_draw(vignette)
 (struct ogles_vignette_filter *filter);
 
 ogles_filter_post_draw(vignette)
-(struct ogles_vignette_filter *filter);
+(struct ogles_vignette_filter *filter, GLuint *texture);
 
 ogles_filter_use_program(vignette)
 (struct ogles_vignette_filter *filter);

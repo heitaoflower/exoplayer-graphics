@@ -141,8 +141,7 @@ ogles_filter_draw(vignette)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    *texture = filter->fbo->rendertexture;
-    ogles_vignette_filter_post_draw(vignette_filter);
+    ogles_vignette_filter_post_draw(vignette_filter, texture);
 }
 
 ogles_filter_pre_draw(vignette)
@@ -163,9 +162,9 @@ ogles_filter_pre_draw(vignette)
 }
 
 ogles_filter_post_draw(vignette)
-(struct ogles_vignette_filter *filter)
+(struct ogles_vignette_filter *filter, GLuint *texture)
 {
-
+    *texture = filter->base.fbo->rendertexture;
 }
 
 ogles_filter_use_program(vignette)

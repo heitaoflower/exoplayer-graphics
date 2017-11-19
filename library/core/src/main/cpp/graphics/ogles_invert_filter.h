@@ -48,7 +48,7 @@ ogles_filter_pre_draw(invert)
 (struct ogles_invert_filter *filter);
 
 ogles_filter_post_draw(invert)
-(struct ogles_invert_filter *filter);
+(struct ogles_invert_filter *filter, GLuint *texture);
 
 ogles_filter_use_program(invert)
 (struct ogles_invert_filter *filter);

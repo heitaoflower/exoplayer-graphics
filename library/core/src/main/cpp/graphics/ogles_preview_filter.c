@@ -119,14 +119,13 @@ ogles_filter_draw(preview)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    *texture = filter->base.fbo->rendertexture;
-    ogles_preview_filter_post_draw(filter);
+    ogles_preview_filter_post_draw(filter, texture);
 }
 
 ogles_filter_post_draw(preview)
-(struct ogles_preview_filter *filter)
+(struct ogles_preview_filter *filter, GLuint *texture)
 {
-
+    *texture = filter->base.fbo->rendertexture;
 }
 
 ogles_filter_use_program(preview)

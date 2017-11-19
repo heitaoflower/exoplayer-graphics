@@ -120,8 +120,7 @@ ogles_filter_draw(invert)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    *texture = filter->fbo->rendertexture;
-    ogles_invert_filter_post_draw(invert_filter);
+    ogles_invert_filter_post_draw(invert_filter, texture);
 }
 
 ogles_filter_pre_draw(invert)
@@ -137,9 +136,9 @@ ogles_filter_pre_draw(invert)
 }
 
 ogles_filter_post_draw(invert)
-(struct ogles_invert_filter *filter)
+(struct ogles_invert_filter *filter, GLuint *texture)
 {
-
+    *texture = filter->base.fbo->rendertexture;
 }
 
 ogles_filter_use_program(invert)

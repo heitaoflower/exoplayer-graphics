@@ -81,12 +81,12 @@ ogles_filter_draw(present)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    ogles_present_filter_post_draw(filter);
+    ogles_present_filter_post_draw(filter, texture);
 
 }
 
 ogles_filter_post_draw(present)
-(struct ogles_present_filter *filter)
+(struct ogles_present_filter *filter, GLuint *texture)
 {
 
 }
