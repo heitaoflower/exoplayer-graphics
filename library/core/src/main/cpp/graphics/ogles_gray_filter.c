@@ -41,6 +41,7 @@ ogles_filter_create(gray)
     filter->base.release = ogles_gray_filter_release;
     filter->base.safe_release = ogles_gray_filter_safe_release;
     filter->base.primitive = NULL;
+    filter->base.fbo = NULL;
     filter->base.program = 0;
     filter->base.vertex_shader = 0;
     filter->base.fragment_shader = 0;
@@ -63,14 +64,14 @@ ogles_filter_init(gray)
     filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
     filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);
     filter->primitive = create_primitive(primitive_type);
-
+    filter->fbo = create_fbo ? malloc(sizeof(struct ogles_fbo)) : NULL;
     ogles_gray_filter_register_handle((struct ogles_gray_filter*)filter);
 }
 
 ogles_filter_resize(gray)
 (struct ogles_filter_base *filter, GLint width, GLint height)
 {
-
+    ogles_fbo_resize(filter->fbo, width, height);
 }
 
 ogles_filter_safe_release(gray)
@@ -80,6 +81,7 @@ ogles_filter_safe_release(gray)
     filter->vertex_shader = 0;
     filter->fragment_shader = 0;
     safe_free_primitive(filter->primitive);
+    ogles_fbo_safe_release(filter->fbo);
 }
 
 ogles_filter_release(gray)
@@ -93,7 +95,7 @@ ogles_filter_release(gray)
 }
 
 ogles_filter_draw(gray)
-(struct ogles_filter_base *filter, GLuint texture)
+(struct ogles_filter_base *filter, GLuint *texture)
 {
     struct ogles_gray_filter *gray_filter = (struct ogles_gray_filter*)filter;
     ogles_gray_filter_use_program(gray_filter);
@@ -108,7 +110,7 @@ ogles_filter_draw(gray)
     glVertexAttribPointer((GLuint)gray_filter->attributes.aTextureCoord.location, VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, *texture);
     glUniform1i(gray_filter->uniforms.sTexture.location, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gray_filter->base.primitive->vbo_indices);
@@ -120,13 +122,20 @@ ogles_filter_draw(gray)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    *texture = filter->fbo->rendertexture;
     ogles_gray_filter_post_draw(gray_filter);
 }
 
 ogles_filter_pre_draw(gray)
 (struct ogles_gray_filter *filter)
 {
+    ogles_fbo_enable(filter->base.fbo);
+    glClear(GL_COLOR_BUFFER_BIT);
 
+    if (filter->base.primitive != NULL)
+    {
+        (*filter->base.primitive->update)(filter->base.primitive);
+    }
 }
 
 ogles_filter_post_draw(gray)
@@ -138,7 +147,6 @@ ogles_filter_post_draw(gray)
 ogles_filter_use_program(gray)
 (struct ogles_gray_filter *filter)
 {
-
     glUseProgram(filter->base.program);
 }
 

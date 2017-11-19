@@ -12,7 +12,6 @@
 struct ogles_effects_filter
 {
     vec_void_t vec;
-    struct ogles_fbo *fbo;
 };
 
 void ogles_effects_filter_init(struct ogles_effects_filter *group);
@@ -27,7 +26,7 @@ void ogles_effects_filter_safe_release(struct ogles_effects_filter *group);
 
 void ogles_effects_filter_resize(struct ogles_effects_filter *group, GLint width, GLint height);
 
-void ogles_effects_filter_draw(struct ogles_effects_filter *group, GLuint texture);
+void ogles_effects_filter_draw(struct ogles_effects_filter *group, GLuint *texture);
 
 void ogles_effects_filter_pre_draw(struct ogles_effects_filter *group);
 

@@ -42,7 +42,7 @@ ogles_filter_pre_draw(present)
 (struct ogles_present_filter *filter);
 
 ogles_filter_draw(present)
-(struct ogles_present_filter *filter, GLuint texture);
+(struct ogles_present_filter *filter, GLuint *texture);
 
 ogles_filter_post_draw(present)
 (struct ogles_present_filter *filter);

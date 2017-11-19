@@ -88,7 +88,7 @@ ogles_filter_pre_draw(preview)
 }
 
 ogles_filter_draw(preview)
-(struct ogles_preview_filter *filter, GLuint texture, mat4 *mvp_mat, const float st_mat[], float aspect)
+(struct ogles_preview_filter *filter, GLuint *texture, mat4 *mvp_mat, const float st_mat[], float aspect)
 {
     ogles_preview_filter_use_program(filter);
     ogles_preview_filter_pre_draw(filter);
@@ -106,7 +106,7 @@ ogles_filter_draw(preview)
     glVertexAttribPointer((GLuint)filter->attributes.aTextureCoord.location, VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(filter->target, texture);
+    glBindTexture(filter->target, *texture);
     glUniform1i(filter->uniforms.sTexture.location, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, filter->base.primitive->vbo_indices);
@@ -119,6 +119,7 @@ ogles_filter_draw(preview)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 
+    *texture = filter->base.fbo->rendertexture;
     ogles_preview_filter_post_draw(filter);
 }
 

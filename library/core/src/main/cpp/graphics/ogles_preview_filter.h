@@ -47,7 +47,7 @@ ogles_filter_pre_draw(preview)
 (struct ogles_preview_filter *filter);
 
 ogles_filter_draw(preview)
-(struct ogles_preview_filter *filter, GLuint texture, mat4 *mvp_mat, const float st_mat[], float aspect);
+(struct ogles_preview_filter *filter, GLuint *texture, mat4 *mvp_mat, const float st_mat[], float aspect);
 
 ogles_filter_post_draw(preview)
 (struct ogles_preview_filter *filter);

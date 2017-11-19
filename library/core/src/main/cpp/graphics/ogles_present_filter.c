@@ -55,7 +55,7 @@ ogles_filter_pre_draw(present)
 }
 
 ogles_filter_draw(present)
-(struct ogles_present_filter *filter, GLuint texture)
+(struct ogles_present_filter *filter, GLuint *texture)
 {
     ogles_present_filter_use_program(filter);
     ogles_present_filter_pre_draw(filter);
@@ -69,7 +69,7 @@ ogles_filter_draw(present)
     glVertexAttribPointer((GLuint)filter->attributes.aTextureCoord.location, VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, *texture);
     glUniform1i(filter->uniforms.sTexture.location, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, filter->base.primitive->vbo_indices);

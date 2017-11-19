@@ -76,7 +76,6 @@ void ogles_fbo_safe_release(struct ogles_fbo *fbo)
         fbo->rendertexture = 0;
         fbo->renderbuffer = 0;
         fbo->framebuffer = 0;
-
         free(fbo);
     }
 }
@@ -92,5 +91,8 @@ void ogles_fbo_release(struct ogles_fbo *fbo)
 
 void ogles_fbo_enable(struct ogles_fbo* fbo)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo->framebuffer);
+    if (fbo != NULL)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo->framebuffer);
+    }
 }

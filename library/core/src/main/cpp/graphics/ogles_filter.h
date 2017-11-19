@@ -64,7 +64,7 @@ struct ogles_filter_base
 
     void (*init)(struct ogles_filter_base *base, primitive_type primitive_type, bool auto_fbo);
     void (*resize)(struct ogles_filter_base *base, GLint width, GLint height);
-    void (*draw)(struct ogles_filter_base *base, GLuint texture);
+    void (*draw)(struct ogles_filter_base *base, GLuint *texture);
     void (*release)(struct ogles_filter_base *base);
     void (*safe_release)(struct ogles_filter_base *base);
 };

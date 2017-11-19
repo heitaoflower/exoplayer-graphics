@@ -42,7 +42,7 @@ ogles_filter_resize(invert)
 (struct ogles_filter_base *filter, GLint width, GLint height);
 
 ogles_filter_draw(invert)
-(struct ogles_filter_base *filter, GLuint texture);
+(struct ogles_filter_base *filter, GLuint *texture);
 
 ogles_filter_pre_draw(invert)
 (struct ogles_invert_filter *filter);

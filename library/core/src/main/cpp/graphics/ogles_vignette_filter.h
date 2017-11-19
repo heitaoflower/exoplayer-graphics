@@ -52,7 +52,7 @@ ogles_filter_resize(vignette)
 (struct ogles_filter_base *filter, GLint width, GLint height);
 
 ogles_filter_draw(vignette)
-(struct ogles_filter_base *filter, GLuint texture);
+(struct ogles_filter_base *filter, GLuint *texture);
 
 ogles_filter_pre_draw(vignette)
 (struct ogles_vignette_filter *filter);

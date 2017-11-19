@@ -82,7 +82,7 @@ JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
 
     (*env)->GetFloatArrayRegion(env, stMatrix, 0, size, nativeStMatrix);
 
-    native(renderer)->draw((GLuint)texture, nativeStMatrix);
+    native(renderer)->draw((GLuint*)&texture, nativeStMatrix);
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnResume)

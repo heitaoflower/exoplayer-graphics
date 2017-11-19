@@ -82,14 +82,14 @@ ogles_filter_init(vignette)
     filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
     filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);
     filter->primitive = create_primitive(primitive_type);
-
+    filter->fbo = create_fbo ? malloc(sizeof(struct ogles_fbo)) : NULL;
     ogles_vignette_filter_register_handle((struct ogles_vignette_filter*)filter);
 }
 
 ogles_filter_resize(vignette)
 (struct ogles_filter_base *filter, GLint width, GLint height)
 {
-
+    ogles_fbo_resize(filter->fbo, width, height);
 }
 
 ogles_filter_safe_release(vignette)
@@ -98,7 +98,9 @@ ogles_filter_safe_release(vignette)
     filter->program = 0;
     filter->vertex_shader = 0;
     filter->fragment_shader = 0;
+
     safe_free_primitive(filter->primitive);
+    ogles_fbo_safe_release(filter->fbo);
 }
 
 ogles_filter_release(vignette)
@@ -112,7 +114,7 @@ ogles_filter_release(vignette)
 }
 
 ogles_filter_draw(vignette)
-(struct ogles_filter_base *filter, GLuint texture)
+(struct ogles_filter_base *filter, GLuint *texture)
 {
     struct ogles_vignette_filter *vignette_filter = (struct ogles_vignette_filter*)filter;
     ogles_vignette_filter_use_program(vignette_filter);
@@ -127,7 +129,7 @@ ogles_filter_draw(vignette)
     glVertexAttribPointer((GLuint)vignette_filter->attributes.aTextureCoord.location, VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, *texture);
     glUniform1i(vignette_filter->uniforms.sTexture.location, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vignette_filter->base.primitive->vbo_indices);
@@ -139,12 +141,21 @@ ogles_filter_draw(vignette)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    *texture = filter->fbo->rendertexture;
     ogles_vignette_filter_post_draw(vignette_filter);
 }
 
 ogles_filter_pre_draw(vignette)
 (struct ogles_vignette_filter *filter)
 {
+    ogles_fbo_enable(filter->base.fbo);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    if (filter->base.primitive != NULL)
+    {
+        (*filter->base.primitive->update)(filter->base.primitive);
+    }
+
     glUniform2f(filter->uniforms.uVignetteCenter.location, filter->vignette_center_x, filter->vignette_center_y);
     glUniform3fv(filter->uniforms.uVignetteColor.location, 1, filter->vignette_color);
     glUniform1f(filter->uniforms.uVignetteStart.location, filter->vignette_start);

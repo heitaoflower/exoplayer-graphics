@@ -41,7 +41,7 @@ static void create(GLuint texture)
     ogles_effects_filter_init(&effects_filter);
 
     ogles_effects_filter_add(&effects_filter, FILTER_TYPE_INVERT, PrimitiveTypeQuad);
-    //ogles_effects_filter_remove(&effects_filter, FILTER_TYPE_INVERT);
+    ogles_effects_filter_add(&effects_filter, FILTER_TYPE_GRAY, PrimitiveTypeQuad);
 
     glBindTexture(preview_filter.target, texture);
     initSampler(preview_filter.target, GL_LINEAR, GL_NEAREST);
@@ -60,13 +60,13 @@ static void resize(GLsizei width, GLsizei height)
     glViewport(0, 0, width, height);
 }
 
-static void draw(GLuint texture, const float st_mat[])
+static void draw(GLuint *texture, const float st_mat[])
 {
     camera_update(&camera);
 
     ogles_preview_filter_draw(&preview_filter, texture, &camera.mvp_mat, st_mat, camera.aspect);
-    ogles_effects_filter_draw(&effects_filter, preview_filter.base.fbo->rendertexture);
-    ogles_present_filter_draw(&present_filter, preview_filter.base.fbo->rendertexture);
+    ogles_effects_filter_draw(&effects_filter, texture);
+    ogles_present_filter_draw(&present_filter, texture);
 }
 
 static void destroy(void)

@@ -15,7 +15,6 @@ void ogles_effects_filter_init(struct ogles_effects_filter *group)
     ogles_effects_filter_safe_release(group);
 
     vec_init(&group->vec);
-    //group->fbo = (struct ogles_fbo*)malloc(sizeof(struct ogles_fbo));
 }
 
 void ogles_effects_filter_add(struct ogles_effects_filter *group, uint32_t filter_type, primitive_type primitive_type)
@@ -55,8 +54,6 @@ void ogles_effects_filter_remove(struct ogles_effects_filter *group, uint32_t fi
 
 void ogles_effects_filter_release(struct ogles_effects_filter *group)
 {
-    ogles_fbo_release(group->fbo);
-
     int i; struct ogles_filter_base* filter;
     vec_foreach(&group->vec, filter, i) {
             filter->release(filter);
@@ -67,8 +64,6 @@ void ogles_effects_filter_release(struct ogles_effects_filter *group)
 
 void ogles_effects_filter_safe_release(struct ogles_effects_filter *group)
 {
-    ogles_fbo_safe_release(group->fbo);
-
     int i; struct ogles_filter_base* filter;
     vec_foreach(&group->vec, filter, i) {
             filter->safe_release(filter);
@@ -79,8 +74,6 @@ void ogles_effects_filter_safe_release(struct ogles_effects_filter *group)
 
 void ogles_effects_filter_resize(struct ogles_effects_filter *group, GLint width, GLint height)
 {
-    ogles_fbo_resize(group->fbo, width, height);
-
     int i; struct ogles_filter_base* filter;
     vec_foreach(&group->vec, filter, i) {
             filter->resize(filter, width, height);
@@ -89,7 +82,6 @@ void ogles_effects_filter_resize(struct ogles_effects_filter *group, GLint width
 
 void ogles_effects_filter_pre_draw(struct ogles_effects_filter *group)
 {
-
 }
 
 void ogles_effects_filter_post_draw(struct ogles_effects_filter *group)
@@ -97,14 +89,19 @@ void ogles_effects_filter_post_draw(struct ogles_effects_filter *group)
 
 }
 
-void ogles_effects_filter_draw(struct ogles_effects_filter *group, GLuint texture)
+void ogles_effects_filter_draw(struct ogles_effects_filter *group, GLuint *texture)
 {
-    ogles_effects_filter_pre_draw(group);
-
-    int i; struct ogles_filter_base* filter;
-    vec_foreach(&group->vec, filter, i){
-            filter->draw(filter, texture);
-        }
+    if (group->vec.length == 0)
+    {
+        return;
+    }
+    else
+    {
+        int i; struct ogles_filter_base* filter;
+        vec_foreach(&group->vec, filter, i){
+                filter->draw(filter, texture);
+            }
+    }
 
     ogles_effects_filter_post_draw(group);
 }
