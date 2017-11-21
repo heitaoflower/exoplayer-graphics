@@ -8,7 +8,8 @@
 #include "ogles_invert_filter.h"
 #include "ogles_vignette_filter.h"
 #include "../geometry/primitive.h"
-#include "../utils/vec.h"
+
+#include <vec.h>
 
 void ogles_effects_filter_init(struct ogles_effects_filter *group)
 {

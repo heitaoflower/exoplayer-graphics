@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/exoplayer-graphics.iml" filepath="$PROJECT_DIR$/exoplayer-graphics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/external/external.iml" filepath="$PROJECT_DIR$/external/external.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/core/library-core.iml" filepath="$PROJECT_DIR$/library/core/library-core.iml" />
     </modules>
   </component>

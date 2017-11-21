@@ -9,4 +9,5 @@ if (gradle.ext.has('exogfxModulePrefix'))
 include modulePrefix + 'demo'
 project(modulePrefix + 'demo').projectDir = new File(rootDir, 'demo')
 
+apply from: 'external.gradle'
 apply from: 'core.gradle'

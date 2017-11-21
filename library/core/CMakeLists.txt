@@ -5,10 +5,6 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
-# Creates and names a library, sets it as either STATIC
-# or SHARED, and provides the relative paths to its source code.
-# You can define multiple libraries, and CMake builds them for you.
-# Gradle automatically packages shared libraries with your APK.
 
 set (SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/main/cpp")
 set (CONTEXT_SOURCE_DIR "${SOURCE_DIR}/context")
@@ -45,8 +41,6 @@ SET( SOURCES
     ${UTILS_SOURCE_DIR}/lib_loader.c
     ${UTILS_SOURCE_DIR}/ogles_util.c
     ${UTILS_SOURCE_DIR}/math_util.c
-    ${UTILS_SOURCE_DIR}/map.c
-    ${UTILS_SOURCE_DIR}/vec.c
 
     # Geometry source dir.
     ${GEOMETRY_SOURCE_DIR}/primitive.c
@@ -69,8 +63,6 @@ SET( HEADERS
      ${UTILS_SOURCE_DIR}/ogles_util.h
      ${UTILS_SOURCE_DIR}/math_util.h
      ${UTILS_SOURCE_DIR}/lib_loader.h
-     ${UTILS_SOURCE_DIR}/map.h
-     ${UTILS_SOURCE_DIR}/vec.h
 
      # Geometry source dir.
      ${GEOMETRY_SOURCE_DIR}/primitive_type.h
@@ -109,33 +101,27 @@ SET( HEADERS
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
-list(APPEND CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+#configure 3rdparty libs
+set(distribution_DIR ${CMAKE_SOURCE_DIR}/../../distribution)
 
-add_library( # Sets the name of the library.
-             exogfx_jni
+add_library(lib-vec STATIC IMPORTED)
+set_target_properties(lib-vec PROPERTIES IMPORTED_LOCATION
+    ${distribution_DIR}/vec/lib/${ANDROID_ABI}/libvec.a)
+add_library(lib-map STATIC IMPORTED)
+set_target_properties(lib-map PROPERTIES IMPORTED_LOCATION
+    ${distribution_DIR}/map/lib/${ANDROID_ABI}/libmap.a)
 
-             # Sets the library as a shared library.
-             SHARED
-
-             # Provides a relative path to your source file(s).
-             ${SOURCES} ${HEADERS})
-
-# Searches for a specified prebuilt library and stores the path as a
-# variable. Because CMake includes system libraries in the search path by
-# default, you only need to specify the name of the public NDK library
-# you want to add. CMake verifies that the library exists before
-# completing its build.
+add_library(lib-exogfx SHARED ${SOURCES} ${HEADERS})
 
 find_library( log-lib log )
 find_library( android-lib android )
 
-# Specifies libraries CMake should link to your target library. You
-# can link multiple libraries, such as libraries you define in this
-# build script, prebuilt third-party libraries, or system libraries.
+target_include_directories(lib-exogfx PRIVATE
+                           ${distribution_DIR}/vec/include
+                           ${distribution_DIR}/map/include)
 
-target_link_libraries( # Specifies the target library.
-                       exogfx_jni
-                       # Links the target library to the log and android libraries
-                       # included in the NDK.
-                       ${android-lib}
-                       ${log-lib} )
+target_link_libraries(lib-exogfx
+                      lib-vec
+                      lib-map
+                      ${android-lib}
+                      ${log-lib})

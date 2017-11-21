@@ -6,7 +6,7 @@ package com.heitao.exogfx.core;
 
 public class NativeLibrary {
 
-    private static final String LIB_NAME = "exogfx_jni";
+    private static final String LIB_NAME = "lib-exogfx";
 
     static
     {
