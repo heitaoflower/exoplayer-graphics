@@ -43,8 +43,6 @@ static void create(GLuint texture)
     ogles_effects_filter_init(&effects_filter);
     ogles_present_filter_init(&present_filter, PrimitiveTypeQuad, false);
 
-    ogles_effects_filter_add(&effects_filter, FILTER_TYPE_INVERT, PrimitiveTypeQuad);
-
     glBindTexture(preview_filter.target, texture);
     initSampler(preview_filter.target, GL_LINEAR, GL_NEAREST);
     camera_set_lookat(&camera);

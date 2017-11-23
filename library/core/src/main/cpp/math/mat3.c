@@ -26,6 +26,13 @@ void mat3_set(mat3* mat, float e00, float e01, float e02, float e10, float e11, 
     *mat3_element(mat, 2, 2) = e22;
 }
 
+void mat3_set_same(mat3 *mat, float value)
+{
+    *mat3_element(mat, 0, 0) = value;
+    *mat3_element(mat, 1, 1) = value;
+    *mat3_element(mat, 2, 2) = value;
+}
+
 void mat3_set_row(mat3 *mat, int row, struct vec3 *vec)
 {
     *mat3_element(mat, row, 0) = vec->x;
