@@ -43,6 +43,10 @@ void orientation_ekf_init(struct orientation_ekf *orientation_ekf);
 
 void orientation_ekf_reset(struct orientation_ekf *orientation_ekf);
 
+float orientation_get_heading_degrees(struct orientation_ekf *orientation_ekf);
+
+float orientation_set_heading_degrees(struct orientation_ekf *orientation_ekf, float heading);
+
 void process_gyro(struct vec3, int64_t timestamp);
 
 void process_acc(struct vec3, int64_t timestamp);

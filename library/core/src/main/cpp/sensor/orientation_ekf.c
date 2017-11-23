@@ -4,6 +4,7 @@
 
 #include "orientation_ekf.h"
 #include "../math/mat3.h"
+#include <math.h>
 
 void orientation_ekf_init(struct orientation_ekf* orientation_ekf)
 {
@@ -40,4 +41,39 @@ void orientation_ekf_reset(struct orientation_ekf *orientation_ekf)
     vec3_set(&orientation_ekf->v_north, 0.0f, 1.0f, 0.0f);
     orientation_ekf->aligned_to_gravity = false;
     orientation_ekf->aligned_to_north = false;
+}
+
+float orientation_get_heading_degrees(struct orientation_ekf *orientation_ekf)
+{
+    const float x = *mat3_element(&orientation_ekf->so3_sensor_from_world, 2, 0);
+    const float y = *mat3_element(&orientation_ekf->so3_sensor_from_world, 2, 1);
+    const float mag = sqrtf(x * x + y * y);
+    if (mag < 0.1f)
+    {
+        return 0.0f;
+    }
+
+    float heading = -90.0f - rad2deg(atan2f(y, x));
+    if (heading < 0.0f)
+    {
+        heading += 360.0f;
+    }
+
+    if (heading >= 360.0f)
+    {
+        heading -= 360.0f;
+    }
+
+    return heading;
+}
+
+float orientation_set_heading_degrees(struct orientation_ekf *orientation_ekf, float heading)
+{
+    const float current_heading = orientation_get_heading_degrees(orientation_ekf);
+    const float delta_heading = heading - current_heading;
+    const float s = sinf(deg2rad(delta_heading);
+    const float c = cosf(deg2rad(delta_heading));
+    mat3 delta_heading_rotation;
+    mat3_set(&delta_heading_rotation, c, -s, 0.0f, s, c, 0.0f, 0.0f, 0.0f, 1.0f);
+    mat3_mul(&orientation_ekf->so3_sensor_from_world, &delta_heading_rotation, &orientation_ekf->so3_sensor_from_world)
 }
