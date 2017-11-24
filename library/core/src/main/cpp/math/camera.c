@@ -3,6 +3,8 @@
 //
 #include "camera.h"
 
+#include "../sensor/orientation_ekf.h"
+#include "../math/mat3.h"
 static void camera_set_perspective(struct camera *camera)
 {
     mat4_perspective_default(&camera->projection_mat, camera->aspect);
@@ -46,6 +48,23 @@ void camera_set_projection(struct camera *camera, projection_type projection_typ
             break;
         }
     }
+
+    struct orientation_ekf o;
+    orientation_ekf_init(&o);
+    o.last_gyro.x = 0.035064697265625f;
+    o.last_gyro.y = -0.0138092041015625f;
+    o.last_gyro.z = 0.027496337890625f;
+    mat3_set(&o.so3_sensor_from_world, 0.3270542403031921f,
+             0.08117731874733539f,
+             -0.9415124889350661f,
+             0.3465762055409068f,
+             0.916579153676822f,
+             0.199418125550194f,
+             0.87915894902604f,
+             -0.3915263694389938f,
+             0.2716369716760765f);
+    mat4 result;
+    orientation_get_predicted_gl_matrix(&o, 0.03333333333333333f, &result);
 }
 
 void camera_update(struct camera *camera)

@@ -47,8 +47,10 @@ float orientation_get_heading_degrees(struct orientation_ekf *orientation_ekf);
 
 float orientation_set_heading_degrees(struct orientation_ekf *orientation_ekf, float heading);
 
-void process_gyro(struct vec3, int64_t timestamp);
+void orientation_get_predicted_gl_matrix(struct orientation_ekf *orientation_ekf, float seconds_after_last_gyro_event, mat4 *matrix);
 
-void process_acc(struct vec3, int64_t timestamp);
+void orientation_process_gyro(struct orientation_ekf *orientation_ekf, struct vec3 gyro, int64_t timestamp);
+
+void orientation_process_acc(struct orientation_ekf *orientation_ekf, struct vec3 acc, int64_t timestamp);
 
 #endif //EXOGFX_ORIENTATION_EKF_H
