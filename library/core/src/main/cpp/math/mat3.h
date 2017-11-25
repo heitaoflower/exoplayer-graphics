@@ -9,6 +9,8 @@
 
 float* mat3_element(mat3 *mat, int row, int col);
 
+void mat3_copy(mat3 *src, mat3 *dst);
+
 void mat3_set(mat3 *mat, float e00, float e01, float e02, float e10, float e11, float e12, float e20, float e21, float e22);
 
 void mat3_set_same(mat3 *mat, float value);
@@ -16,6 +18,8 @@ void mat3_set_same(mat3 *mat, float value);
 void mat3_set_row(mat3 *mat, int row, struct vec3 *vec);
 
 void mat3_get_row(mat3 *mat, int row, struct vec3 *vec);
+
+void mat3_set_col(mat3 *mat, int col, struct vec3 *vec);
 
 void mat3_zero(mat3 *mat);
 

@@ -11,7 +11,22 @@ float* mat3_element(mat3 *mat, int row, int col)
     return (float*)mat + (row + col * 3);
 }
 
-void mat3_set(mat3* mat, float e00, float e01, float e02, float e10, float e11, float e12, float e20, float e21, float e22)
+void mat3_copy(mat3 *src, mat3 *dst)
+{
+    *mat3_element(dst, 0, 0) = *mat3_element(src, 0, 0);
+    *mat3_element(dst, 0, 1) = *mat3_element(src, 0, 1);
+    *mat3_element(dst, 0, 2) = *mat3_element(src, 0, 2);
+
+    *mat3_element(dst, 1, 0) = *mat3_element(src, 1, 0);
+    *mat3_element(dst, 1, 1) = *mat3_element(src, 1, 1);
+    *mat3_element(dst, 1, 2) = *mat3_element(src, 1, 2);
+
+    *mat3_element(dst, 2, 0) = *mat3_element(src, 2, 0);
+    *mat3_element(dst, 2, 1) = *mat3_element(src, 2, 1);
+    *mat3_element(dst, 2, 2) = *mat3_element(src, 2, 2);
+}
+
+void mat3_set(mat3 *mat, float e00, float e01, float e02, float e10, float e11, float e12, float e20, float e21, float e22)
 {
     *mat3_element(mat, 0, 0) = e00;
     *mat3_element(mat, 0, 1) = e01;
@@ -45,6 +60,20 @@ void mat3_get_row(mat3 *mat, int row, struct vec3 *vec)
     vec->x = *mat3_element(mat, row, 0);
     vec->y = *mat3_element(mat, row, 1);
     vec->z = *mat3_element(mat, row, 2);
+}
+
+void mat3_set_col(mat3 *mat, int col, struct vec3 *vec)
+{
+    *mat3_element(mat, 0, col) = vec->x;
+    *mat3_element(mat, 1, col) = vec->y;
+    *mat3_element(mat, 2, col) = vec->z;
+}
+
+void mat3_get_col(mat3 *mat, int col, struct vec3 *vec)
+{
+    vec->x = *mat3_element(mat, 0, col);
+    vec->y = *mat3_element(mat, 1, col);
+    vec->z = *mat3_element(mat, 2, col);
 }
 
 void mat3_zero(mat3 *mat)
@@ -111,9 +140,9 @@ void mat3_mul(mat3 *src1, mat3 *src2, mat3 *dst)
 
 void mat3_mulv(mat3 *src1, struct vec3 *src2, struct vec3 *dst)
 {
-    dst->x = *mat3_element(src1, 0, 0) * src2->x + *mat3_element(src1, 1, 0) * src2->y + *mat3_element(src1, 2, 0) * src2->z;
-    dst->y = *mat3_element(src1, 0, 1) * src2->x + *mat3_element(src1, 1, 1) * src2->y + *mat3_element(src1, 2, 1) * src2->z;
-    dst->z = *mat3_element(src1, 0, 2) * src2->x + *mat3_element(src1, 1, 2) * src2->y + *mat3_element(src1, 2, 2) * src2->z;
+    dst->x = *mat3_element(src1, 0, 0) * src2->x + *mat3_element(src1, 0, 1) * src2->y + *mat3_element(src1, 0, 2) * src2->z;
+    dst->y = *mat3_element(src1, 1, 0) * src2->x + *mat3_element(src1, 1, 1) * src2->y + *mat3_element(src1, 1, 2) * src2->z;
+    dst->z = *mat3_element(src1, 2, 0) * src2->x + *mat3_element(src1, 2, 1) * src2->y + *mat3_element(src1, 2, 2) * src2->z;
 }
 
 void mat3_transpose(mat3 *mat)

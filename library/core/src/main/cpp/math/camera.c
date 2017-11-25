@@ -48,23 +48,19 @@ void camera_set_projection(struct camera *camera, projection_type projection_typ
             break;
         }
     }
-
     struct orientation_ekf o;
     orientation_ekf_init(&o);
-    o.last_gyro.x = 0.035064697265625f;
-    o.last_gyro.y = -0.0138092041015625f;
-    o.last_gyro.z = 0.027496337890625f;
-    mat3_set(&o.so3_sensor_from_world, 0.3270542403031921f,
-             0.08117731874733539f,
-             -0.9415124889350661f,
-             0.3465762055409068f,
-             0.916579153676822f,
-             0.199418125550194f,
-             0.87915894902604f,
-             -0.3915263694389938f,
-             0.2716369716760765f);
-    mat4 result;
-    orientation_get_predicted_gl_matrix(&o, 0.03333333333333333f, &result);
+    orientation_ekf_reset(&o);
+    o.aligned_to_gravity = true;
+    // acc -1.3926239013671875, 5.91265869140625, 7.4751739501953125
+    // previousAccelNorm 9.60976575139596
+    // movingAverageAccelNormChange 0.002772407310237989
+    struct vec3 acc;
+    vec3_set(&acc,-1.3926239013671875f, 5.91265869140625f, 7.4751739501953125f );
+    mat3_set(&o.so3_sensor_from_world, 0.9866880756909621f, -0.07736556012614729f, -0.1430426908151337f, 0.1497106196002979f, 0.7756272416900796f, 0.6131795106876484f, 0.06350883141864648f, -0.6264319213247411f, 0.77688459649889f);
+    o.previous_accel_norm = 9.60976575139596f;
+    o.moving_average_accel_norm_change = 0.002772407310237989f;
+    orientation_ekf_process_acc(&o, &acc, 0);
 }
 
 void camera_update(struct camera *camera)
