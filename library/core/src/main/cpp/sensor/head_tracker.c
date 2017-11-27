@@ -6,7 +6,6 @@
 #include "orientation_ekf.h"
 #include "../utils/math_util.h"
 #include "../math/vec3.h"
-#include "../utils/log_util.h"
 
 #include <malloc.h>
 #include <sys/prctl.h>
@@ -22,7 +21,7 @@ static void head_tracker_process_acc(struct orientation_ekf *orientation_ekf, fl
 {
     struct vec3 vec3;
     vec3_set(&vec3, x, y, z);
-    //orientation_ekf_process_acc(orientation_ekf, &vec3, timestamp);
+    orientation_ekf_process_acc(orientation_ekf, &vec3, timestamp);
 }
 
 static void head_tracker_process_gyro(struct orientation_ekf *orientation_ekf, float x, float y, float z, int64_t timestamp)
@@ -118,7 +117,7 @@ static void* head_tracker_worker(__attribute__((unused)) void *data)
                         gettimeofday(&context->last_gyro_time, NULL);
                         head_tracker_process_gyro(
                                 context->orientation_ekf,
-                                -event.data[0],
+                                event.data[0],
                                 event.data[1],
                                 event.data[2],
                                 event.timestamp
