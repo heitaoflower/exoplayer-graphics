@@ -144,7 +144,7 @@ void mat3_sub(mat3 *src1, mat3 *src2, mat3 *dst)
     *mat3_element(dst, 2, 2) = a22 - b22;
 }
 
-void mat3_mul(mat3 *src1, mat3 *src2, mat3 *dst)
+void mat3_multiply_mm(mat3 *src1, mat3 *src2, mat3 *dst)
 {
     float a00 = *mat3_element(src1, 0, 0), a01 = *mat3_element(src1, 0, 1), a02 = *mat3_element(src1, 0, 2),
           a10 = *mat3_element(src1, 1, 0), a11 = *mat3_element(src1, 1, 1), a12 = *mat3_element(src1, 1, 2),
@@ -165,7 +165,7 @@ void mat3_mul(mat3 *src1, mat3 *src2, mat3 *dst)
     *mat3_element(dst, 2, 2) = a02 * b20 + a12 * b21 + a22 * b22;
 }
 
-void mat3_mulv(mat3 *src1, struct vec3 *src2, struct vec3 *dst)
+void mat3_multiply_mv(mat3 *src1, struct vec3 *src2, struct vec3 *dst)
 {
     dst->x = *mat3_element(src1, 0, 0) * src2->x + *mat3_element(src1, 1, 0) * src2->y + *mat3_element(src1, 2, 0) * src2->z;
     dst->y = *mat3_element(src1, 0, 1) * src2->x + *mat3_element(src1, 1, 1) * src2->y + *mat3_element(src1, 2, 1) * src2->z;

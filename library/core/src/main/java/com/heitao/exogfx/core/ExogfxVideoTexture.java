@@ -43,7 +43,6 @@ public class ExogfxVideoTexture {
         texName = textures[0];
 
         surfaceTexture = new SurfaceTexture(texName);
-
         surfaceTexture.setOnFrameAvailableListener(new UpdateSurfaceListener());
 
     }

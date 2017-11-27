@@ -1,5 +1,7 @@
 package com.heitao.exogfx.core;
 
+import android.content.Context;
+
 /**
  * Created by showtime on 9/2/2017.
  */
@@ -13,7 +15,7 @@ public class NativeLibrary {
         System.loadLibrary(LIB_NAME);
     }
 
-    public static native void nativeInitializeContext();
+    public static native void nativeInitializeContext(Context context, ClassLoader classLoader);
 
     public static native void nativeOnSurfaceChanged(long renderer, int width, int height);
 

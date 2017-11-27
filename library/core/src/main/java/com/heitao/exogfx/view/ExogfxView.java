@@ -50,25 +50,25 @@ public class ExogfxView extends GLSurfaceView{
             }
         };
 
-        initializeVideoRendering();
+        initializeVideoRenderer();
 
-        initializeVideoPlayer(context);
+        initializeVideoPlayer();
 
         renderer.bindPlayer(player);
     }
 
-    private void initializeVideoRendering()
+    private void initializeVideoRenderer()
     {
         setEGLContextFactory(new DefaultEGLContextFactory());
         setEGLConfigChooser(new DefaultEGLConfigChooser());
 
-        renderer = new ExogfxVideoRenderer();
+        renderer = new ExogfxVideoRenderer(getContext());
         setRenderer(renderer);
     }
 
-    private void initializeVideoPlayer(Context context) {
+    private void initializeVideoPlayer() {
 
-        player = new ExogfxVideoPlayer(context);
+        player = new ExogfxVideoPlayer(getContext());
         player.getExoPlayer().addVideoListener(new SimpleExoPlayer.VideoListener() {
             @Override
             public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {

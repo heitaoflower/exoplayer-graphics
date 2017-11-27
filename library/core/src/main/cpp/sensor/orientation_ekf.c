@@ -12,7 +12,7 @@
 
 static void acc_observation_function_numerical_jacobian(struct orientation_ekf *orientation_ekf, mat3 *so3_sensor_from_world_pred, struct vec3 *result)
 {
-    mat3_mulv(so3_sensor_from_world_pred, &orientation_ekf->v_down, &orientation_ekf->v_h);
+    mat3_multiply_mv(so3_sensor_from_world_pred, &orientation_ekf->v_down, &orientation_ekf->v_h);
     mat3 temp;
     so3_from_two_vec(&orientation_ekf->v_h, &orientation_ekf->v_z, &temp);
     so3_to_mu(&temp, result);
@@ -23,8 +23,8 @@ static void orientation_ekf_update_covariances_after_motion(struct orientation_e
     mat3 temp_m1;
     mat3 temp_m2;
     mat3_transpose_to(&orientation_ekf->so3_last_motion, &temp_m1);
-    mat3_mul(&orientation_ekf->m_p, &temp_m1, &temp_m2);
-    mat3_mul(&orientation_ekf->so3_last_motion, &temp_m2, &orientation_ekf->m_p);
+    mat3_multiply_mm(&orientation_ekf->m_p, &temp_m1, &temp_m2);
+    mat3_multiply_mm(&orientation_ekf->so3_last_motion, &temp_m2, &orientation_ekf->m_p);
     mat3_identity(&orientation_ekf->so3_last_motion);
 }
 
@@ -145,7 +145,8 @@ float orientation_ekf_set_heading_degrees(struct orientation_ekf *orientation_ek
     const float c = cosf(deg2rad(delta_heading));
     mat3 delta_heading_rotation;
     mat3_set(&delta_heading_rotation, c, -s, 0.0f, s, c, 0.0f, 0.0f, 0.0f, 1.0f);
-    mat3_mul(&orientation_ekf->so3_sensor_from_world, &delta_heading_rotation, &orientation_ekf->so3_sensor_from_world);
+    mat3_multiply_mm(&orientation_ekf->so3_sensor_from_world, &delta_heading_rotation,
+                     &orientation_ekf->so3_sensor_from_world);
 }
 
 void orientation_ekf_get_predicted_gl_matrix(struct orientation_ekf *orientation_ekf, float seconds_after_last_gyro_event, mat4 *matrix)
@@ -156,7 +157,8 @@ void orientation_ekf_get_predicted_gl_matrix(struct orientation_ekf *orientation
     mat3 so3_predicted_motion;
     so3_from_mu(&pmu, &so3_predicted_motion);
     mat3 so3_predicted_state;
-    mat3_mul(&so3_predicted_motion, &orientation_ekf->so3_sensor_from_world, &so3_predicted_state);
+    mat3_multiply_mm(&so3_predicted_motion, &orientation_ekf->so3_sensor_from_world,
+                     &so3_predicted_state);
     orientation_ekf_gl_matrix_from_so3(&so3_predicted_state, matrix);
 }
 
@@ -179,7 +181,8 @@ void orientation_ekf_process_gyro(struct orientation_ekf *orientation_ekf, struc
         vec3_copy(gyro, &orientation_ekf->v_u);
         vec3_scale(&orientation_ekf->v_u, -delta);
         so3_from_mu(&orientation_ekf->v_u, &orientation_ekf->so3_last_motion);
-        mat3_mul(&orientation_ekf->so3_last_motion, &orientation_ekf->so3_sensor_from_world, &orientation_ekf->so3_sensor_from_world);
+        mat3_multiply_mm(&orientation_ekf->so3_last_motion, &orientation_ekf->so3_sensor_from_world,
+                         &orientation_ekf->so3_sensor_from_world);
         orientation_ekf_update_covariances_after_motion(orientation_ekf);
         mat3 temp;
         mat3_copy(&orientation_ekf->m_q, &temp);
@@ -205,7 +208,7 @@ void orientation_ekf_process_acc(struct orientation_ekf *orientation_ekf, struct
             vec3_zero(&temp_v1);
             vec3_set_component(&temp_v1, dof, eps);
             so3_from_mu(&temp_v1, &temp_m1);
-            mat3_mul(&temp_m1, &orientation_ekf->so3_sensor_from_world, &temp_m2);
+            mat3_multiply_mm(&temp_m1, &orientation_ekf->so3_sensor_from_world, &temp_m2);
             acc_observation_function_numerical_jacobian(orientation_ekf, &temp_m2, &temp_v1);
             vec3_sub(&orientation_ekf->v_nu, &temp_v1, &temp_v2);
             vec3_scale(&temp_v2, 1.0f/eps);
@@ -214,23 +217,24 @@ void orientation_ekf_process_acc(struct orientation_ekf *orientation_ekf, struct
 
         mat3 temp_m3, temp_m4, temp_m5;
         mat3_transpose_to(&orientation_ekf->m_h, &temp_m3);
-        mat3_mul(&orientation_ekf->m_p, &temp_m3, &temp_m4);
-        mat3_mul(&orientation_ekf->m_h, &temp_m4, &temp_m5);
+        mat3_multiply_mm(&orientation_ekf->m_p, &temp_m3, &temp_m4);
+        mat3_multiply_mm(&orientation_ekf->m_h, &temp_m4, &temp_m5);
         mat3_add(&temp_m5, &orientation_ekf->m_raccel, &orientation_ekf->m_s);
         mat3_invert(&orientation_ekf->m_s, &temp_m3);
 
         mat3_transpose_to(&orientation_ekf->m_h, &temp_m4);
-        mat3_mul(&temp_m4, &temp_m3, &temp_m5);
-        mat3_mul(&orientation_ekf->m_p, &temp_m5, &orientation_ekf->m_k);
-        mat3_mulv(&orientation_ekf->m_k, &orientation_ekf->v_nu, &orientation_ekf->v_x);
-        mat3_mul(&orientation_ekf->m_k, &orientation_ekf->m_h, &temp_m3);
+        mat3_multiply_mm(&temp_m4, &temp_m3, &temp_m5);
+        mat3_multiply_mm(&orientation_ekf->m_p, &temp_m5, &orientation_ekf->m_k);
+        mat3_multiply_mv(&orientation_ekf->m_k, &orientation_ekf->v_nu, &orientation_ekf->v_x);
+        mat3_multiply_mm(&orientation_ekf->m_k, &orientation_ekf->m_h, &temp_m3);
 
         mat3_identity(&temp_m4);
         mat3_sub(&temp_m4, &temp_m3, &temp_m4);
-        mat3_mul(&temp_m4, &orientation_ekf->m_p, &temp_m3);
+        mat3_multiply_mm(&temp_m4, &orientation_ekf->m_p, &temp_m3);
         mat3_copy(&temp_m3, &orientation_ekf->m_p);
         so3_from_mu(&orientation_ekf->v_x, &orientation_ekf->so3_last_motion);
-        mat3_mul(&orientation_ekf->so3_last_motion, &orientation_ekf->so3_sensor_from_world, &orientation_ekf->so3_sensor_from_world);
+        mat3_multiply_mm(&orientation_ekf->so3_last_motion, &orientation_ekf->so3_sensor_from_world,
+                         &orientation_ekf->so3_sensor_from_world);
         orientation_ekf_update_covariances_after_motion(orientation_ekf);
     }
     else

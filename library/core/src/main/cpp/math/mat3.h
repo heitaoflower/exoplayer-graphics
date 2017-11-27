@@ -31,9 +31,9 @@ void mat3_add(mat3 *src1, mat3 *src2, mat3 *dst);
 
 void mat3_sub(mat3 *src1, mat3 *src2, mat3 *dst);
 
-void mat3_mul(mat3 *src1, mat3 *src2, mat3 *dst);
+void mat3_multiply_mm(mat3 *src1, mat3 *src2, mat3 *dst);
 
-void mat3_mulv(mat3 *mat, struct vec3 *vec, struct vec3 *dst);
+void mat3_multiply_mv(mat3 *mat, struct vec3 *vec, struct vec3 *dst);
 
 void mat3_transpose(mat3 *mat);
 

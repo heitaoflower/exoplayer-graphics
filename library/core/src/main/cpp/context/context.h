@@ -5,9 +5,11 @@
 #ifndef EXOGFX_CONTEXT_H
 #define EXOGFX_CONTEXT_H
 
+#include "../graphics/ogles.h"
+
 #include <stdbool.h>
 #include <stdint.h>
-#include "../graphics/ogles.h"
+#include <jni.h>
 
 enum api_type
 {
@@ -31,7 +33,7 @@ extern struct exogfx_renderer vulkan_renderer;
 
 extern struct exogfx_renderer *renderer;
 
-bool context_init(void);
+bool context_init(JNIEnv *env, jobject android_context, jobject class_loader);
 
 static inline bool api_is_ogles(void)
 {

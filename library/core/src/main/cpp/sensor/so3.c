@@ -86,7 +86,7 @@ void so3_from_two_vec(struct vec3 *a, struct vec3 *b, mat3 *result)
     mat3_set_row(&r2_tmp, 2, &vec_tmp);
 
     mat3_transpose(&r1_tmp);
-    mat3_mul(&r2_tmp, &r1_tmp, result);
+    mat3_multiply_mm(&r2_tmp, &r1_tmp, result);
 }
 
 void so3_from_mu(struct vec3 *w, mat3 *result)

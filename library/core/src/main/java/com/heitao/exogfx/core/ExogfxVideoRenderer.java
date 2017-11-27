@@ -1,8 +1,7 @@
 package com.heitao.exogfx.core;
 
-import android.opengl.GLES20;
+import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.Surface;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -24,9 +23,9 @@ public class ExogfxVideoRenderer implements GLSurfaceView.Renderer {
 
     private SimpleExoPlayer videoPlayer;
 
-    public ExogfxVideoRenderer()
+    public ExogfxVideoRenderer(Context context)
     {
-        NativeLibrary.nativeInitializeContext();
+        NativeLibrary.nativeInitializeContext(context, getClass().getClassLoader());
 
         nativeRenderer = NativeLibrary.nativeCreateRenderer();
 

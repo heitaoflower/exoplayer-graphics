@@ -32,9 +32,9 @@
         Java_com_heitao_exogfx_core_##class_name##_##method_name
 
 JNI_METHOD(NativeLibrary, void, nativeInitializeContext)
-(JNIEnv *evn, jobject obj)
+(JNIEnv *env, jobject obj, jobject androidContext, jobject classLoader)
 {
-    if (!context_init())
+    if (!context_init(env, androidContext, classLoader))
     {
         LOGE("initialized context failed.");
     }
