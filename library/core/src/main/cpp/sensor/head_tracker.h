@@ -5,6 +5,9 @@
 #ifndef EXOGFX_HEAD_TRACKER_H
 #define EXOGFX_HEAD_TRACKER_H
 
+#include "../math/mat4.h"
+#include "orientation_ekf.h"
+
 #include <android/looper.h>
 #include <android/sensor.h>
 #include <time.h>
@@ -22,6 +25,7 @@ struct head_tracker_context
     ALooper *looper;
     ASensorEventQueue *event_queue;
     pthread_mutex_t *lock;
+    struct orientation_ekf *orientation_ekf;
     struct timeval last_gyro_time;
 };
 
@@ -29,6 +33,6 @@ void head_tracker_start(void);
 
 void head_tracker_stop(void);
 
-void head_tracker_get_last_view(float *matrix);
+void head_tracker_get_last_view(mat4 *matrix);
 
 #endif //EXOGFX_HEAD_TRACKER_H

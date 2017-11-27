@@ -3,6 +3,7 @@
 //
 
 #include "head_tracker.h"
+#include "orientation_ekf.h"
 #include "../utils/math_util.h"
 #include "../math/vec3.h"
 #include "../utils/log_util.h"
@@ -13,25 +14,25 @@
 #define SENSOR_REFRESH_PERIOD_US 1000000L / 60
 
 static bool running = false;
+
 static struct head_tracker_context *context;
 static pthread_t tracker_tid;
 
-static void head_tracker_process_acc(float x, float y, float z, int64_t timestamp)
+static void head_tracker_process_acc(struct orientation_ekf *orientation_ekf, float x, float y, float z, int64_t timestamp)
 {
     struct vec3 vec3;
     vec3_set(&vec3, x, y, z);
-
-    //ekf.process_acc(vec3, timestamp);
+    //orientation_ekf_process_acc(orientation_ekf, &vec3, timestamp);
 }
 
-static void head_tracker_process_gyro(float x, float y, float z, int64_t timestamp)
+static void head_tracker_process_gyro(struct orientation_ekf *orientation_ekf, float x, float y, float z, int64_t timestamp)
 {
     struct vec3 vec3;
     vec3_set(&vec3, x, y, z);
-    //ekf.process_gyro(vec3, timestamp);
+    orientation_ekf_process_gyro(orientation_ekf, &vec3, timestamp);
 }
 
-static struct head_tracker_context * tracker_context_create()
+static struct head_tracker_context* tracker_context_create()
 {
     struct head_tracker_context *context = (struct head_tracker_context*)malloc(sizeof(struct head_tracker_context));
     memset(context, 0, sizeof(struct head_tracker_context));
@@ -64,6 +65,9 @@ static struct head_tracker_context * tracker_context_create()
     context->lock = malloc(sizeof(pthread_mutex_t));
     pthread_mutex_init(context->lock, NULL);
 
+    context->orientation_ekf = malloc(sizeof(struct orientation_ekf));
+    orientation_ekf_init(context->orientation_ekf);
+    orientation_ekf_reset(context->orientation_ekf);
     return context;
 
 }
@@ -100,8 +104,9 @@ static void* head_tracker_worker(__attribute__((unused)) void *data)
                         pthread_mutex_lock(context->lock);
 
                         head_tracker_process_acc(
-                                -event.data[1],
+                                context->orientation_ekf,
                                 event.data[0],
+                                event.data[1],
                                 event.data[2],
                                 event.timestamp
                         );
@@ -112,8 +117,9 @@ static void* head_tracker_worker(__attribute__((unused)) void *data)
                         pthread_mutex_lock(context->lock);
                         gettimeofday(&context->last_gyro_time, NULL);
                         head_tracker_process_gyro(
-                                -event.data[1],
-                                event.data[0],
+                                context->orientation_ekf,
+                                -event.data[0],
+                                event.data[1],
                                 event.data[2],
                                 event.timestamp
                         );
@@ -150,7 +156,19 @@ void head_tracker_stop(void)
     pthread_join(tracker_tid, NULL);
 }
 
-void head_tracker_get_last_view(float *matrix)
+void head_tracker_get_last_view(mat4 *matrix)
 {
+    if (context == NULL)
+    {
+        mat4_identity(matrix);
+        return;
+    }
 
+    struct timeval now;
+    gettimeofday(&now, NULL);
+    double seconds_since_last_gyro_event = now.tv_sec + now.tv_usec / 1000000.0f - (context->last_gyro_time.tv_sec) - (context->last_gyro_time.tv_usec) / 1000000.0f;
+    double seconds_to_predict_forward = seconds_since_last_gyro_event + 1.0f / 30;
+    pthread_mutex_lock(context->lock);
+    orientation_ekf_get_predicted_gl_matrix(context->orientation_ekf, (float)seconds_to_predict_forward, matrix);
+    pthread_mutex_unlock(context->lock);
 }

@@ -119,9 +119,9 @@ void so3_to_mu(mat3 *so3, struct vec3 *result)
 {
     const float cos_angle = (*mat3_element(so3, 0, 0) + *mat3_element(so3, 1, 1) + *mat3_element(so3, 2, 2) - 1.0f) * 0.5f;
     vec3_set(result,
-             (*mat3_element(so3, 2, 1) - *mat3_element(so3, 1, 2)) / 2.0f,
-             (*mat3_element(so3, 0, 2) - *mat3_element(so3, 2, 0)) / 2.0f,
-             (*mat3_element(so3, 1, 0) - *mat3_element(so3, 0, 1)) / 2.0f);
+             (*mat3_element(so3, 1, 2) - *mat3_element(so3, 2, 1)) / 2.0f,
+             (*mat3_element(so3, 2, 0) - *mat3_element(so3, 0, 2)) / 2.0f,
+             (*mat3_element(so3, 0, 1) - *mat3_element(so3, 1, 0)) / 2.0f);
 
     const float sin_angle_abs = vec3_distance(result);
     if (cos_angle > 0.7071067811865476f)

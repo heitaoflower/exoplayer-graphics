@@ -6,6 +6,7 @@
 #include "../math/mat3.h"
 #include "../math/mat4.h"
 #include "so3.h"
+#include "../utils/log_util.h"
 
 #include <math.h>
 
@@ -92,8 +93,8 @@ void orientation_ekf_reset(struct orientation_ekf *orientation_ekf)
     mat3_set_same(&orientation_ekf->m_p, 25.0f);
     mat3_zero(&orientation_ekf->m_q);
     mat3_set_same(&orientation_ekf->m_q, 1.0f);
-    mat3_zero(&orientation_ekf->m_p);
-    mat3_set_same(&orientation_ekf->m_p, 0.0625f);
+    mat3_zero(&orientation_ekf->m_r);
+    mat3_set_same(&orientation_ekf->m_r, 0.0625f);
     mat3_zero(&orientation_ekf->m_raccel);
     mat3_set_same(&orientation_ekf->m_raccel, 0.5625f);
     mat3_zero(&orientation_ekf->m_s);
@@ -147,8 +148,7 @@ float orientation_ekf_set_heading_degrees(struct orientation_ekf *orientation_ek
     mat3_mul(&orientation_ekf->so3_sensor_from_world, &delta_heading_rotation, &orientation_ekf->so3_sensor_from_world);
 }
 
-void orientation_ekf_get_predicted_gl_matrix(struct orientation_ekf *orientation_ekf,
-                                             float seconds_after_last_gyro_event, mat4 *matrix)
+void orientation_ekf_get_predicted_gl_matrix(struct orientation_ekf *orientation_ekf, float seconds_after_last_gyro_event, mat4 *matrix)
 {
     struct vec3 pmu;
     vec3_copy(&orientation_ekf->last_gyro, &pmu);
@@ -190,11 +190,6 @@ void orientation_ekf_process_gyro(struct orientation_ekf *orientation_ekf, struc
     vec3_copy(gyro, &orientation_ekf->last_gyro);
 }
 
-// acc -1.3926239013671875, 5.91265869140625, 7.4751739501953125
-// previousAccelNorm 9.60976575139596
-// movingAverageAccelNormChange 0.002772407310237989
-// currentAccelNorm 9.63209010118778
-// mRaccel { 1.6201448473905566, 0.0, 0.0, 0.0, 1.6201448473905566, 0.0, 0.0, 0.0, 1.6201448473905566 }
 void orientation_ekf_process_acc(struct orientation_ekf *orientation_ekf, struct vec3 *acc, int64_t timestamp)
 {
     vec3_copy(acc, &orientation_ekf->v_z);
@@ -202,7 +197,7 @@ void orientation_ekf_process_acc(struct orientation_ekf *orientation_ekf, struct
     if (orientation_ekf->aligned_to_gravity)
     {
         acc_observation_function_numerical_jacobian(orientation_ekf, &orientation_ekf->so3_sensor_from_world, &orientation_ekf->v_nu);
-        const float eps = 1.0E-7;
+        const float eps = 1.0E-7f;
         for (uint32_t dof = 0; dof < 3; ++dof)
         {
             struct vec3 temp_v1, temp_v2;
@@ -214,7 +209,33 @@ void orientation_ekf_process_acc(struct orientation_ekf *orientation_ekf, struct
             acc_observation_function_numerical_jacobian(orientation_ekf, &temp_m2, &temp_v1);
             vec3_sub(&orientation_ekf->v_nu, &temp_v1, &temp_v2);
             vec3_scale(&temp_v2, 1.0f/eps);
-            mat3_set_col(&orientation_ekf->m_h, dof, &temp_v2);
+            mat3_set_row(&orientation_ekf->m_h, dof, &temp_v2);
         }
+
+        mat3 temp_m3, temp_m4, temp_m5;
+        mat3_transpose_to(&orientation_ekf->m_h, &temp_m3);
+        mat3_mul(&orientation_ekf->m_p, &temp_m3, &temp_m4);
+        mat3_mul(&orientation_ekf->m_h, &temp_m4, &temp_m5);
+        mat3_add(&temp_m5, &orientation_ekf->m_raccel, &orientation_ekf->m_s);
+        mat3_invert(&orientation_ekf->m_s, &temp_m3);
+
+        mat3_transpose_to(&orientation_ekf->m_h, &temp_m4);
+        mat3_mul(&temp_m4, &temp_m3, &temp_m5);
+        mat3_mul(&orientation_ekf->m_p, &temp_m5, &orientation_ekf->m_k);
+        mat3_mulv(&orientation_ekf->m_k, &orientation_ekf->v_nu, &orientation_ekf->v_x);
+        mat3_mul(&orientation_ekf->m_k, &orientation_ekf->m_h, &temp_m3);
+
+        mat3_identity(&temp_m4);
+        mat3_sub(&temp_m4, &temp_m3, &temp_m4);
+        mat3_mul(&temp_m4, &orientation_ekf->m_p, &temp_m3);
+        mat3_copy(&temp_m3, &orientation_ekf->m_p);
+        so3_from_mu(&orientation_ekf->v_x, &orientation_ekf->so3_last_motion);
+        mat3_mul(&orientation_ekf->so3_last_motion, &orientation_ekf->so3_sensor_from_world, &orientation_ekf->so3_sensor_from_world);
+        orientation_ekf_update_covariances_after_motion(orientation_ekf);
+    }
+    else
+    {
+        so3_from_two_vec(&orientation_ekf->v_down, &orientation_ekf->v_z, &orientation_ekf->so3_sensor_from_world);
+        orientation_ekf->aligned_to_gravity = true;
     }
 }

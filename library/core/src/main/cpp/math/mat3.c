@@ -104,45 +104,72 @@ void mat3_scale(mat3 *mat, float scalar)
 
 void mat3_add(mat3 *src1, mat3 *src2, mat3 *dst)
 {
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            *mat3_element(dst, i, j) = *mat3_element(src1, i, j) + *mat3_element(src2, i, j);
-        }
-    }
+    float a00 = *mat3_element(src1, 0, 0), a01 = *mat3_element(src1, 0, 1), a02 = *mat3_element(src1, 0, 2),
+          a10 = *mat3_element(src1, 1, 0), a11 = *mat3_element(src1, 1, 1), a12 = *mat3_element(src1, 1, 2),
+          a20 = *mat3_element(src1, 2, 0), a21 = *mat3_element(src1, 2, 1), a22 = *mat3_element(src1, 2, 2);
+
+    float b00 = *mat3_element(src2, 0, 0), b01 = *mat3_element(src2, 0, 1), b02 = *mat3_element(src2, 0, 2),
+          b10 = *mat3_element(src2, 1, 0), b11 = *mat3_element(src2, 1, 1), b12 = *mat3_element(src2, 1, 2),
+          b20 = *mat3_element(src2, 2, 0), b21 = *mat3_element(src2, 2, 1), b22 = *mat3_element(src2, 2, 2);
+
+    *mat3_element(dst, 0, 0) = a00 + b00;
+    *mat3_element(dst, 0, 1) = a01 + b01;
+    *mat3_element(dst, 0, 2) = a02 + b02;
+    *mat3_element(dst, 1, 0) = a10 + b10;
+    *mat3_element(dst, 1, 1) = a11 + b11;
+    *mat3_element(dst, 1, 2) = a12 + b12;
+    *mat3_element(dst, 2, 0) = a20 + b20;
+    *mat3_element(dst, 2, 1) = a21 + b21;
+    *mat3_element(dst, 2, 2) = a22 + b22;
 }
 
 void mat3_sub(mat3 *src1, mat3 *src2, mat3 *dst)
 {
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            *mat3_element(dst, i, j) = *mat3_element(src1, i, j) - *mat3_element(src2, i, j);
-        }
-    }
+    float a00 = *mat3_element(src1, 0, 0), a01 = *mat3_element(src1, 0, 1), a02 = *mat3_element(src1, 0, 2),
+          a10 = *mat3_element(src1, 1, 0), a11 = *mat3_element(src1, 1, 1), a12 = *mat3_element(src1, 1, 2),
+          a20 = *mat3_element(src1, 2, 0), a21 = *mat3_element(src1, 2, 1), a22 = *mat3_element(src1, 2, 2);
+
+    float b00 = *mat3_element(src2, 0, 0), b01 = *mat3_element(src2, 0, 1), b02 = *mat3_element(src2, 0, 2),
+          b10 = *mat3_element(src2, 1, 0), b11 = *mat3_element(src2, 1, 1), b12 = *mat3_element(src2, 1, 2),
+          b20 = *mat3_element(src2, 2, 0), b21 = *mat3_element(src2, 2, 1), b22 = *mat3_element(src2, 2, 2);
+
+    *mat3_element(dst, 0, 0) = a00 - b00;
+    *mat3_element(dst, 0, 1) = a01 - b01;
+    *mat3_element(dst, 0, 2) = a02 - b02;
+    *mat3_element(dst, 1, 0) = a10 - b10;
+    *mat3_element(dst, 1, 1) = a11 - b11;
+    *mat3_element(dst, 1, 2) = a12 - b12;
+    *mat3_element(dst, 2, 0) = a20 - b20;
+    *mat3_element(dst, 2, 1) = a21 - b21;
+    *mat3_element(dst, 2, 2) = a22 - b22;
 }
 
 void mat3_mul(mat3 *src1, mat3 *src2, mat3 *dst)
 {
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            *mat3_element(dst, j, i) =
-                *mat3_element(src1, 0, i) * *mat3_element(src2, j, 0) +
-                *mat3_element(src1, 1, i) * *mat3_element(src2, j, 1) +
-                *mat3_element(src1, 2, i) * *mat3_element(src2, j, 2);
-        }
-    }
+    float a00 = *mat3_element(src1, 0, 0), a01 = *mat3_element(src1, 0, 1), a02 = *mat3_element(src1, 0, 2),
+          a10 = *mat3_element(src1, 1, 0), a11 = *mat3_element(src1, 1, 1), a12 = *mat3_element(src1, 1, 2),
+          a20 = *mat3_element(src1, 2, 0), a21 = *mat3_element(src1, 2, 1), a22 = *mat3_element(src1, 2, 2);
+
+    float b00 = *mat3_element(src2, 0, 0), b01 = *mat3_element(src2, 0, 1), b02 = *mat3_element(src2, 0, 2),
+          b10 = *mat3_element(src2, 1, 0), b11 = *mat3_element(src2, 1, 1), b12 = *mat3_element(src2, 1, 2),
+          b20 = *mat3_element(src2, 2, 0), b21 = *mat3_element(src2, 2, 1), b22 = *mat3_element(src2, 2, 2);
+
+    *mat3_element(dst, 0, 0) = a00 * b00 + a10 * b01 + a20 * b02;
+    *mat3_element(dst, 0, 1) = a01 * b00 + a11 * b01 + a21 * b02;
+    *mat3_element(dst, 0, 2) = a02 * b00 + a12 * b01 + a22 * b02;
+    *mat3_element(dst, 1, 0) = a00 * b10 + a10 * b11 + a20 * b12;
+    *mat3_element(dst, 1, 1) = a01 * b10 + a11 * b11 + a21 * b12;
+    *mat3_element(dst, 1, 2) = a02 * b10 + a12 * b11 + a22 * b12;
+    *mat3_element(dst, 2, 0) = a00 * b20 + a10 * b21 + a20 * b22;
+    *mat3_element(dst, 2, 1) = a01 * b20 + a11 * b21 + a21 * b22;
+    *mat3_element(dst, 2, 2) = a02 * b20 + a12 * b21 + a22 * b22;
 }
 
 void mat3_mulv(mat3 *src1, struct vec3 *src2, struct vec3 *dst)
 {
-    dst->x = *mat3_element(src1, 0, 0) * src2->x + *mat3_element(src1, 0, 1) * src2->y + *mat3_element(src1, 0, 2) * src2->z;
-    dst->y = *mat3_element(src1, 1, 0) * src2->x + *mat3_element(src1, 1, 1) * src2->y + *mat3_element(src1, 1, 2) * src2->z;
-    dst->z = *mat3_element(src1, 2, 0) * src2->x + *mat3_element(src1, 2, 1) * src2->y + *mat3_element(src1, 2, 2) * src2->z;
+    dst->x = *mat3_element(src1, 0, 0) * src2->x + *mat3_element(src1, 1, 0) * src2->y + *mat3_element(src1, 2, 0) * src2->z;
+    dst->y = *mat3_element(src1, 0, 1) * src2->x + *mat3_element(src1, 1, 1) * src2->y + *mat3_element(src1, 2, 1) * src2->z;
+    dst->z = *mat3_element(src1, 0, 2) * src2->x + *mat3_element(src1, 1, 2) * src2->y + *mat3_element(src1, 2, 2) * src2->z;
 }
 
 void mat3_transpose(mat3 *mat)
