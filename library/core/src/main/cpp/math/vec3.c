@@ -3,7 +3,7 @@
 //
 
 #include "vec3.h"
-#include "vec3-ext.h"
+#include "vec3_ext.h"
 
 #include <math.h>
 

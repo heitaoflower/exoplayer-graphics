@@ -40,7 +40,17 @@ static bool load_ogles_library(void)
     return true;
 }
 
+static void unload_ogles_library(void)
+{
+    // TODO
+}
+
 bool gfx_init(void)
 {
     return load_ogles_library();
+}
+
+void gfx_deinit(void)
+{
+    unload_ogles_library();
 }

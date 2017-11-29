@@ -15,6 +15,8 @@ void mat4_zero(mat4 *mat);
 
 void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2);
 
+void mat4_rotate_euler(mat4 *dst, float x, float y, float z);
+
 void mat4_perspective(mat4 *mat, float fovy, float aspect, float zNear, float zFar);
 
 void mat4_perspective_default(mat4 *mat, float aspect);

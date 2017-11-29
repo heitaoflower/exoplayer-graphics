@@ -11,4 +11,6 @@
 
 bool gfx_init(void);
 
+void gfx_deinit(void);
+
 #endif //EXOGFX_GRAPHICS_GFX_H

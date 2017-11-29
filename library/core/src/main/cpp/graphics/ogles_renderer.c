@@ -8,6 +8,7 @@
 #include "../utils/ogles_util.h"
 #include "../math/camera.h"
 #include "../context/context.h"
+#include "../sensor/head_tracker.h"
 
 #pragma pack(1)
 
@@ -54,16 +55,13 @@ static void resize(GLsizei width, GLsizei height)
     ogles_effects_filter_resize(&effects_filter, width, height);
     ogles_present_filter_resize(&present_filter, width, height);
 
-    // Update camera projection.
     camera_set_projection(&camera, ProjectionTypeOrtho, width, height);
-    // Update viewport.
     glViewport(0, 0, width, height);
 }
 
 static void draw(GLuint *texture, const float st_mat[])
 {
     camera_update(&camera);
-
     ogles_preview_filter_draw(&preview_filter, texture, &camera.mvp_mat, st_mat, camera.aspect);
     ogles_effects_filter_draw(&effects_filter, texture);
     ogles_present_filter_draw(&present_filter, texture);

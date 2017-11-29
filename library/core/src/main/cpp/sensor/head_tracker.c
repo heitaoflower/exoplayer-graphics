@@ -10,11 +10,10 @@
 #include <malloc.h>
 #include <sys/prctl.h>
 
-#define SENSOR_REFRESH_PERIOD_US 1000000L / 60
-
 static bool running = false;
 
 static struct head_tracker_context *context;
+
 static pthread_t tracker_tid;
 
 static void head_tracker_process_acc(struct orientation_ekf *orientation_ekf, float x, float y, float z, int64_t timestamp)
@@ -163,6 +162,9 @@ void head_tracker_get_last_view(mat4 *matrix)
         return;
     }
 
+    mat4 rotation;
+    mat4_rotate_euler(&rotation, -90.0f, 0.0f, 0.0f);
+
     struct timeval now;
     gettimeofday(&now, NULL);
     double seconds_since_last_gyro_event = now.tv_sec + now.tv_usec / 1000000.0f - (context->last_gyro_time.tv_sec) - (context->last_gyro_time.tv_usec) / 1000000.0f;
@@ -170,4 +172,5 @@ void head_tracker_get_last_view(mat4 *matrix)
     pthread_mutex_lock(context->lock);
     orientation_ekf_get_predicted_gl_matrix(context->orientation_ekf, (float)seconds_to_predict_forward, matrix);
     pthread_mutex_unlock(context->lock);
+    mat4_multiply(matrix, matrix, &rotation);
 }

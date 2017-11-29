@@ -13,6 +13,8 @@
 #include <time.h>
 #include <pthread.h>
 
+#define SENSOR_REFRESH_PERIOD_US 1000000L / 60
+
 enum {LOOPER_ID_USER = 3};
 
 struct head_tracker_context

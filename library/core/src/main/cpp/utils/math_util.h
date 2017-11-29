@@ -41,6 +41,6 @@ float deg2rad(float deg);
 
 float rad2deg(float rad);
 
-int sign(int value);
+int signum(int value);
 
 #endif //EXOGFX_UTILS_MATH_UTIL_H

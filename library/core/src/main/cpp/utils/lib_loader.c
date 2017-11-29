@@ -10,6 +10,11 @@ library_handle open_library(const char *lib)
     return dlopen(lib, RTLD_NOW);
 }
 
+void close_library(library_handle lib)
+{
+    dlclose(lib);
+}
+
 void* get_library_symbol(library_handle lib, const char *fn)
 {
     if (lib)

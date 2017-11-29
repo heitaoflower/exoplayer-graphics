@@ -11,6 +11,8 @@ typedef  void* library_handle;
 
 library_handle open_library(const char *lib);
 
+void close_library(library_handle lib);
+
 void* get_library_symbol(library_handle lib, const char * fn);
 
 #endif //EXOGFX_UTILS_LIB_LOADER_H

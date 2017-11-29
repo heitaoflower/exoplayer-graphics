@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
 
     private void initializeExogfxView() {
 
-        exogfxView = new ExogfxView(this);
+        exogfxView = new ExogfxView(getApplicationContext());
         exogfxView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         ((ScreenWrapperView) findViewById(R.id.layout_movie_wrapper)).addView(exogfxView);
         exogfxView.loadVideo(Uri.parse(Constants.STREAM_URL_MP4_VOD_LONG));

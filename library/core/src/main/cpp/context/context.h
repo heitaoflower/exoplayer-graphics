@@ -35,6 +35,8 @@ extern struct exogfx_renderer *renderer;
 
 bool context_init(JNIEnv *env, jobject android_context, jobject class_loader);
 
+void context_deinit(void);
+
 static inline bool api_is_ogles(void)
 {
     switch (renderer->api_type)

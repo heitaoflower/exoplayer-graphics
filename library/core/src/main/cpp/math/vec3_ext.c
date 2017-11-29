@@ -2,7 +2,7 @@
 // Created by showtime on 10/28/2017.
 //
 
-#include "vec3-ext.h"
+#include "vec3_ext.h"
 #include <math.h>
 
 float vec3_max(struct vec3* vec)
