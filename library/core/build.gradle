@@ -26,7 +26,7 @@ android {
     }
     sourceSets {
         main {
-            jni.srcDirs = ['src/main/cpp', 'src/main/cpp/model', 'src/main/cpp/sensor', 'src/main/cpp/context']
+            jni.srcDirs = ['src/main/cpp', 'src/main/cpp/model', 'src/main/cpp/sensor', 'src/main/cpp/context', 'src/main/cpp/geometry', 'src/main/cpp/math', 'src/main/cpp/utils', 'src/main/cpp/vr',  'src/main/cpp/vr/ogles', 'src/main/cpp/graphics', 'src/main/cpp/graphics/ogles']
         }
     }
 }

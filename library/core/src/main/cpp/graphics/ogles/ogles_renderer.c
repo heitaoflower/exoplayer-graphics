@@ -5,13 +5,10 @@
 #include "ogles_preview_filter.h"
 #include "ogles_effects_filter.h"
 #include "ogles_present_filter.h"
-#include "../utils/ogles_util.h"
-#include "../math/camera.h"
-#include "../context/context.h"
-#include "../sensor/head_tracker.h"
-#include "../vr/ogles/ogles_vr_renderer.h"
-
-#pragma pack(1)
+#include "../../utils/ogles_util.h"
+#include "../../math/camera.h"
+#include "../../context/context.h"
+#include "../../sensor/head_tracker.h"
 
 static struct camera camera;
 
@@ -30,8 +27,6 @@ static struct ogles_present_filter present_filter = {
         .uniforms = {UNIFORM(sTexture)},
         .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aTextureCoord)}
 };
-
-#pragma pack()
 
 static void create(GLuint texture)
 {

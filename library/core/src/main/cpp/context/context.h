@@ -5,7 +5,7 @@
 #ifndef EXOGFX_CONTEXT_H
 #define EXOGFX_CONTEXT_H
 
-#include "../graphics/ogles.h"
+#include "../graphics/ogles/ogles.h"
 
 #include <stdbool.h>
 #include <stdint.h>

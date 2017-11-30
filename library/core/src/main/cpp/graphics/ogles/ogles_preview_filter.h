@@ -8,7 +8,7 @@
 #include "ogles.h"
 #include "ogles_fbo.h"
 #include "ogles_filter.h"
-#include "../math/mat4.h"
+#include "../../math/mat4.h"
 
 struct ogles_preview_filter
 {

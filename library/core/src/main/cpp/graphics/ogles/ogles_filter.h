@@ -1,7 +1,7 @@
 //
 // Created by showtime on 9/11/2017.
 //
-#include "../geometry/primitive_type.h"
+#include "../../geometry/primitive_type.h"
 
 #include <stdbool.h>
 

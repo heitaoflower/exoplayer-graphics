@@ -2,8 +2,8 @@
 // Created by showtime on 9/10/2017.
 //
 #include "ogles_preview_filter.h"
-#include "../utils/ogles_util.h"
-#include "../geometry/primitive.h"
+#include "../../utils/ogles_util.h"
+#include "../../geometry/primitive.h"
 
 #include <malloc.h>
 

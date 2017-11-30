@@ -8,7 +8,7 @@
 #include <assert.h>
 
 #define FNSYM(fn, ret, args) PFN_##fn fn = NULL;
-#include "ogles_func.h"
+#include "ogles/ogles_func.h"
 #undef FNSYM
 
 static bool load_ogles_library(void)
@@ -34,7 +34,7 @@ static bool load_ogles_library(void)
 #define FNSYM(fn, ret, args)                            \
         fn = (PFN_##fn)get_library_symbol(lib, #fn);    \
         assert(fn != NULL);
-#include "ogles_func.h"
+#include "ogles/ogles_func.h"
 #undef FNSYM
 
     return true;

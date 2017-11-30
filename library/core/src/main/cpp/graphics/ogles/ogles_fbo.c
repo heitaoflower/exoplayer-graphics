@@ -2,8 +2,8 @@
 // Created by showtime on 9/10/2017.
 //
 #include "ogles_fbo.h"
-#include "../utils/log_util.h"
-#include "../utils/ogles_util.h"
+#include "../../utils/log_util.h"
+#include "../../utils/ogles_util.h"
 
 #include <malloc.h>
 

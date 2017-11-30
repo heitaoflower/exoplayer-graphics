@@ -8,7 +8,7 @@
 #include "ogles.h"
 #include "ogles_fbo.h"
 #include "ogles_filter.h"
-#include "../geometry/primitive.h"
+#include "../../geometry/primitive.h"
 
 struct ogles_invert_filter
 {

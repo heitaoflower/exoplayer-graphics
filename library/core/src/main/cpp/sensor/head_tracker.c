@@ -162,8 +162,8 @@ void head_tracker_get_last_view(mat4 *matrix)
         return;
     }
 
-    mat4 rotation;
-    mat4_rotate_euler(&rotation, -90.0f, 0.0f, 0.0f);
+    mat4 ekf_to_head_tracker;
+    mat4_rotate_euler(&ekf_to_head_tracker, -90.0f, 0.0f, 0.0f);
 
     struct timeval now;
     gettimeofday(&now, NULL);
@@ -172,5 +172,5 @@ void head_tracker_get_last_view(mat4 *matrix)
     pthread_mutex_lock(context->lock);
     orientation_ekf_get_predicted_gl_matrix(context->orientation_ekf, (float)seconds_to_predict_forward, matrix);
     pthread_mutex_unlock(context->lock);
-    mat4_multiply(matrix, matrix, &rotation);
+    mat4_multiply(matrix, matrix, &ekf_to_head_tracker);
 }

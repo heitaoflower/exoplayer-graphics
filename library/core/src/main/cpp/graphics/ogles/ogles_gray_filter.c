@@ -3,7 +3,7 @@
 //
 
 #include "ogles_gray_filter.h"
-#include "../utils/ogles_util.h"
+#include "../../utils/ogles_util.h"
 
 #include <malloc.h>
 

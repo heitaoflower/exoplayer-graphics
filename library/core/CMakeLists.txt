@@ -9,10 +9,13 @@ cmake_minimum_required(VERSION 3.4.1)
 set (SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/main/cpp")
 set (CONTEXT_SOURCE_DIR "${SOURCE_DIR}/context")
 set (GRAPHICS_SOURCE_DIR "${SOURCE_DIR}/graphics")
+set (GRAPHICS_OGLES_SOURCE_DIR "${GRAPHICS_SOURCE_DIR}/ogles")
 set (MATH_SOURCE_DIR "${SOURCE_DIR}/math")
 set (UTILS_SOURCE_DIR "${SOURCE_DIR}/utils")
 set (GEOMETRY_SOURCE_DIR "${SOURCE_DIR}/geometry")
 set (SENSOR_SOURCE_DIR "${SOURCE_DIR}/sensor")
+set (VR_SOURCE_DIR "${SOURCE_DIR}/vr")
+set (VR_OGLES_SOURCE_DIR "${VR_SOURCE_DIR}/ogles")
 
 SET( SOURCES
 
@@ -29,14 +32,19 @@ SET( SOURCES
 
     # Graphics source dir.
     ${GRAPHICS_SOURCE_DIR}/gfx.c
-    ${GRAPHICS_SOURCE_DIR}/ogles_renderer.c
-    ${GRAPHICS_SOURCE_DIR}/ogles_fbo.c
-    ${GRAPHICS_SOURCE_DIR}/ogles_present_filter.c
-    ${GRAPHICS_SOURCE_DIR}/ogles_preview_filter.c
-    ${GRAPHICS_SOURCE_DIR}/ogles_gray_filter.c
-    ${GRAPHICS_SOURCE_DIR}/ogles_invert_filter.c
-    ${GRAPHICS_SOURCE_DIR}/ogles_vignette_filter.c
-    ${GRAPHICS_SOURCE_DIR}/ogles_effects_filter.c
+
+    # Graphics ogles source dir.
+    ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_renderer.c
+    ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_fbo.c
+    ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_present_filter.c
+    ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_preview_filter.c
+    ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_gray_filter.c
+    ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_invert_filter.c
+    ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_vignette_filter.c
+    ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_effects_filter.c
+
+    # VR source dir.
+    ${VR_OGLES_SOURCE_DIR}/vr_ogles_engine.c
 
     # Utils source dir.
     ${UTILS_SOURCE_DIR}/lib_loader.c
@@ -89,17 +97,23 @@ SET( HEADERS
      ${SENSOR_SOURCE_DIR}/orientation_ekf.h
 
      # Graphics source dir.
+     ${VR_OGLES_SOURCE_DIR}/vr_ogles_engine.h
+
+     # Graphics source dir.
      ${GRAPHICS_SOURCE_DIR}/gfx.h
-     ${GRAPHICS_SOURCE_DIR}/ogles.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_func.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_fbo.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_filter.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_present_filter.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_preview_filter.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_gray_filter.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_invert_filter.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_vignette_filter.h
-     ${GRAPHICS_SOURCE_DIR}/ogles_effects_filter.h )
+
+     # Graphics ogles source dir.
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_renderer.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_func.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_fbo.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_filter.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_present_filter.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_preview_filter.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_gray_filter.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_invert_filter.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_vignette_filter.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_effects_filter.h )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 

@@ -5,7 +5,7 @@
 #ifndef EXOGFX_GEOMETRY_PRIMITIVE_H
 #define EXOGFX_GEOMETRY_PRIMITIVE_H
 
-#include "../graphics/ogles.h"
+#include "../graphics/ogles/ogles.h"
 #include "primitive_type.h"
 #include "mesh_factory.h"
 

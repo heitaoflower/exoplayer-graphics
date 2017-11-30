@@ -6,7 +6,6 @@
 #include "../math/mat3.h"
 #include "../math/mat4.h"
 #include "so3.h"
-#include "../utils/log_util.h"
 
 #include <math.h>
 
@@ -137,7 +136,7 @@ float orientation_ekf_get_heading_degrees(struct orientation_ekf *orientation_ek
     return heading;
 }
 
-float orientation_ekf_set_heading_degrees(struct orientation_ekf *orientation_ekf, float heading)
+void orientation_ekf_set_heading_degrees(struct orientation_ekf *orientation_ekf, float heading)
 {
     const float current_heading = orientation_ekf_get_heading_degrees(orientation_ekf);
     const float delta_heading = heading - current_heading;
@@ -145,8 +144,7 @@ float orientation_ekf_set_heading_degrees(struct orientation_ekf *orientation_ek
     const float c = cosf(deg2rad(delta_heading));
     mat3 delta_heading_rotation;
     mat3_set(&delta_heading_rotation, c, -s, 0.0f, s, c, 0.0f, 0.0f, 0.0f, 1.0f);
-    mat3_multiply_mm(&orientation_ekf->so3_sensor_from_world, &delta_heading_rotation,
-                     &orientation_ekf->so3_sensor_from_world);
+    mat3_multiply_mm(&orientation_ekf->so3_sensor_from_world, &delta_heading_rotation, &orientation_ekf->so3_sensor_from_world);
 }
 
 void orientation_ekf_get_predicted_gl_matrix(struct orientation_ekf *orientation_ekf, float seconds_after_last_gyro_event, mat4 *matrix)

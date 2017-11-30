@@ -7,7 +7,7 @@
 #include "ogles_gray_filter.h"
 #include "ogles_invert_filter.h"
 #include "ogles_vignette_filter.h"
-#include "../geometry/primitive.h"
+#include "../../geometry/primitive.h"
 
 #include <vec.h>
 

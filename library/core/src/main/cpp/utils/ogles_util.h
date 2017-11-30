@@ -5,7 +5,7 @@
 #ifndef EXOGFX_OGLES_UTIL_H
 #define EXOGFX_OGLES_UTIL_H
 
-#include "../graphics/ogles.h"
+#include "../graphics/ogles/ogles.h"
 #include "log_util.h"
 
 #include <stdbool.h>

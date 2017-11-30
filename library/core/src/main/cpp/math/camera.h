@@ -6,7 +6,7 @@
 #define EXOGFX_MATH_CAMERA_H
 
 #include "mat4.h"
-#include "../graphics/ogles.h"
+#include "../graphics/ogles/ogles.h"
 
 typedef enum
 {

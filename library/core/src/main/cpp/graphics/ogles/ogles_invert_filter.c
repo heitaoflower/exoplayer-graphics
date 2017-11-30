@@ -2,7 +2,7 @@
 // Created by showtime on 11/10/2017.
 //
 #include "ogles_invert_filter.h"
-#include "../utils/ogles_util.h"
+#include "../../utils/ogles_util.h"
 
 #include <malloc.h>
 

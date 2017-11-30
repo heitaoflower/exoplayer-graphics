@@ -6,7 +6,7 @@
 #define EXOGFX_GRAPHICS_OGLES_EFFECTS_FILTER_H
 
 #include "ogles.h"
-#include "../geometry/primitive_type.h"
+#include "../../geometry/primitive_type.h"
 #include "ogles_filter.h"
 #include <vec.h>
 struct ogles_effects_filter
