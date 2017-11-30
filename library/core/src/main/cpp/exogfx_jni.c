@@ -40,38 +40,38 @@ JNI_METHOD(NativeLibrary, void, nativeInitializeContext)
     }
 }
 
-jlong jptr(struct exogfx_renderer *nativeRenderer)
+jlong jptr(struct ogles_renderer *nativeRenderer)
 {
     return (jlong)nativeRenderer;
 }
 
-struct exogfx_renderer* native(jlong ptr)
+struct ogles_renderer* native(jlong ptr)
 {
-    return (struct exogfx_renderer*)ptr;
+    return (struct ogles_renderer*)ptr;
 }
 JNI_METHOD(NativeLibrary, jlong , nativeCreateRenderer)
 (JNIEnv *env, jobject obj)
 {
-    return jptr(renderer);
+    return jptr(ogles_renderer_create());
 }
 
 JNI_METHOD(NativeLibrary, void, nativeDestroyRenderer)
 (JNIEnv *env, jobject obj, jlong renderer)
 {
-    struct exogfx_renderer *nativeRenderer = native(renderer);
-    nativeRenderer->destroy();
+    struct ogles_renderer *nativeRenderer = native(renderer);
+    ogles_renderer_destroy(nativeRenderer);
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnSurfaceCreated)
 (JNIEnv *env, jobject obj, jlong renderer, jint texture)
 {
-    native(renderer)->create((GLuint)texture);
+    ogles_renderer_init(native(renderer), (GLuint)texture);
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnSurfaceChanged)
 (JNIEnv *env, jobject obj, jlong renderer, jint width, jint height)
 {
-    native(renderer)->resize((GLsizei)width, (GLsizei)height);
+    ogles_renderer_resize(native(renderer), (GLsizei)width, (GLsizei)height);
 }
 
 JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
@@ -82,7 +82,7 @@ JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
 
     (*env)->GetFloatArrayRegion(env, stMatrix, 0, size, nativeStMatrix);
 
-    native(renderer)->draw((GLuint*)&texture, nativeStMatrix);
+    ogles_renderer_draw(native(renderer), (GLuint*)&texture, nativeStMatrix);
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnResume)

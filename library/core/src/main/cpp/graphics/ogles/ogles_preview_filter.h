@@ -31,23 +31,26 @@ struct ogles_preview_filter
     } attributes;
 };
 
+ogles_filter_create(preview)
+(void);
+
 ogles_filter_init(preview)
-(struct ogles_preview_filter *filter, primitive_type primitive_type, bool create_fbo);
+(struct ogles_filter_base *filter, primitive_type primitive_type, bool create_fbo, GLuint texture);
 
 ogles_filter_release(preview)
-(struct ogles_preview_filter *filter);
+(struct ogles_filter_base *filter);
 
 ogles_filter_safe_release(preview)
-(struct ogles_preview_filter *filter);
+(struct ogles_filter_base *filter);
 
 ogles_filter_resize(preview)
-(struct ogles_preview_filter *filter, GLint width, GLint height);
+(struct ogles_filter_base *filter, GLint width, GLint height);
 
 ogles_filter_pre_draw(preview)
 (struct ogles_preview_filter *filter);
 
 ogles_filter_draw(preview)
-(struct ogles_preview_filter *filter, GLuint *texture, mat4 *mvp_mat, const float st_mat[], float aspect);
+(struct ogles_filter_base *filter, GLuint *texture, mat4 *mvp_mat, const float st_mat[], float aspect);
 
 ogles_filter_post_draw(preview)
 (struct ogles_preview_filter *filter, GLuint *texture);

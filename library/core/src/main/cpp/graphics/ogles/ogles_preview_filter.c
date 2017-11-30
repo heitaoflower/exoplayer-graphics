@@ -34,45 +34,82 @@ static const char *fragment_shader_source =
         LINE("}");
 #undef LINE
 
+ogles_filter_create(preview)
+(void)
+{
+#define STR(s) #s
+    struct ogles_preview_filter *filter = malloc(sizeof(struct ogles_preview_filter));
+    filter->base.type = FILTER_TYPE_PREVIEW;
+    filter->base.init = NULL;
+    filter->base.resize = NULL;
+    filter->base.draw = NULL;
+    filter->base.release = NULL;
+    filter->base.safe_release = NULL;
+    filter->base.primitive = NULL;
+    filter->base.fbo = NULL;
+    filter->base.program = 0;
+    filter->base.vertex_shader = 0;
+    filter->base.fragment_shader = 0;
+    filter->uniforms.uMVPMatrix.name = STR(uMVPMatrix);
+    filter->uniforms.uMVPMatrix.location = -1;
+    filter->uniforms.uSTMatrix.name = STR(uSTMatrix);
+    filter->uniforms.uSTMatrix.location = -1;
+    filter->uniforms.sTexture.name = STR(sTexture);
+    filter->uniforms.sTexture.location = -1;
+    filter->uniforms.uAspect.name = STR(uAspect);
+    filter->uniforms.uAspect.location = -1;
+    filter->attributes.aPosition.location = -1;
+    filter->attributes.aPosition.name = STR(aPosition);
+    filter->attributes.aTextureCoord.location = -1;
+    filter->attributes.aTextureCoord.name = STR(aTextureCoord);
+#undef STR
+
+    return filter;
+}
+
 ogles_filter_init(preview)
-(struct ogles_preview_filter *filter, primitive_type primitive_type, bool create_fbo)
+(struct ogles_filter_base *filter, primitive_type primitive_type, bool create_fbo, GLuint texture)
 {
     ogles_preview_filter_safe_release(filter);
 
-    filter->base.vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
-    filter->base.fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
-    filter->base.program = createProgram(filter->base.vertex_shader, filter->base.fragment_shader);
-    filter->base.primitive = create_primitive(primitive_type);
-    filter->base.fbo = create_fbo ? malloc(sizeof(struct ogles_fbo)) : NULL;
-    filter->target = GL_TEXTURE_EXTERNAL_OES;
+    filter->vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
+    filter->fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
+    filter->program = createProgram(filter->vertex_shader, filter->fragment_shader);
+    filter->primitive = create_primitive(primitive_type);
+    filter->fbo = create_fbo ? malloc(sizeof(struct ogles_fbo)) : NULL;
 
-    ogles_preview_filter_register_handle(filter);
+    struct ogles_preview_filter* preview_filter = (struct ogles_preview_filter*)filter;
+    preview_filter->target = GL_TEXTURE_EXTERNAL_OES;
+    glBindTexture(preview_filter->target, texture);
+    initSampler(preview_filter->target, GL_LINEAR, GL_NEAREST);
+
+    ogles_preview_filter_register_handle(preview_filter);
 }
 
 ogles_filter_release(preview)
-(struct ogles_preview_filter *filter)
+(struct ogles_filter_base *filter)
 {
-    glDeleteProgram(filter->base.program);
-    glDeleteShader(filter->base.vertex_shader);
-    glDeleteShader(filter->base.fragment_shader);
+    glDeleteProgram(filter->program);
+    glDeleteShader(filter->vertex_shader);
+    glDeleteShader(filter->fragment_shader);
 
     ogles_preview_filter_safe_release(filter);
 }
 ogles_filter_safe_release(preview)
-(struct ogles_preview_filter *filter)
+(struct ogles_filter_base *filter)
 {
-    filter->base.program = 0;
-    filter->base.vertex_shader = 0;
-    filter->base.fragment_shader = 0;
+    filter->program = 0;
+    filter->vertex_shader = 0;
+    filter->fragment_shader = 0;
 
-    safe_free_primitive(filter->base.primitive);
-    ogles_fbo_safe_release(filter->base.fbo);
+    safe_free_primitive(filter->primitive);
+    ogles_fbo_safe_release(filter->fbo);
 }
 
 ogles_filter_resize(preview)
-(struct ogles_preview_filter *filter, GLint width, GLint height)
+(struct ogles_filter_base *filter, GLint width, GLint height)
 {
-    ogles_fbo_resize(filter->base.fbo, width, height);
+    ogles_fbo_resize(filter->fbo, width, height);
 }
 
 ogles_filter_pre_draw(preview)
@@ -88,38 +125,40 @@ ogles_filter_pre_draw(preview)
 }
 
 ogles_filter_draw(preview)
-(struct ogles_preview_filter *filter, GLuint *texture, mat4 *mvp_mat, const float st_mat[], float aspect)
+(struct ogles_filter_base *filter, GLuint *texture, mat4 *mvp_mat, const float st_mat[], float aspect)
 {
-    ogles_preview_filter_use_program(filter);
-    ogles_preview_filter_pre_draw(filter);
+    struct ogles_preview_filter *preview_filter = (struct ogles_preview_filter*)filter;
 
-    glUniformMatrix4fv(filter->uniforms.uMVPMatrix.location, 1, GL_FALSE, (const float*)mvp_mat);
-    glUniformMatrix4fv(filter->uniforms.uSTMatrix.location, 1, GL_FALSE, st_mat);
-    glUniform1f(filter->uniforms.uAspect.location, aspect);
+    ogles_preview_filter_use_program(preview_filter);
+    ogles_preview_filter_pre_draw(preview_filter);
 
-    glBindBuffer(GL_ARRAY_BUFFER, filter->base.primitive->vbo_vertices);
-    glEnableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
-    glVertexAttribPointer((GLuint)filter->attributes.aPosition.location, VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
+    glUniformMatrix4fv(preview_filter->uniforms.uMVPMatrix.location, 1, GL_FALSE, (const float*)mvp_mat);
+    glUniformMatrix4fv(preview_filter->uniforms.uSTMatrix.location, 1, GL_FALSE, st_mat);
+    glUniform1f(preview_filter->uniforms.uAspect.location, aspect);
 
-    glBindBuffer(GL_ARRAY_BUFFER, filter->base.primitive->vbo_uvs);
-    glEnableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);
-    glVertexAttribPointer((GLuint)filter->attributes.aTextureCoord.location, VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, preview_filter->base.primitive->vbo_vertices);
+    glEnableVertexAttribArray((GLuint)preview_filter->attributes.aPosition.location);
+    glVertexAttribPointer((GLuint)preview_filter->attributes.aPosition.location, VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, preview_filter->base.primitive->vbo_uvs);
+    glEnableVertexAttribArray((GLuint)preview_filter->attributes.aTextureCoord.location);
+    glVertexAttribPointer((GLuint)preview_filter->attributes.aTextureCoord.location, VERTICES_DATA_UV_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(filter->target, *texture);
-    glUniform1i(filter->uniforms.sTexture.location, 0);
+    glBindTexture(preview_filter->target, *texture);
+    glUniform1i(preview_filter->uniforms.sTexture.location, 0);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, filter->base.primitive->vbo_indices);
-    glDrawElements(GL_TRIANGLES, filter->base.primitive->elements_count, GL_UNSIGNED_INT, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, preview_filter->base.primitive->vbo_indices);
+    glDrawElements(GL_TRIANGLES, preview_filter->base.primitive->elements_count, GL_UNSIGNED_INT, 0);
 
-    glDisableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
-    glDisableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);
+    glDisableVertexAttribArray((GLuint)preview_filter->attributes.aPosition.location);
+    glDisableVertexAttribArray((GLuint)preview_filter->attributes.aTextureCoord.location);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    ogles_preview_filter_post_draw(filter, texture);
+    ogles_preview_filter_post_draw(preview_filter, texture);
 }
 
 ogles_filter_post_draw(preview)

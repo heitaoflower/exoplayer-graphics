@@ -9,75 +9,70 @@
 #include "../../math/camera.h"
 #include "../../context/context.h"
 #include "../../sensor/head_tracker.h"
+#include "ogles_renderer.h"
 
-static struct camera camera;
-
-static struct ogles_preview_filter preview_filter = {
-        .base = {.type = FILTER_TYPE_PREVIEW},
-        .uniforms = {UNIFORM(uMVPMatrix), UNIFORM(uSTMatrix), UNIFORM(sTexture), UNIFORM(uAspect)},
-        .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aTextureCoord)}
-};
-
-static struct ogles_effects_filter effects_filter = {
-        .base = {.type = FILTER_TYPE_EFFECTS}
-};
-
-static struct ogles_present_filter present_filter = {
-        .base = {.type = FILTER_TYPE_PRESENT},
-        .uniforms = {UNIFORM(sTexture)},
-        .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aTextureCoord)}
-};
-
-static void create(GLuint texture)
+static void ogles_renderer_set_global_state(void)
 {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_SCISSOR_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-    ogles_preview_filter_init(&preview_filter, PrimitiveTypeQuad, true);
-    ogles_effects_filter_init(&effects_filter);
-    ogles_present_filter_init(&present_filter, PrimitiveTypeQuad, false);
-
-    glBindTexture(preview_filter.target, texture);
-    initSampler(preview_filter.target, GL_LINEAR, GL_NEAREST);
-    camera_set_lookat(&camera);
 }
 
-static void resize(GLsizei width, GLsizei height)
+struct ogles_renderer* ogles_renderer_create()
 {
-    ogles_preview_filter_resize(&preview_filter, width, height);
-    ogles_effects_filter_resize(&effects_filter, width, height);
-    ogles_present_filter_resize(&present_filter, width, height);
+    struct ogles_renderer *render = malloc(sizeof(struct ogles_renderer));
+    render->name = "OGLES";
+    render->camera = camera_create();
+    render->ogles_preview_filter = ogles_preview_filter_create();
+    render->ogles_effects_filter = ogles_effects_filter_create();
+    render->ogles_present_filter = ogles_present_filter_create();
 
-    camera_set_projection(&camera, ProjectionTypeOrtho, width, height);
+    return render;
+}
+
+void ogles_renderer_init(struct ogles_renderer *ogles_renderer, GLuint texture)
+{
+    ogles_renderer_set_global_state();
+
+    camera_set_lookat(ogles_renderer->camera);
+    ogles_preview_filter_init(&ogles_renderer->ogles_preview_filter->base, PrimitiveTypeQuad, true, texture);
+    ogles_effects_filter_init(ogles_renderer->ogles_effects_filter);
+    ogles_present_filter_init(&ogles_renderer->ogles_present_filter->base, PrimitiveTypeQuad, false);
+}
+
+void ogles_renderer_resize(struct ogles_renderer *ogles_renderer, GLsizei width, GLsizei height)
+{
+    ogles_preview_filter_resize(&ogles_renderer->ogles_preview_filter->base, width, height);
+    ogles_effects_filter_resize(ogles_renderer->ogles_effects_filter, width, height);
+    ogles_present_filter_resize(&ogles_renderer->ogles_present_filter->base, width, height);
+    camera_set_projection(ogles_renderer->camera, ProjectionTypeOrtho, width, height);
     glViewport(0, 0, width, height);
 }
 
-static void draw(GLuint *texture, const float st_mat[])
+void ogles_renderer_draw(struct ogles_renderer *ogles_renderer, GLuint *texture, const float st_mat[])
 {
     mat4 head_view;
     head_tracker_get_last_view(&head_view);
 
-    camera_update(&camera);
-    ogles_preview_filter_draw(&preview_filter, texture, &camera.mvp_mat, st_mat, camera.aspect);
-    ogles_effects_filter_draw(&effects_filter, texture);
-    ogles_present_filter_draw(&present_filter, texture);
+    camera_update(ogles_renderer->camera);
+    ogles_preview_filter_draw(&ogles_renderer->ogles_preview_filter->base, texture, ogles_renderer->camera->mvp_mat, st_mat, ogles_renderer->camera->aspect);
+    ogles_effects_filter_draw(ogles_renderer->ogles_effects_filter, texture);
+    ogles_present_filter_draw(&ogles_renderer->ogles_present_filter->base, texture);
 }
 
-static void destroy(void)
+void ogles_renderer_destroy(struct ogles_renderer *ogles_renderer)
 {
-    ogles_preview_filter_release(&preview_filter);
-    ogles_effects_filter_release(&effects_filter);
-    ogles_present_filter_release(&present_filter);
-}
+    camera_destroy(ogles_renderer->camera);
 
-struct exogfx_renderer ogles_renderer = {
-        .name = "OGLES",
-        .api_type = API_OGLES20,
-        .create = create,
-        .resize = resize,
-        .draw = draw,
-        .destroy = destroy
-};
+    ogles_preview_filter_release(&ogles_renderer->ogles_preview_filter->base);
+    ogles_effects_filter_release(ogles_renderer->ogles_effects_filter);
+    ogles_present_filter_release(&ogles_renderer->ogles_present_filter->base);
+
+    free(ogles_renderer->ogles_preview_filter);
+    free(ogles_renderer->ogles_effects_filter);
+    free(ogles_renderer->ogles_present_filter);
+
+    free(ogles_renderer);
+}
