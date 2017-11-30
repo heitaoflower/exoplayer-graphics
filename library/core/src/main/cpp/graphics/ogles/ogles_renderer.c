@@ -9,6 +9,7 @@
 #include "../math/camera.h"
 #include "../context/context.h"
 #include "../sensor/head_tracker.h"
+#include "../vr/ogles/ogles_vr_renderer.h"
 
 #pragma pack(1)
 
@@ -61,6 +62,9 @@ static void resize(GLsizei width, GLsizei height)
 
 static void draw(GLuint *texture, const float st_mat[])
 {
+    mat4 head_view;
+    head_tracker_get_last_view(&head_view);
+
     camera_update(&camera);
     ogles_preview_filter_draw(&preview_filter, texture, &camera.mvp_mat, st_mat, camera.aspect);
     ogles_effects_filter_draw(&effects_filter, texture);
