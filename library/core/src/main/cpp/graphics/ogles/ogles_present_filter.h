@@ -26,26 +26,23 @@ struct ogles_present_filter
     } attributes;
 };
 
-ogles_filter_create(present)
-(void);
-
 ogles_filter_init(present)
-(struct ogles_filter_base *filter, primitive_type primitive_type, bool create_fbo);
+(struct ogles_present_filter *filter, primitive_type primitive_type, bool create_fbo);
 
 ogles_filter_release(present)
-(struct ogles_filter_base *filter);
+(struct ogles_present_filter *filter);
 
 ogles_filter_safe_release(present)
-(struct ogles_filter_base *filter);
+(struct ogles_present_filter *filter);
 
 ogles_filter_resize(present)
-(struct ogles_filter_base *filter, GLint width, GLint height);
+(struct ogles_present_filter *filter, GLint width, GLint height);
 
 ogles_filter_pre_draw(present)
 (struct ogles_present_filter *filter);
 
 ogles_filter_draw(present)
-(struct ogles_filter_base *filter, GLuint *texture);
+(struct ogles_present_filter *filter, GLuint *texture);
 
 ogles_filter_post_draw(present)
 (struct ogles_present_filter *filter, GLuint *texture);

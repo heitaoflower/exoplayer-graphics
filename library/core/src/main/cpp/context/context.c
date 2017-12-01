@@ -4,11 +4,14 @@
 #include "context.h"
 #include "../graphics/gfx.h"
 #include "../sensor/head_tracker.h"
-#include "../graphics/ogles/ogles_renderer.h"
 
-bool context_init(JNIEnv *env, jobject appcontext, jobject class_loader)
+struct exogfx_renderer *renderer;
+
+bool context_init(JNIEnv *env, jobject android_context, jobject class_loader)
 {
     gfx_init();
+
+    renderer = &ogles_renderer;
 
     head_tracker_start();
 
@@ -18,6 +21,8 @@ bool context_init(JNIEnv *env, jobject appcontext, jobject class_loader)
 void context_deinit(void)
 {
     gfx_deinit();
+
+    renderer = NULL;
 
     head_tracker_stop();
 }

@@ -31,6 +31,15 @@
     JNIEXPORT return_type JNICALL                               \
         Java_com_heitao_exogfx_core_##class_name##_##method_name
 
+JNI_METHOD(NativeLibrary, void, nativeInitializeContext)
+(JNIEnv *env, jobject obj, jobject androidContext, jobject classLoader)
+{
+    if (!context_init(env, androidContext, classLoader))
+    {
+        LOGE("initialized context failed.");
+    }
+}
+
 jlong jptr(struct exogfx_renderer *nativeRenderer)
 {
     return (jlong)nativeRenderer;
@@ -41,13 +50,8 @@ struct exogfx_renderer* native(jlong ptr)
     return (struct exogfx_renderer*)ptr;
 }
 JNI_METHOD(NativeLibrary, jlong , nativeCreateRenderer)
-(JNIEnv *env, jobject obj, jobject appContext, jobject classLoader)
+(JNIEnv *env, jobject obj)
 {
-    if (!context_init(env, appContext, classLoader))
-    {
-        LOGE("initialized context failed.");
-    }
-
     return jptr(renderer);
 }
 

@@ -28,23 +28,20 @@ static struct ogles_present_filter present_filter = {
         .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aTextureCoord)}
 };
 
-static void set_ogles_state()
+static void create(GLuint texture)
 {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_SCISSOR_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-}
 
-static void create(GLuint texture)
-{
-    set_ogles_state();
-
-    ogles_preview_filter_init(&preview_filter, PrimitiveTypeQuad, true, texture);
+    ogles_preview_filter_init(&preview_filter, PrimitiveTypeQuad, true);
     ogles_effects_filter_init(&effects_filter);
     ogles_present_filter_init(&present_filter, PrimitiveTypeQuad, false);
 
+    glBindTexture(preview_filter.target, texture);
+    initSampler(preview_filter.target, GL_LINEAR, GL_NEAREST);
     camera_set_lookat(&camera);
 }
 

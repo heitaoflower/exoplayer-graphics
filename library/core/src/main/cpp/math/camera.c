@@ -3,42 +3,23 @@
 //
 #include "camera.h"
 
-#include <malloc.h>
-
 static void camera_set_perspective(struct camera *camera)
 {
-    mat4_perspective_default(camera->projection_mat, camera->aspect);
+    mat4_perspective_default(&camera->projection_mat, camera->aspect);
 }
 
 static void camera_set_ortho(struct camera *camera)
 {
-    mat4_ortho_default(camera->projection_mat, camera->aspect);
+    mat4_ortho_default(&camera->projection_mat, camera->aspect);
 }
 
 static void camera_set_frustum(struct camera *camera)
 {
-    mat4_frustum_default(camera->projection_mat, camera->aspect);
+    mat4_frustum_default(&camera->projection_mat, camera->aspect);
 }
-
-struct camera* camera_create(void)
-{
-    struct camera *camera = malloc(sizeof(camera));
-    camera->model_mat = malloc(sizeof(mat4));
-    camera->view_mat = malloc(sizeof(mat4));
-    camera->projection_mat = malloc(sizeof(mat4));
-    camera->mvp_mat = malloc(sizeof(mat4));
-
-    mat4_identity(camera->model_mat);
-    mat4_identity(camera->view_mat);
-    mat4_identity(camera->projection_mat);
-    mat4_identity(camera->mvp_mat);
-
-    return camera;
-}
-
 void camera_set_lookat(struct camera *camera)
 {
-    mat4_lookat(camera->view_mat, 0.0f, 0.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    mat4_lookat(&camera->view_mat, 0.0f, 0.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 }
 
 void camera_set_projection(struct camera *camera, projection_type projection_type, GLint width, GLint height)
@@ -69,20 +50,7 @@ void camera_set_projection(struct camera *camera, projection_type projection_typ
 
 void camera_update(struct camera *camera)
 {
-    mat4_identity(camera->model_mat);
-    mat4_multiply(camera->mvp_mat, camera->view_mat, camera->model_mat);
-    mat4_multiply(camera->mvp_mat, camera->projection_mat, camera->mvp_mat);
-}
-
-void camera_destroy(struct camera *camera)
-{
-    if (camera != NULL)
-    {
-        free(camera->model_mat);
-        free(camera->view_mat);
-        free(camera->projection_mat);
-        free(camera->mvp_mat);
-        free(camera);
-        camera = NULL;
-    }
+    mat4_identity(&camera->model_mat);
+    mat4_multiply(&camera->mvp_mat, &camera->view_mat, &camera->model_mat);
+    mat4_multiply(&camera->mvp_mat, &camera->projection_mat, &camera->mvp_mat);
 }

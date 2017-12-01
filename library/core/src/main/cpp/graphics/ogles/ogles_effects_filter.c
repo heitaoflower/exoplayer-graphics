@@ -11,27 +11,11 @@
 
 #include <vec.h>
 
-struct ogles_effects_filter* ogles_effects_filter_create(void)
-{
-    struct ogles_effects_filter *filter = malloc(sizeof(struct ogles_effects_filter));
-    filter->base.type = FILTER_TYPE_EFFECTS;
-    filter->base.init = NULL;
-    filter->base.resize = NULL;
-    filter->base.draw = NULL;
-    filter->base.release = NULL;
-    filter->base.safe_release = NULL;
-    filter->base.primitive = NULL;
-    filter->base.fbo = NULL;
-    filter->base.program = 0;
-    filter->base.vertex_shader = 0;
-    filter->base.fragment_shader = 0;
-    vec_init(&filter->vec);
-    return filter;
-}
-
 void ogles_effects_filter_init(struct ogles_effects_filter *group)
 {
     ogles_effects_filter_safe_release(group);
+
+    vec_init(&group->vec);
 }
 
 void ogles_effects_filter_add(struct ogles_effects_filter *group, uint32_t filter_type, primitive_type primitive_type)
@@ -86,7 +70,7 @@ void ogles_effects_filter_safe_release(struct ogles_effects_filter *group)
             filter->safe_release(filter);
         }
 
-    vec_clear(&group->vec);
+    vec_deinit(&group->vec);
 }
 
 void ogles_effects_filter_resize(struct ogles_effects_filter *group, GLint width, GLint height)
