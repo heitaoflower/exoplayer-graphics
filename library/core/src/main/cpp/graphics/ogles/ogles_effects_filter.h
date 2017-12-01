@@ -15,6 +15,8 @@ struct ogles_effects_filter
     vec_void_t vec;
 };
 
+struct ogles_effects_filter* ogles_effects_filter_create(void);
+
 void ogles_effects_filter_init(struct ogles_effects_filter *group);
 
 void ogles_effects_filter_add(struct ogles_effects_filter *group, uint32_t filter_type, primitive_type primitive_type);

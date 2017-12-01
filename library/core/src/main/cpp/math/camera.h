@@ -14,19 +14,23 @@ typedef enum
 } projection_type;
 
 struct camera{
-    mat4 model_mat;
-    mat4 view_mat;
-    mat4 projection_mat;
-    mat4 mvp_mat;
+    mat4 *model_mat;
+    mat4 *view_mat;
+    mat4 *projection_mat;
+    mat4 *mvp_mat;
     GLint viewport_width;
     GLint viewport_height;
     GLfloat aspect;
 };
+
+struct camera* camera_create(void);
 
 void camera_set_lookat(struct camera *camera);
 
 void camera_set_projection(struct camera *camera, projection_type projection_type, GLint width, GLint height);
 
 void camera_update(struct camera *camera);
+
+void camera_destroy(struct camera *camera);
 
 #endif //EXOGFX_MATH_CAMERA_H

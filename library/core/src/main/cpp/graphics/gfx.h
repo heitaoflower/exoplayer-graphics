@@ -9,6 +9,13 @@
 
 #include <stdbool.h>
 
+enum api_type
+{
+    API_UNKNOWN,
+    API_OGLES20,
+    API_VULKAN
+};
+
 bool gfx_init(void);
 
 void gfx_deinit(void);
