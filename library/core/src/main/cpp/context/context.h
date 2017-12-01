@@ -33,7 +33,7 @@ extern struct exogfx_renderer vulkan_renderer;
 
 extern struct exogfx_renderer *renderer;
 
-bool context_init(JNIEnv *env, jobject android_context, jobject class_loader);
+bool context_init(JNIEnv *env, jobject appcontext, jobject class_loader);
 
 void context_deinit(void);
 

@@ -25,10 +25,7 @@ public class ExogfxVideoRenderer implements GLSurfaceView.Renderer {
 
     public ExogfxVideoRenderer(Context context)
     {
-        NativeLibrary.nativeInitializeContext(context, getClass().getClassLoader());
-
-        nativeRenderer = NativeLibrary.nativeCreateRenderer();
-
+        nativeRenderer = NativeLibrary.nativeCreateRenderer(context, getClass().getClassLoader());
     }
 
     @Override

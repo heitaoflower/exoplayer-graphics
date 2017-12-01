@@ -7,7 +7,7 @@
 
 struct exogfx_renderer *renderer;
 
-bool context_init(JNIEnv *env, jobject android_context, jobject class_loader)
+bool context_init(JNIEnv *env, jobject appcontext, jobject class_loader)
 {
     gfx_init();
 

@@ -15,8 +15,6 @@ public class NativeLibrary {
         System.loadLibrary(LIB_NAME);
     }
 
-    public static native void nativeInitializeContext(Context context, ClassLoader classLoader);
-
     public static native void nativeOnSurfaceChanged(long renderer, int width, int height);
 
     public static native void nativeOnSurfaceCreated(long renderer, int texture);
@@ -27,7 +25,7 @@ public class NativeLibrary {
 
     public static native void nativeOnResume(long renderer);
 
-    public static native long nativeCreateRenderer();
+    public static native long nativeCreateRenderer(Context context, ClassLoader classLoader);
 
     public static native void nativeDestroyRenderer(long renderer);
 
