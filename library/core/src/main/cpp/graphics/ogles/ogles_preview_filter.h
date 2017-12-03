@@ -32,7 +32,7 @@ struct ogles_preview_filter
 };
 
 ogles_filter_init(preview)
-(struct ogles_preview_filter *filter, primitive_type primitive_type, bool create_fbo);
+(struct ogles_preview_filter *filter, primitive_type primitive_type, bool create_fbo, GLuint texture);
 
 ogles_filter_release(preview)
 (struct ogles_preview_filter *filter);

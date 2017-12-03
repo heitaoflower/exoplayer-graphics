@@ -61,18 +61,18 @@ static void orientation_ekf_filter_gyro_timestep(struct orientation_ekf *orienta
     }
 }
 
-static void orientation_ekf_gl_matrix_from_so3(mat3 *so3, mat4 *matrix)
+static void orientation_ekf_gl_matrix_from_so3(mat3 *so3, mat4 *mat)
 {
-    mat4_zero(matrix);
+    mat4_zero(mat);
     for (uint32_t r = 0; r < 3; ++r)
     {
         for (uint32_t c = 0; c < 3; ++c)
         {
-            *mat4_element(matrix, r, c) = *mat3_element(so3, r, c);
+            *mat4_element(mat, r, c) = *mat3_element(so3, r, c);
         }
     }
 
-    *mat4_element(matrix, 3, 3) = 1.0f;
+    *mat4_element(mat, 3, 3) = 1.0f;
 }
 
 void orientation_ekf_init(struct orientation_ekf* orientation_ekf)
@@ -147,7 +147,7 @@ void orientation_ekf_set_heading_degrees(struct orientation_ekf *orientation_ekf
     mat3_multiply_mm(&orientation_ekf->so3_sensor_from_world, &delta_heading_rotation, &orientation_ekf->so3_sensor_from_world);
 }
 
-void orientation_ekf_get_predicted_gl_matrix(struct orientation_ekf *orientation_ekf, float seconds_after_last_gyro_event, mat4 *matrix)
+void orientation_ekf_get_predicted_gl_matrix(struct orientation_ekf *orientation_ekf, float seconds_after_last_gyro_event, mat4 *mat)
 {
     struct vec3 pmu;
     vec3_copy(&orientation_ekf->last_gyro, &pmu);
@@ -155,9 +155,13 @@ void orientation_ekf_get_predicted_gl_matrix(struct orientation_ekf *orientation
     mat3 so3_predicted_motion;
     so3_from_mu(&pmu, &so3_predicted_motion);
     mat3 so3_predicted_state;
-    mat3_multiply_mm(&so3_predicted_motion, &orientation_ekf->so3_sensor_from_world,
-                     &so3_predicted_state);
-    orientation_ekf_gl_matrix_from_so3(&so3_predicted_state, matrix);
+    mat3_multiply_mm(&so3_predicted_motion, &orientation_ekf->so3_sensor_from_world, &so3_predicted_state);
+    orientation_ekf_gl_matrix_from_so3(&so3_predicted_state, mat);
+}
+
+void orientation_ekf_get_gl_matrix(struct orientation_ekf *orientation_ekf, mat4 *mat)
+{
+    orientation_ekf_gl_matrix_from_so3(&orientation_ekf->so3_sensor_from_world, mat);
 }
 
 void orientation_ekf_process_gyro(struct orientation_ekf *orientation_ekf, struct vec3 *gyro, int64_t timestamp)
@@ -169,7 +173,7 @@ void orientation_ekf_process_gyro(struct orientation_ekf *orientation_ekf, struc
         float delta = (timestamp - orientation_ekf->sensor_timestamp_gyro) * 1.0E-9f;
         if (delta > time_threshould)
         {
-            delta= (orientation_ekf->gyro_filter_valid ? orientation_ekf->filtered_gyro_timestep : delta_default);
+            delta = (orientation_ekf->gyro_filter_valid ? orientation_ekf->filtered_gyro_timestep : delta_default);
         }
         else
         {
@@ -179,8 +183,7 @@ void orientation_ekf_process_gyro(struct orientation_ekf *orientation_ekf, struc
         vec3_copy(gyro, &orientation_ekf->v_u);
         vec3_scale(&orientation_ekf->v_u, -delta);
         so3_from_mu(&orientation_ekf->v_u, &orientation_ekf->so3_last_motion);
-        mat3_multiply_mm(&orientation_ekf->so3_last_motion, &orientation_ekf->so3_sensor_from_world,
-                         &orientation_ekf->so3_sensor_from_world);
+        mat3_multiply_mm(&orientation_ekf->so3_last_motion, &orientation_ekf->so3_sensor_from_world, &orientation_ekf->so3_sensor_from_world);
         orientation_ekf_update_covariances_after_motion(orientation_ekf);
         mat3 temp;
         mat3_copy(&orientation_ekf->m_q, &temp);

@@ -23,6 +23,14 @@ struct camera{
     GLfloat aspect;
 };
 
+void camera_init(struct camera *camera);
+
+void camera_rotate_yaw(struct camera *camera, float angle);
+
+void camera_rotate_pitch(struct camera *camera, float angle);
+
+void camera_rotate_roll(struct camera *camera, float angle);
+
 void camera_set_lookat(struct camera *camera);
 
 void camera_set_projection(struct camera *camera, projection_type projection_type, GLint width, GLint height);

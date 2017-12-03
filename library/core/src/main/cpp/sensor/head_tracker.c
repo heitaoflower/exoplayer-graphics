@@ -20,7 +20,7 @@ static void head_tracker_process_acc(struct orientation_ekf *orientation_ekf, fl
 {
     struct vec3 vec3;
     vec3_set(&vec3, x, y, z);
-    orientation_ekf_process_acc(orientation_ekf, &vec3, timestamp);
+    //orientation_ekf_process_acc(orientation_ekf, &vec3, timestamp);
 }
 
 static void head_tracker_process_gyro(struct orientation_ekf *orientation_ekf, float x, float y, float z, int64_t timestamp)
@@ -66,6 +66,8 @@ static struct head_tracker_context* tracker_context_create()
     context->orientation_ekf = malloc(sizeof(struct orientation_ekf));
     orientation_ekf_init(context->orientation_ekf);
     orientation_ekf_reset(context->orientation_ekf);
+
+    context->display_rotation = DisplayRotationUnknown;
     return context;
 
 }
@@ -116,9 +118,9 @@ static void* head_tracker_worker(__attribute__((unused)) void *data)
                         gettimeofday(&context->last_gyro_time, NULL);
                         head_tracker_process_gyro(
                                 context->orientation_ekf,
-                                event.data[0],
-                                event.data[1],
                                 event.data[2],
+                                event.data[1],
+                                event.data[0],
                                 event.timestamp
                         );
                         pthread_mutex_unlock(context->lock);
@@ -154,23 +156,59 @@ void head_tracker_stop(void)
     pthread_join(tracker_tid, NULL);
 }
 
-void head_tracker_get_last_view(mat4 *matrix)
+void head_tracker_get_last_view(mat4 *head_view, int32_t display_rotation)
 {
     if (context == NULL)
     {
-        mat4_identity(matrix);
+        mat4_identity(head_view);
         return;
     }
 
-    mat4 ekf_to_head_tracker;
-    mat4_rotate_euler(&ekf_to_head_tracker, -90.0f, 0.0f, 0.0f);
+    float rotation = 0.0f;
+    switch (display_rotation)
+    {
+        case DisplayRotation0:
+        {
+            rotation = 0.0f;
+            break;
+        }
+        case DisplayRotation90:
+        {
+            rotation = 90.0f;
+            break;
+        }
+        case DisplayRotation180:
+        {
+            rotation = 180.0f;
+            break;
+        }
+        case DisplayRotation270:
+        {
+            rotation = 270.0f;
+            break;
+        }
+    }
 
+    static mat4 ekf_to_head_tracker;
+    static mat4 sensor_to_display;
+    if (rotation != context->display_rotation)
+    {
+        context->display_rotation = rotation;
+        mat4_rotate_euler(&sensor_to_display, 0.0f, 0.0f, -rotation);
+        mat4_rotate_euler(&ekf_to_head_tracker, -90.0f, 0.0f, rotation);
+    }
+
+    mat4 temp_m1, temp_m2;
     struct timeval now;
     gettimeofday(&now, NULL);
-    double seconds_since_last_gyro_event = now.tv_sec + now.tv_usec / 1000000.0f - (context->last_gyro_time.tv_sec) - (context->last_gyro_time.tv_usec) / 1000000.0f;
+    double seconds_since_last_gyro_event = (double)now.tv_sec + (double)(now.tv_usec / 1000000.0f) - (double)context->last_gyro_time.tv_sec - (double)(context->last_gyro_time.tv_usec / 1000000.0f);
     double seconds_to_predict_forward = seconds_since_last_gyro_event + 1.0f / 30;
     pthread_mutex_lock(context->lock);
-    orientation_ekf_get_predicted_gl_matrix(context->orientation_ekf, (float)seconds_to_predict_forward, matrix);
+    orientation_ekf_get_predicted_gl_matrix(context->orientation_ekf, (float)seconds_to_predict_forward, temp_m1);
     pthread_mutex_unlock(context->lock);
-    mat4_multiply(matrix, matrix, &ekf_to_head_tracker);
+
+    mat4_multiply(&temp_m2, &sensor_to_display, &temp_m1);
+    mat4_multiply(head_view, &temp_m2, &ekf_to_head_tracker);
+
+    orientation_ekf_get_gl_matrix(context->orientation_ekf, head_view);
 }

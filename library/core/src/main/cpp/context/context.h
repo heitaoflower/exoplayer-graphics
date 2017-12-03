@@ -24,7 +24,7 @@ struct exogfx_renderer
     enum api_type api_type;
     void (*create)(GLuint texture);
     void (*resize)(GLsizei width, GLsizei height);
-    void (*draw)(GLuint *texture, const float st_mat[]);
+    void (*draw)(GLuint *texture, const float st_mat[], const int32_t display_rotation);
     void (*destroy)(void);
 };
 

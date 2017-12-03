@@ -47,7 +47,9 @@ float orientation_ekf_get_heading_degrees(struct orientation_ekf *orientation_ek
 
 void orientation_ekf_set_heading_degrees(struct orientation_ekf *orientation_ekf, float heading);
 
-void orientation_ekf_get_predicted_gl_matrix(struct orientation_ekf *orientation_ekf, float seconds_after_last_gyro_event, mat4 *matrix);
+void orientation_ekf_get_predicted_gl_matrix(struct orientation_ekf *orientation_ekf, float seconds_after_last_gyro_event, mat4 *mat);
+
+void orientation_ekf_get_gl_matrix(struct orientation_ekf *orientation_ekf, mat4 *mat);
 
 void orientation_ekf_process_gyro(struct orientation_ekf *orientation_ekf, struct vec3 *gyro, int64_t timestamp);
 

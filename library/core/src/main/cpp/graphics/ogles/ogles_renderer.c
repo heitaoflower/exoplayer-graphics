@@ -5,12 +5,15 @@
 #include "ogles_preview_filter.h"
 #include "ogles_effects_filter.h"
 #include "ogles_present_filter.h"
+#include "../../vr/ogles/vr_ogles_engine.h"
 #include "../../utils/ogles_util.h"
 #include "../../math/camera.h"
 #include "../../context/context.h"
 #include "../../sensor/head_tracker.h"
 
 static struct camera camera;
+
+static struct vr_ogles_engine vr_ogles_engine;
 
 static struct ogles_preview_filter preview_filter = {
         .base = {.type = FILTER_TYPE_PREVIEW},
@@ -36,13 +39,13 @@ static void create(GLuint texture)
     glDisable(GL_SCISSOR_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    ogles_preview_filter_init(&preview_filter, PrimitiveTypeQuad, true);
+    vr_ogles_engine_init(&vr_ogles_engine);
+
+    ogles_preview_filter_init(&preview_filter, PrimitiveTypeSphere, true, texture);
     ogles_effects_filter_init(&effects_filter);
     ogles_present_filter_init(&present_filter, PrimitiveTypeQuad, false);
 
-    glBindTexture(preview_filter.target, texture);
-    initSampler(preview_filter.target, GL_LINEAR, GL_NEAREST);
-    camera_set_lookat(&camera);
+    camera_init(&camera);
 }
 
 static void resize(GLsizei width, GLsizei height)
@@ -51,16 +54,24 @@ static void resize(GLsizei width, GLsizei height)
     ogles_effects_filter_resize(&effects_filter, width, height);
     ogles_present_filter_resize(&present_filter, width, height);
 
-    camera_set_projection(&camera, ProjectionTypeOrtho, width, height);
-    glViewport(0, 0, width, height);
+    camera_set_projection(&camera, ProjectionTypePerspective, width, height);
 }
 
-static void draw(GLuint *texture, const float st_mat[])
+static void draw(GLuint *texture, const float st_mat[], const int32_t display_rotation)
 {
     mat4 head_view;
-    head_tracker_get_last_view(&head_view);
+    head_tracker_get_last_view(&head_view, display_rotation);
+    vr_ogles_engine_draw(&vr_ogles_engine);
 
+    if (vr_ogles_engine.project_changed)
+    {
+        vr_ogles_engine.project_changed = false;
+    }
+
+    camera_set_lookat(&camera);
+    mat4_copy((mat4*)head_view, &camera.view_mat);
     camera_update(&camera);
+
     ogles_preview_filter_draw(&preview_filter, texture, &camera.mvp_mat, st_mat, camera.aspect);
     ogles_effects_filter_draw(&effects_filter, texture);
     ogles_present_filter_draw(&present_filter, texture);

@@ -12,9 +12,8 @@ android {
 
         externalNativeBuild {
             cmake {
-                arguments '-DANDROID_PLATFORM=android-14',
-                        '-DANDROID_TOOLCHAIN=clang'
-                // explicitly build libs
+                arguments '-DANDROID_TOOLCHAIN=clang'
+                abiFilters 'armeabi-v7a'
                 targets 'vec', 'map'
             }
 
@@ -32,6 +31,7 @@ android {
             path 'src/main/cpp/CMakeLists.txt'
         }
     }
+    sourceSets { main { jni.srcDirs = ['src/main/jni'] } }
 }
 
 dependencies {

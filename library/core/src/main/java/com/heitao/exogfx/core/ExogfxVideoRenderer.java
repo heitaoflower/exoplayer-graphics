@@ -2,7 +2,9 @@ package com.heitao.exogfx.core;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.view.Display;
 import android.view.Surface;
+import android.view.WindowManager;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
 
@@ -23,12 +25,13 @@ public class ExogfxVideoRenderer implements GLSurfaceView.Renderer {
 
     private SimpleExoPlayer videoPlayer;
 
+    private Display display;
+
     public ExogfxVideoRenderer(Context context)
     {
-        NativeLibrary.nativeInitializeContext(context, getClass().getClassLoader());
+        nativeRenderer = NativeLibrary.nativeCreateRenderer(context, getClass().getClassLoader());
 
-        nativeRenderer = NativeLibrary.nativeCreateRenderer();
-
+        display = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
     }
 
     @Override
@@ -62,7 +65,7 @@ public class ExogfxVideoRenderer implements GLSurfaceView.Renderer {
 
         videoTexture.updateTexture();
 
-        NativeLibrary.nativeDrawFrame(nativeRenderer, videoTexture.getTexName(), videoTexture.getStMatrix());
+        NativeLibrary.nativeDrawFrame(nativeRenderer, videoTexture.getTexName(), videoTexture.getStMatrix(), display.getRotation());
     }
 
     public void bindPlayer(ExogfxVideoPlayer videoPlayer)

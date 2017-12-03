@@ -34,6 +34,29 @@ void mat4_zero(mat4 *mat)
     memset(mat, 0, sizeof(*mat));
 }
 
+void mat4_copy(mat4 *src, mat4 *dst)
+{
+    *mat4_element(dst, 0, 0) = *mat4_element(src, 0, 0);
+    *mat4_element(dst, 0, 1) = *mat4_element(src, 0, 1);
+    *mat4_element(dst, 0, 2) = *mat4_element(src, 0, 2);
+    *mat4_element(dst, 0, 3) = *mat4_element(src, 0, 3);
+
+    *mat4_element(dst, 1, 0) = *mat4_element(src, 1, 0);
+    *mat4_element(dst, 1, 1) = *mat4_element(src, 1, 1);
+    *mat4_element(dst, 1, 2) = *mat4_element(src, 1, 2);
+    *mat4_element(dst, 1, 3) = *mat4_element(src, 1, 3);
+
+    *mat4_element(dst, 2, 0) = *mat4_element(src, 2, 0);
+    *mat4_element(dst, 2, 1) = *mat4_element(src, 2, 1);
+    *mat4_element(dst, 2, 2) = *mat4_element(src, 2, 2);
+    *mat4_element(dst, 2, 3) = *mat4_element(src, 2, 3);
+
+    *mat4_element(dst, 3, 0) = *mat4_element(src, 3, 0);
+    *mat4_element(dst, 3, 1) = *mat4_element(src, 3, 1);
+    *mat4_element(dst, 3, 2) = *mat4_element(src, 3, 2);
+    *mat4_element(dst, 3, 3) = *mat4_element(src, 3, 3);
+}
+
 void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2)
 {
     mat4 mat;

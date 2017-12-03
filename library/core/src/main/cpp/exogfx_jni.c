@@ -21,7 +21,6 @@
  */
 
 #include "context/context.h"
-#include "utils/log_util.h"
 #include "utils/ogles_util.h"
 
 #include <jni.h>
@@ -31,27 +30,24 @@
     JNIEXPORT return_type JNICALL                               \
         Java_com_heitao_exogfx_core_##class_name##_##method_name
 
-JNI_METHOD(NativeLibrary, void, nativeInitializeContext)
+static jlong jptr(struct exogfx_renderer *nativeRenderer)
+{
+    return (jlong)nativeRenderer;
+}
+
+static struct exogfx_renderer* native(jlong ptr)
+{
+    return (struct exogfx_renderer*)ptr;
+}
+
+JNI_METHOD(NativeLibrary, jlong , nativeCreateRenderer)
 (JNIEnv *env, jobject obj, jobject androidContext, jobject classLoader)
 {
     if (!context_init(env, androidContext, classLoader))
     {
         LOGE("initialized context failed.");
     }
-}
 
-jlong jptr(struct exogfx_renderer *nativeRenderer)
-{
-    return (jlong)nativeRenderer;
-}
-
-struct exogfx_renderer* native(jlong ptr)
-{
-    return (struct exogfx_renderer*)ptr;
-}
-JNI_METHOD(NativeLibrary, jlong , nativeCreateRenderer)
-(JNIEnv *env, jobject obj)
-{
     return jptr(renderer);
 }
 
@@ -75,14 +71,13 @@ JNI_METHOD(NativeLibrary, void, nativeOnSurfaceChanged)
 }
 
 JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
-(JNIEnv *env, jobject obj, jlong renderer, jint texture, jfloatArray stMatrix)
+(JNIEnv *env, jobject obj, jlong renderer, jint texture, jfloatArray stMatrix, jint displayRotation)
 {
     GLsizei size = (*env)->GetArrayLength(env, stMatrix);
     float nativeStMatrix[size];
 
     (*env)->GetFloatArrayRegion(env, stMatrix, 0, size, nativeStMatrix);
-
-    native(renderer)->draw((GLuint*)&texture, nativeStMatrix);
+    native(renderer)->draw((GLuint*)&texture, nativeStMatrix, displayRotation);
 }
 
 JNI_METHOD(NativeLibrary, void, nativeOnResume)

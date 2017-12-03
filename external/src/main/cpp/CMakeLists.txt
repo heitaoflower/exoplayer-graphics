@@ -20,8 +20,6 @@
 # to use.
 cmake_minimum_required(VERSION 3.4.1)
 
-set(CMAKE_VERBOSE_MAKEFILE on)
-
 set(lib_src_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(lib_build_DIR $ENV{HOME}/tmp)

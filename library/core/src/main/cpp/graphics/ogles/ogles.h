@@ -16,6 +16,7 @@
 #define glClearColor GL_FN(glClearColor)
 #define glEnable GL_FN(glEnable)
 #define glViewport GL_FN(glViewport)
+#define glScissor GL_FN(glScissor)
 #define glActiveTexture GL_FN(glActiveTexture)
 #define glAttachShader GL_FN(glAttachShader)
 #define glBindBuffer GL_FN(glBindBuffer)

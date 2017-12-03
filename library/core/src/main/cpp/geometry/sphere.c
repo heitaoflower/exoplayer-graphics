@@ -15,7 +15,7 @@ static void update(struct primitive *primitive)
 struct primitive *primitive_sphere_create(void)
 {
     struct primitive *primitive = (struct primitive *)malloc(sizeof(struct primitive));
-    struct mesh* sphere_mesh = create_sphere_mesh(1.0f, 24, 24, false);
+    struct mesh* sphere_mesh = create_sphere_mesh(1.0f, 64, 64, true);
 
     primitive->type = PrimitiveTypeSphere;
     primitive->vbo_vertices = createBuffer(GL_ARRAY_BUFFER, sphere_mesh->vertices, sphere_mesh->vertice_size * sizeof(float));

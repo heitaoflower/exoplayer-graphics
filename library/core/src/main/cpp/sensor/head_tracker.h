@@ -15,7 +15,9 @@
 
 #define SENSOR_REFRESH_PERIOD_US 1000000L / 60
 
-enum {LOOPER_ID_USER = 3};
+enum looper_id_type {LOOPER_ID_USER = 3};
+
+enum display_rotation {DisplayRotation0, DisplayRotation90, DisplayRotation180, DisplayRotation270, DisplayRotationUnknown};
 
 struct head_tracker_context
 {
@@ -29,12 +31,13 @@ struct head_tracker_context
     pthread_mutex_t *lock;
     struct orientation_ekf *orientation_ekf;
     struct timeval last_gyro_time;
+    float display_rotation;
 };
 
 void head_tracker_start(void);
 
 void head_tracker_stop(void);
 
-void head_tracker_get_last_view(mat4 *matrix);
+void head_tracker_get_last_view(mat4 *head_view, int32_t display_rotation);
 
 #endif //EXOGFX_HEAD_TRACKER_H

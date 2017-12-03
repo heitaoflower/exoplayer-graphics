@@ -45,6 +45,9 @@ SET( SOURCES
 
     # VR source dir.
     ${VR_OGLES_SOURCE_DIR}/vr_ogles_engine.c
+    ${VR_OGLES_SOURCE_DIR}/vr_ogles_eye.c
+    ${VR_OGLES_SOURCE_DIR}/vr_ogles_fov.c
+    ${VR_OGLES_SOURCE_DIR}/vr_ogles_viewport.c
 
     # Utils source dir.
     ${UTILS_SOURCE_DIR}/lib_loader.c
@@ -98,6 +101,9 @@ SET( HEADERS
 
      # Graphics source dir.
      ${VR_OGLES_SOURCE_DIR}/vr_ogles_engine.h
+     ${VR_OGLES_SOURCE_DIR}/vr_ogles_eye.h
+     ${VR_OGLES_SOURCE_DIR}/vr_ogles_fov.h
+     ${VR_OGLES_SOURCE_DIR}/vr_ogles_viewport.h
 
      # Graphics source dir.
      ${GRAPHICS_SOURCE_DIR}/gfx.h
@@ -114,8 +120,6 @@ SET( HEADERS
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_invert_filter.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_vignette_filter.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_effects_filter.h )
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
 #configure 3rdparty libs
 set(distribution_DIR ${CMAKE_SOURCE_DIR}/../../distribution)

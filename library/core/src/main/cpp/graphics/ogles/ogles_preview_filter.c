@@ -35,7 +35,7 @@ static const char *fragment_shader_source =
 #undef LINE
 
 ogles_filter_init(preview)
-(struct ogles_preview_filter *filter, primitive_type primitive_type, bool create_fbo)
+(struct ogles_preview_filter *filter, primitive_type primitive_type, bool create_fbo, GLuint texture)
 {
     ogles_preview_filter_safe_release(filter);
 
@@ -46,6 +46,8 @@ ogles_filter_init(preview)
     filter->base.fbo = create_fbo ? malloc(sizeof(struct ogles_fbo)) : NULL;
     filter->target = GL_TEXTURE_EXTERNAL_OES;
 
+    glBindTexture(filter->target, texture);
+    initSampler(filter->target, GL_LINEAR, GL_NEAREST);
     ogles_preview_filter_register_handle(filter);
 }
 

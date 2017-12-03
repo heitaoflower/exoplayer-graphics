@@ -197,8 +197,9 @@ struct mesh *create_sphere_mesh(float radius, uint32_t h_segments, uint32_t v_se
         for (int32_t i = h_segments; i >= 0; --i)
         {
             float u = (float) i / h_segments;
+            float v = (float) j / v_segments;
             sphere_mesh->uvs[uv_counter++] = mirror_uvs ? 1.0f - u : u;
-            sphere_mesh->uvs[uv_counter++] = (float) j / v_segments;
+            sphere_mesh->uvs[uv_counter++] = mirror_uvs ? 1.0f - v : v;
         }
     }
 

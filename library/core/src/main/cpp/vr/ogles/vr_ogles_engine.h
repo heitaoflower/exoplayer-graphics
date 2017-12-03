@@ -5,15 +5,21 @@
 #ifndef EXOGFX_VR_OGLES_ENGINE_H
 #define EXOGFX_VR_OGLES_ENGINE_H
 
-typedef struct ogles_vr_renderer
+#include "vr_ogles_eye.h"
+
+struct vr_ogles_engine
 {
+    struct vr_ogles_eye center_eye;
+    struct vr_ogles_eye left_eye;
+    struct vr_ogles_eye right_eye;
+    bool vr_mode;
+    bool project_changed;
+};
 
-} ogles_vr_renderer;
+void vr_ogles_engine_draw(struct vr_ogles_engine *vr_ogles_engine);
 
-void ogles_vr_draw(ogles_vr_renderer *vr_renderer);
+void vr_ogles_engine_init(struct vr_ogles_engine *vr_ogles_engine);
 
-void ogles_setup_renderer(void);
-
-void ogles_unload_renderer();
+void vr_ogles_engine_release(struct vr_ogles_engine *vr_ogles_engine);
 
 #endif //EXOGFX_VR_OGLES_ENGINE_H
