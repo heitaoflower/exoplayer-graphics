@@ -8,7 +8,7 @@
 
 float deg2rad(float deg)
 {
-    return deg / 360.0F * 2.0F * PI;
+    return deg / 360.0f * 2.0f * PI;
 }
 
 float rad2deg(float rad)

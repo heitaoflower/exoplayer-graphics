@@ -75,8 +75,8 @@ JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
 {
     GLsizei size = (*env)->GetArrayLength(env, stMatrix);
     float nativeStMatrix[size];
-
     (*env)->GetFloatArrayRegion(env, stMatrix, 0, size, nativeStMatrix);
+
     native(renderer)->draw((GLuint*)&texture, nativeStMatrix, displayRotation);
 }
 

@@ -68,7 +68,7 @@ static void orientation_ekf_gl_matrix_from_so3(mat3 *so3, mat4 *mat)
     {
         for (uint32_t c = 0; c < 3; ++c)
         {
-            *mat4_element(mat, r, c) = *mat3_element(so3, r, c);
+            *mat4_element(mat, c, r) = *mat3_element(so3, r, c);
         }
     }
 

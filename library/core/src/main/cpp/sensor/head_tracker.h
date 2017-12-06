@@ -40,4 +40,6 @@ void head_tracker_stop(void);
 
 void head_tracker_get_last_view(mat4 *head_view, int32_t display_rotation);
 
+void head_tracker_get_last_view_test(mat4 *head_view, mat4 *sensor_to_display, mat4 *ekf_to_head_tracker);
+
 #endif //EXOGFX_HEAD_TRACKER_H

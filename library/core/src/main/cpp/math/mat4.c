@@ -4,6 +4,7 @@
 
 #include "mat4.h"
 #include "../utils/log_util.h"
+#include "vec3.h"
 
 #include <string.h>
 #include <math.h>
@@ -75,40 +76,6 @@ void mat4_multiply(mat4 *dst, mat4 *src1, mat4 *src2)
     }
 
     memcpy(dst, &mat, sizeof(mat4));
-}
-
-void mat4_rotate_euler(mat4 *mat, float x, float y, float z) {
-    x = deg2rad(x);
-    y = deg2rad(y);
-    z = deg2rad(z);
-    float cx = cosf(x);
-    float sx = sinf(x);
-    float cy = cosf(y);
-    float sy = sinf(y);
-    float cz = cosf(z);
-    float sz = sinf(z);
-    float cxsy = cx * sy;
-    float sxsy = sx * sy;
-
-    *mat4_element(mat, 0, 0)  =   cy * cz;
-    *mat4_element(mat, 0, 1)  =  -cy * sz;
-    *mat4_element(mat, 0, 2)  =   sy;
-    *mat4_element(mat, 0, 3)  =  0.0f;
-
-    *mat4_element(mat, 1, 0)  =  cxsy * cz + cx * sz;
-    *mat4_element(mat, 1, 1)  = -cxsy * sz + cx * cz;
-    *mat4_element(mat, 1, 2)  =  -sx * cy;
-    *mat4_element(mat, 1, 3)  =  0.0f;
-
-    *mat4_element(mat, 2, 0)  = -sxsy * cz + sx * sz;
-    *mat4_element(mat, 2, 1)  =  sxsy * sz + sx * cz;
-    *mat4_element(mat, 2, 2) =  cx * cy;
-    *mat4_element(mat, 2, 3) =  0.0f;
-
-    *mat4_element(mat, 3, 0) =  0.0f;
-    *mat4_element(mat, 3, 1) =  0.0f;
-    *mat4_element(mat, 3, 2) =  0.0f;
-    *mat4_element(mat, 3, 3) =  1.0f;
 }
 
 /* https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFrustum.xml

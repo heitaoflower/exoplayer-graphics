@@ -7,9 +7,9 @@
 
 #include <stdbool.h>
 
-#ifndef PI
-#define PI 3.14159265358979323846264338327950288419716939937510f
-#endif
+#define PI    (float)M_PI
+#define PI_2  (float)M_PI_2
+#define PI_4  (float)M_PI_4
 
 #pragma pack(1)
 

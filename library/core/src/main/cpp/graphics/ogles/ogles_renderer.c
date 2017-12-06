@@ -61,6 +61,7 @@ static void draw(GLuint *texture, const float st_mat[], const int32_t display_ro
 {
     mat4 head_view;
     head_tracker_get_last_view(&head_view, display_rotation);
+
     vr_ogles_engine_draw(&vr_ogles_engine);
 
     if (vr_ogles_engine.project_changed)
@@ -69,7 +70,7 @@ static void draw(GLuint *texture, const float st_mat[], const int32_t display_ro
     }
 
     camera_set_lookat(&camera);
-    mat4_copy((mat4*)head_view, &camera.view_mat);
+    mat4_copy(&head_view, &camera.model_mat);
     camera_update(&camera);
 
     ogles_preview_filter_draw(&preview_filter, texture, &camera.mvp_mat, st_mat, camera.aspect);
@@ -87,8 +88,8 @@ static void destroy(void)
 struct exogfx_renderer ogles_renderer = {
         .name = "OGLES",
         .api_type = API_OGLES20,
-        .create = create,
-        .resize = resize,
-        .draw = draw,
-        .destroy = destroy
+        .create   = create,
+        .resize   = resize,
+        .draw     = draw,
+        .destroy  = destroy
 };
