@@ -197,9 +197,9 @@ void head_tracker_get_last_view(mat4 *head_view, int32_t display_rotation)
     {
         context->display_rotation = rotation;
         struct vec3 angle;
-        vec3_set(&angle, deg2rad(-90.0f), deg2rad(0.0f), deg2rad(-90.0f));
+        vec3_set(&angle, -deg2rad(90.0f), deg2rad(0.0f), deg2rad(rotation));
         euler_yzx(&angle, &ekf_to_head_tracker);
-        vec3_set(&angle, deg2rad(0.0f), deg2rad(0.0f), deg2rad(-90.0f));
+        vec3_set(&angle, deg2rad(0.0f), deg2rad(0.0f), -deg2rad(rotation));
         euler_yzx(&angle, &sensor_to_display);
     }
 
