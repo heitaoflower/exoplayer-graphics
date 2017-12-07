@@ -6,7 +6,6 @@
 #include "orientation_ekf.h"
 #include "../utils/math_util.h"
 #include "../math/vec3.h"
-#include "../utils/log_util.h"
 #include "../math/euler.h"
 
 #include <malloc.h>
@@ -70,6 +69,10 @@ static struct head_tracker_context* tracker_context_create()
     orientation_ekf_reset(context->orientation_ekf);
 
     context->display_rotation = DisplayRotationUnknown;
+    mat4_identity(&context->neck_model_translation);
+    mat4_set_translate(&context->neck_model_translation, 0.0f, -DEFAULT_NECK_VERTICAL_OFFSET, DEFAULT_NECK_HORIZONTAL_OFFSET);
+    context->neck_model_enabled = DEFAULT_NECK_MODEL_ENABLED;
+
     return context;
 
 }
@@ -157,6 +160,14 @@ void head_tracker_stop(void)
     pthread_join(tracker_tid, NULL);
 }
 
+void head_tracker_set_neck_model_enabled(bool enabled)
+{
+    if (context != NULL)
+    {
+        context->neck_model_enabled = enabled;
+    }
+}
+
 void head_tracker_get_last_view(mat4 *head_view, int32_t display_rotation)
 {
     if (context == NULL)
@@ -197,9 +208,9 @@ void head_tracker_get_last_view(mat4 *head_view, int32_t display_rotation)
     {
         context->display_rotation = rotation;
         struct vec3 angle;
-        vec3_set(&angle, -deg2rad(90.0f), deg2rad(0.0f), deg2rad(rotation));
+        vec3_set(&angle, deg2rad(-90.0f), deg2rad(0.0f), deg2rad(rotation));
         euler_yzx(&angle, &ekf_to_head_tracker);
-        vec3_set(&angle, deg2rad(0.0f), deg2rad(0.0f), -deg2rad(rotation));
+        vec3_set(&angle, deg2rad(0.0f), deg2rad(0.0f), deg2rad(-rotation));
         euler_yzx(&angle, &sensor_to_display);
     }
 
@@ -213,4 +224,10 @@ void head_tracker_get_last_view(mat4 *head_view, int32_t display_rotation)
 
     mat4_multiply(head_view, &sensor_to_display, head_view);
     mat4_multiply(head_view, head_view, &ekf_to_head_tracker);
+
+    if (!context->neck_model_enabled)
+    {
+        mat4_multiply(head_view, &context->neck_model_translation, head_view);
+        mat4_translate(head_view, 0.0f, DEFAULT_NECK_VERTICAL_OFFSET, 0.0f);
+    }
 }

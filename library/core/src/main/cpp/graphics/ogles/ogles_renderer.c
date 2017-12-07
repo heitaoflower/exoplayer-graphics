@@ -59,8 +59,8 @@ static void resize(GLsizei width, GLsizei height)
 
 static void draw(GLuint *texture, const float st_mat[], const int32_t display_rotation)
 {
-    mat4 head_view;
-    head_tracker_get_last_view(&head_view, display_rotation);
+    mat4 native_head_view;
+    head_tracker_get_last_view(&native_head_view, display_rotation);
 
     vr_ogles_engine_draw(&vr_ogles_engine);
 
@@ -70,7 +70,7 @@ static void draw(GLuint *texture, const float st_mat[], const int32_t display_ro
     }
 
     camera_set_lookat(&camera);
-    mat4_copy(&head_view, &camera.model_mat);
+    mat4_copy(&native_head_view, &camera.model_mat);
     camera_update(&camera);
 
     ogles_preview_filter_draw(&preview_filter, texture, &camera.mvp_mat, st_mat, camera.aspect);

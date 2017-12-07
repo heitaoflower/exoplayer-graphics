@@ -7,6 +7,8 @@
 
 #include "../utils/math_util.h"
 
+#define MATRIX4x4_LENGTH 16
+
 float* mat4_element(mat4 *mat, int row, int col);
 
 void mat4_identity(mat4 *mat);

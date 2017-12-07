@@ -22,6 +22,7 @@
 
 #include "context/context.h"
 #include "utils/ogles_util.h"
+#include "math/mat4.h"
 
 #include <jni.h>
 
@@ -73,9 +74,8 @@ JNI_METHOD(NativeLibrary, void, nativeOnSurfaceChanged)
 JNI_METHOD(NativeLibrary, void, nativeDrawFrame)
 (JNIEnv *env, jobject obj, jlong renderer, jint texture, jfloatArray stMatrix, jint displayRotation)
 {
-    GLsizei size = (*env)->GetArrayLength(env, stMatrix);
-    float nativeStMatrix[size];
-    (*env)->GetFloatArrayRegion(env, stMatrix, 0, size, nativeStMatrix);
+    float nativeStMatrix[MATRIX4x4_LENGTH];
+    (*env)->GetFloatArrayRegion(env, stMatrix, 0, MATRIX4x4_LENGTH, nativeStMatrix);
 
     native(renderer)->draw((GLuint*)&texture, nativeStMatrix, displayRotation);
 }
