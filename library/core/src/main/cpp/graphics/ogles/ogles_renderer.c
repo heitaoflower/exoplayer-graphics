@@ -63,7 +63,6 @@ static void draw(GLuint *texture, const float st_mat[], const int32_t display_ro
     head_tracker_get_last_view(&native_head_view, display_rotation);
 
     vr_ogles_engine_draw(&vr_ogles_engine);
-
     if (vr_ogles_engine.project_changed)
     {
         vr_ogles_engine.project_changed = false;

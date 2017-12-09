@@ -176,7 +176,7 @@ void head_tracker_get_last_view(mat4 *head_view, int32_t display_rotation)
         return;
     }
 
-    float rotation = 0.0f;
+    float rotation;
     switch (display_rotation)
     {
         case DisplayRotation0:
@@ -199,11 +199,14 @@ void head_tracker_get_last_view(mat4 *head_view, int32_t display_rotation)
             rotation = 270.0f;
             break;
         }
+        default:
+        {
+            rotation = 0.0f;
+        }
     }
 
     static mat4 ekf_to_head_tracker;
     static mat4 sensor_to_display;
-
     if (rotation != context->display_rotation)
     {
         context->display_rotation = rotation;
@@ -225,7 +228,7 @@ void head_tracker_get_last_view(mat4 *head_view, int32_t display_rotation)
     mat4_multiply(head_view, &sensor_to_display, head_view);
     mat4_multiply(head_view, head_view, &ekf_to_head_tracker);
 
-    if (!context->neck_model_enabled)
+    if (context->neck_model_enabled)
     {
         mat4_multiply(head_view, &context->neck_model_translation, head_view);
         mat4_translate(head_view, 0.0f, DEFAULT_NECK_VERTICAL_OFFSET, 0.0f);
