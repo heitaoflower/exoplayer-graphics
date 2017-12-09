@@ -6,8 +6,8 @@ project.ext {
     buildToolsVersion = '26.0.2'
     testSupportLibraryVersion = '0.5'
     supportLibraryVersion = '25.4.0'
-    exoplayLibraryVersion = '2.6.0'
-    releaseVersion = 'r0.1.0'
+    exoplayerLibraryVersion = '2.6.0'
+    releaseVersion = 'r1.0.0'
     modulePrefix = ':'
     if (gradle.ext.has('exogfxModulePrefix')) {
         modulePrefix += gradle.ext.exogfxModulePrefix

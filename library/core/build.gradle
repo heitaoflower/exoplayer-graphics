@@ -11,7 +11,6 @@ android {
 
         externalNativeBuild {
             cmake {
-                cppFlags '-lstdc++'
                 abiFilters 'armeabi-v7a'
             }
         }
@@ -35,6 +34,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(modulePrefix + 'external')
-    compile 'com.google.android.exoplayer:exoplayer-core:' + exoplayLibraryVersion
-    compile 'com.google.android.exoplayer:exoplayer-hls:' + exoplayLibraryVersion
+    compile 'com.google.android.exoplayer:exoplayer-core:' + project.ext.exoplayerLibraryVersion
+    compile 'com.google.android.exoplayer:exoplayer-hls:' + project.ext.exoplayerLibraryVersion
 }
