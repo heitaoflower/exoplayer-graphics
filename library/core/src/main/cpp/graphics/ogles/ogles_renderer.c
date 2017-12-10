@@ -9,9 +9,9 @@
 #include "../../utils/ogles_util.h"
 #include "../../math/camera.h"
 #include "../../context/context.h"
-#include "../../sensor/head_tracker.h"
+#include "ogles_camera.h"
 
-static struct camera camera;
+static struct ogles_camera ogles_camera;
 
 static struct vr_ogles_engine vr_ogles_engine;
 
@@ -40,12 +40,14 @@ static void create(GLuint texture)
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     vr_ogles_engine_init(&vr_ogles_engine);
+    vr_ogles_engine.vr_mode = true;
 
     ogles_preview_filter_init(&preview_filter, PrimitiveTypeSphere, true, texture);
     ogles_effects_filter_init(&effects_filter);
     ogles_present_filter_init(&present_filter, PrimitiveTypeQuad, false);
 
-    camera_init(&camera);
+    ogles_camera_init(&ogles_camera, EyeTypeBoth);
+    ogles_camera_set_lookat(&ogles_camera);
 }
 
 static void resize(GLsizei width, GLsizei height)
@@ -54,25 +56,17 @@ static void resize(GLsizei width, GLsizei height)
     ogles_effects_filter_resize(&effects_filter, width, height);
     ogles_present_filter_resize(&present_filter, width, height);
 
-    camera_set_projection(&camera, ProjectionTypePerspective, width, height);
+    vr_ogles_engine_resize(&vr_ogles_engine, width, height);
+    ogles_camera_set_viewport(&ogles_camera, 0, 0, width, height);
+    ogles_camera_set_projection(&ogles_camera, ProjectionTypePerspective);
 }
 
 static void draw(GLuint *texture, const float st_mat[], const int32_t display_rotation)
 {
-    mat4 native_head_view;
-    head_tracker_get_last_view(&native_head_view, display_rotation);
+    vr_ogles_engine_draw(&vr_ogles_engine, display_rotation);
+    ogles_camera_update(&ogles_camera);
 
-    vr_ogles_engine_draw(&vr_ogles_engine);
-    if (vr_ogles_engine.project_changed)
-    {
-        vr_ogles_engine.project_changed = false;
-    }
-
-    camera_set_lookat(&camera);
-    mat4_copy(&native_head_view, &camera.model_mat);
-    camera_update(&camera);
-
-    ogles_preview_filter_draw(&preview_filter, texture, &camera.mvp_mat, st_mat, camera.aspect);
+    ogles_preview_filter_draw(&preview_filter, texture, &vr_ogles_engine.both_ogles_camera.camera.mvp_mat, st_mat, ogles_camera_get_aspect(&ogles_camera));
     ogles_effects_filter_draw(&effects_filter, texture);
     ogles_present_filter_draw(&present_filter, texture);
 }

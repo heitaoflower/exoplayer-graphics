@@ -18,8 +18,9 @@ static void camera_set_frustum(struct camera *camera)
     mat4_frustum_default(&camera->projection_mat, camera->aspect);
 }
 
-void camera_init(struct camera *camera)
+void camera_init(struct camera *camera, eye_type eye_type)
 {
+    camera->eye_type = eye_type;
     mat4_identity(&camera->model_mat);
     mat4_identity(&camera->view_mat);
     mat4_identity(&camera->projection_mat);
@@ -46,12 +47,17 @@ void camera_set_lookat(struct camera *camera)
     mat4_lookat(&camera->view_mat, 0.0f, 0.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 }
 
-void camera_set_projection(struct camera *camera, projection_type projection_type, GLint width, GLint height)
+void camera_set_viewport(struct camera *camera, int x, int y, int width, int height)
 {
+    camera->viewport_x = x;
+    camera->viewport_y = y;
     camera->viewport_width = width;
     camera->viewport_height = height;
-    camera->aspect = width / (float)height;
+    camera->aspect = camera->viewport_width / (float)camera->viewport_height;
+}
 
+void camera_set_projection(struct camera *camera, projection_type projection_type)
+{
     switch (projection_type)
     {
         case ProjectionTypePerspective:
@@ -70,8 +76,6 @@ void camera_set_projection(struct camera *camera, projection_type projection_typ
             break;
         }
     }
-
-    glViewport(0, 0, width, height);
 }
 
 void camera_update(struct camera *camera)

@@ -35,6 +35,7 @@ SET( SOURCES
 
     # Graphics ogles source dir.
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_renderer.c
+    ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_camera.c
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_fbo.c
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_present_filter.c
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_preview_filter.c
@@ -45,7 +46,6 @@ SET( SOURCES
 
     # VR source dir.
     ${VR_OGLES_SOURCE_DIR}/vr_ogles_engine.c
-    ${VR_OGLES_SOURCE_DIR}/vr_ogles_eye.c
     ${VR_OGLES_SOURCE_DIR}/vr_ogles_fov.c
     ${VR_OGLES_SOURCE_DIR}/vr_ogles_viewport.c
 
@@ -103,7 +103,6 @@ SET( HEADERS
 
      # Graphics source dir.
      ${VR_OGLES_SOURCE_DIR}/vr_ogles_engine.h
-     ${VR_OGLES_SOURCE_DIR}/vr_ogles_eye.h
      ${VR_OGLES_SOURCE_DIR}/vr_ogles_fov.h
      ${VR_OGLES_SOURCE_DIR}/vr_ogles_viewport.h
 
@@ -113,6 +112,7 @@ SET( HEADERS
      # Graphics ogles source dir.
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_renderer.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_camera.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_func.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_fbo.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_filter.h

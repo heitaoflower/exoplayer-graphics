@@ -7,9 +7,9 @@
 
 void vr_ogles_fov_init(struct vr_ogles_fov *vr_ogles_fov)
 {
-    vr_ogles_fov->left = DEFAULT_MAX_FOV_LEFT_RIGHT;
-    vr_ogles_fov->right = DEFAULT_MAX_FOV_LEFT_RIGHT;
-    vr_ogles_fov->top = DEFAULT_MAX_FOV_TOP;
+    vr_ogles_fov->left   = DEFAULT_MAX_FOV_LEFT_RIGHT;
+    vr_ogles_fov->right  = DEFAULT_MAX_FOV_LEFT_RIGHT;
+    vr_ogles_fov->top    = DEFAULT_MAX_FOV_TOP;
     vr_ogles_fov->bottom = DEFAULT_MAX_FOV_BOTTOM;
 }
 
