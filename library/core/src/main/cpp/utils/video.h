@@ -7,7 +7,7 @@
 
 typedef enum video_format
 {
-    VideoFormat_2D,
+    VideoFormat_2D_90,
     VideoFormat_2D_360,
     VideoFormat_2D_180,
     VideoFormat_3D_360,

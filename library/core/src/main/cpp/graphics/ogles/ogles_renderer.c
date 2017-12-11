@@ -46,7 +46,7 @@ static void create(GLuint texture)
     ogles_effects_filter_init(&effects_filter);
     ogles_present_filter_init(&present_filter, PrimitiveTypeQuad, false);
 
-    ogles_camera_init(&ogles_camera, EyeTypeBoth);
+    ogles_camera_init(&ogles_camera, EyeTypeBoth, ProjectionTypePerspective);
     ogles_camera_set_lookat(&ogles_camera);
 }
 
@@ -56,9 +56,9 @@ static void resize(GLsizei width, GLsizei height)
     ogles_effects_filter_resize(&effects_filter, width, height);
     ogles_present_filter_resize(&present_filter, width, height);
 
+    ogles_camera_resize(&ogles_camera, width, height);
+
     vr_ogles_engine_resize(&vr_ogles_engine, width, height);
-    ogles_camera_set_viewport(&ogles_camera, 0, 0, width, height);
-    ogles_camera_set_projection(&ogles_camera, ProjectionTypePerspective);
 }
 
 static void draw(GLuint *texture, const float st_mat[], const int32_t display_rotation)

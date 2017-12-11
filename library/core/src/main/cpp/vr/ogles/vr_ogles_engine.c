@@ -9,9 +9,9 @@
 
 void vr_ogles_engine_init(struct vr_ogles_engine *vr_ogles_engine)
 {
-    ogles_camera_init(&vr_ogles_engine->both_ogles_camera, EyeTypeBoth);
-    ogles_camera_init(&vr_ogles_engine->left_ogles_camera, EyeTypeLeft);
-    ogles_camera_init(&vr_ogles_engine->right_ogles_camera, EyeTypeRight);
+    ogles_camera_init(&vr_ogles_engine->both_ogles_camera, EyeTypeBoth, ProjectionTypePerspective);
+    ogles_camera_init(&vr_ogles_engine->left_ogles_camera, EyeTypeLeft, ProjectionTypePerspective);
+    ogles_camera_init(&vr_ogles_engine->right_ogles_camera, EyeTypeRight, ProjectionTypePerspective);
 
     ogles_camera_set_lookat(&vr_ogles_engine->both_ogles_camera);
     ogles_camera_set_lookat(&vr_ogles_engine->left_ogles_camera);
@@ -20,13 +20,9 @@ void vr_ogles_engine_init(struct vr_ogles_engine *vr_ogles_engine)
 
 void vr_ogles_engine_resize(struct vr_ogles_engine *vr_ogles_engine, GLsizei width, GLsizei height)
 {
-    ogles_camera_set_viewport(&vr_ogles_engine->both_ogles_camera, 0, 0, width, height);
-    ogles_camera_set_viewport(&vr_ogles_engine->left_ogles_camera, 0, 0, width, height);
-    ogles_camera_set_viewport(&vr_ogles_engine->right_ogles_camera, 0, 0, width, height);
-
-    ogles_camera_set_projection(&vr_ogles_engine->both_ogles_camera, ProjectionTypePerspective);
-    ogles_camera_set_projection(&vr_ogles_engine->left_ogles_camera, ProjectionTypePerspective);
-    ogles_camera_set_projection(&vr_ogles_engine->right_ogles_camera, ProjectionTypePerspective);
+    ogles_camera_resize(&vr_ogles_engine->both_ogles_camera, width, height);
+    ogles_camera_resize(&vr_ogles_engine->left_ogles_camera, width, height);
+    ogles_camera_resize(&vr_ogles_engine->right_ogles_camera, width, height);
 }
 
 void vr_ogles_engine_draw(struct vr_ogles_engine *vr_ogles_engine, int32_t display_rotation)
