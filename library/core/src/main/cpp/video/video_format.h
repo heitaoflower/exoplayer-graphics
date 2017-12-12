@@ -1,11 +1,10 @@
 //
 // Created by showtime on 12/10/2017.
 //
+#ifndef EXOGFX_VIDEO_VIDEO_FORMAT_H
+#define EXOGFX_VIDEO_VIDEO_FORMAT_H
 
-#ifndef EXOGFX_UTILS_VIDEO_H
-#define EXOGFX_UTILS_VIDEO_H
-
-typedef enum video_format
+enum video_format
 {
     VideoFormat_2D_90,
     VideoFormat_2D_360,
@@ -15,7 +14,8 @@ typedef enum video_format
     VideoFormat_3D_360_LR,
     VideoFormat_3D_360_TB,
     VideoFormat_3D_180_LR,
-    VideoFOrmat_3D_180_TB
-} video_format;
+    VideoFormat_3D_180_TB,
+    VideoFormat_Unknown
+};
 
-#endif //EXOGFX_UTILS_VIDEO_H
+#endif //EXOGFX_VIDEO_VIDEO_FORMAT_H

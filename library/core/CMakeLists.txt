@@ -14,6 +14,7 @@ set (MATH_SOURCE_DIR "${SOURCE_DIR}/math")
 set (UTILS_SOURCE_DIR "${SOURCE_DIR}/utils")
 set (GEOMETRY_SOURCE_DIR "${SOURCE_DIR}/geometry")
 set (SENSOR_SOURCE_DIR "${SOURCE_DIR}/sensor")
+set (VIDEO_SOURCE_DIR "${SOURCE_DIR}/video")
 set (VR_SOURCE_DIR "${SOURCE_DIR}/vr")
 set (VR_OGLES_SOURCE_DIR "${VR_SOURCE_DIR}/ogles")
 
@@ -100,6 +101,9 @@ SET( HEADERS
      ${SENSOR_SOURCE_DIR}/head_tracker.h
      ${SENSOR_SOURCE_DIR}/so3.h
      ${SENSOR_SOURCE_DIR}/orientation_ekf.h
+
+     # Video source dir.
+     ${VIDEO_SOURCE_DIR}/video_format.h
 
      # Graphics source dir.
      ${VR_OGLES_SOURCE_DIR}/vr_ogles_engine.h

@@ -2,6 +2,7 @@
 // Created by showtime on 9/9/2017.
 //
 #include "ogles_fbo.h"
+#include "ogles_camera.h"
 #include "ogles_preview_filter.h"
 #include "ogles_effects_filter.h"
 #include "ogles_present_filter.h"
@@ -9,11 +10,13 @@
 #include "../../utils/ogles_util.h"
 #include "../../math/camera.h"
 #include "../../context/context.h"
-#include "ogles_camera.h"
+#include "../../video/video_format.h"
 
 static struct ogles_camera ogles_camera;
 
 static struct vr_ogles_engine vr_ogles_engine;
+
+static enum video_format video_format = VideoFormat_Unknown;
 
 static struct ogles_preview_filter preview_filter = {
         .base = {.type = FILTER_TYPE_PREVIEW},
