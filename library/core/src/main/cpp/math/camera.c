@@ -43,16 +43,48 @@ void camera_rotate_roll(struct camera *camera, float angle)
     mat4_rotate(&camera->model_mat, angle, 0, 0, 1);
 }
 
-void camera_set_lookat(struct camera *camera)
+void camera_set_lookat_default(struct camera *camera)
 {
-    mat4_lookat(&camera->view_mat, 0.0f, 0.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    if (camera->eye_type == EyeTypeLeft)
+    {
+        mat4_lookat(&camera->view_mat, -0.012f, 0.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    }
+    else if (camera->eye_type == EyeTypeRight)
+    {
+        mat4_lookat(&camera->view_mat, 0.012f, 0.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    }
+    else
+    {
+        mat4_lookat(&camera->view_mat, 0.0f, 0.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    }
 }
 
 void camera_set_viewport(struct camera *camera, int width, int height)
 {
-    camera->viewport_width = width;
-    camera->viewport_height = height;
-    camera->aspect = camera->viewport_width / (float)camera->viewport_height;
+    if (camera->eye_type == EyeTypeLeft)
+    {
+        camera->viewport_x = 0;
+        camera->viewport_y = 0;
+        camera->viewport_width = width >> 1;
+        camera->viewport_height = height;
+        camera->aspect = width / height / 2.0f;
+    }
+    else if (camera->eye_type == EyeTypeRight)
+    {
+        camera->viewport_x = width >> 1;
+        camera->viewport_y = 0;
+        camera->viewport_width = width >> 1;
+        camera->viewport_height = height;
+        camera->aspect = width / height / 2.0f;
+    }
+    else
+    {
+        camera->viewport_x = 0;
+        camera->viewport_y = 0;
+        camera->viewport_width = width;
+        camera->viewport_height = height;
+        camera->aspect = width / (float)height;
+    }
 }
 
 void camera_set_projection(struct camera *camera, projection_type projection_type)

@@ -36,7 +36,7 @@ SET( SOURCES
 
     # Graphics ogles source dir.
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_renderer.c
-    ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_camera.c
+    ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_eye.c
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_fbo.c
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_present_filter.c
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_preview_filter.c
@@ -116,7 +116,7 @@ SET( HEADERS
      # Graphics ogles source dir.
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_renderer.h
-     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_camera.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_eye.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_func.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_fbo.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_filter.h

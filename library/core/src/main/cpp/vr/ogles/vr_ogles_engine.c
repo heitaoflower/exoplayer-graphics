@@ -5,24 +5,24 @@
 #include <GLES2/gl2.h>
 #include "vr_ogles_engine.h"
 #include "../../sensor/head_tracker.h"
-#include "../../graphics/ogles/ogles_camera.h"
+#include "../../graphics/ogles/ogles_eye.h"
 
 void vr_ogles_engine_init(struct vr_ogles_engine *vr_ogles_engine)
 {
-    ogles_camera_init(&vr_ogles_engine->both_ogles_camera, EyeTypeBoth, ProjectionTypePerspective);
-    ogles_camera_init(&vr_ogles_engine->left_ogles_camera, EyeTypeLeft, ProjectionTypePerspective);
-    ogles_camera_init(&vr_ogles_engine->right_ogles_camera, EyeTypeRight, ProjectionTypePerspective);
+    ogles_eye_init(&vr_ogles_engine->both_ogles_camera, EyeTypeBoth, ProjectionTypePerspective);
+    ogles_eye_init(&vr_ogles_engine->left_ogles_camera, EyeTypeLeft, ProjectionTypePerspective);
+    ogles_eye_init(&vr_ogles_engine->right_ogles_camera, EyeTypeRight, ProjectionTypePerspective);
 
-    ogles_camera_set_lookat(&vr_ogles_engine->both_ogles_camera);
-    ogles_camera_set_lookat(&vr_ogles_engine->left_ogles_camera);
-    ogles_camera_set_lookat(&vr_ogles_engine->right_ogles_camera);
+    ogles_eye_set_lookat_default(&vr_ogles_engine->both_ogles_camera);
+    ogles_eye_set_lookat_default(&vr_ogles_engine->left_ogles_camera);
+    ogles_eye_set_lookat_default(&vr_ogles_engine->right_ogles_camera);
 }
 
 void vr_ogles_engine_resize(struct vr_ogles_engine *vr_ogles_engine, GLsizei width, GLsizei height)
 {
-    ogles_camera_resize(&vr_ogles_engine->both_ogles_camera, width, height);
-    ogles_camera_resize(&vr_ogles_engine->left_ogles_camera, width, height);
-    ogles_camera_resize(&vr_ogles_engine->right_ogles_camera, width, height);
+    ogles_eye_resize(&vr_ogles_engine->both_ogles_camera, width, height);
+    ogles_eye_resize(&vr_ogles_engine->left_ogles_camera, width, height);
+    ogles_eye_resize(&vr_ogles_engine->right_ogles_camera, width, height);
 }
 
 void vr_ogles_engine_draw(struct vr_ogles_engine *vr_ogles_engine, int32_t display_rotation)
@@ -34,9 +34,9 @@ void vr_ogles_engine_draw(struct vr_ogles_engine *vr_ogles_engine, int32_t displ
     mat4_copy(&head_view, &vr_ogles_engine->left_ogles_camera.camera.model_mat);
     mat4_copy(&head_view, &vr_ogles_engine->right_ogles_camera.camera.model_mat);
 
-    ogles_camera_update(&vr_ogles_engine->both_ogles_camera);
-    ogles_camera_update(&vr_ogles_engine->left_ogles_camera);
-    ogles_camera_update(&vr_ogles_engine->right_ogles_camera);
+    ogles_eye_update(&vr_ogles_engine->both_ogles_camera);
+    ogles_eye_update(&vr_ogles_engine->left_ogles_camera);
+    ogles_eye_update(&vr_ogles_engine->right_ogles_camera);
 }
 
 void vr_ogles_engine_release(struct vr_ogles_engine *vr_ogles_engine)

@@ -6,13 +6,13 @@
 #define EXOGFX_VR_OGLES_ENGINE_H
 
 #include "../../math/camera.h"
-#include "../../graphics/ogles/ogles_camera.h"
+#include "../../graphics/ogles/ogles_eye.h"
 
 struct vr_ogles_engine
 {
-    struct ogles_camera both_ogles_camera;
-    struct ogles_camera left_ogles_camera;
-    struct ogles_camera right_ogles_camera;
+    struct ogles_eye both_ogles_camera;
+    struct ogles_eye left_ogles_camera;
+    struct ogles_eye right_ogles_camera;
     bool vr_mode;
 };
 

@@ -26,6 +26,8 @@ struct camera{
     mat4 view_mat;
     mat4 projection_mat;
     mat4 mvp_mat;
+    int32_t viewport_x;
+    int32_t viewport_y;
     int32_t viewport_width;
     int32_t viewport_height;
     float aspect;
@@ -39,7 +41,7 @@ void camera_rotate_pitch(struct camera *camera, float angle);
 
 void camera_rotate_roll(struct camera *camera, float angle);
 
-void camera_set_lookat(struct camera *camera);
+void camera_set_lookat_default(struct camera *camera);
 
 void camera_set_viewport(struct camera *camera, int width, int height);
 
