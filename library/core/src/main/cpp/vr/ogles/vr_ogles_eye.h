@@ -1,8 +1,0 @@
-//
-// Created by showtime on 12/10/2017.
-//
-
-#ifndef EXOPLAYER_GRAPHICS_VR_OGLES_EYE_H
-#define EXOPLAYER_GRAPHICS_VR_OGLES_EYE_H
-
-#endif //EXOPLAYER_GRAPHICS_VR_OGLES_EYE_H

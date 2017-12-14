@@ -15,8 +15,6 @@ set (UTILS_SOURCE_DIR "${SOURCE_DIR}/utils")
 set (GEOMETRY_SOURCE_DIR "${SOURCE_DIR}/geometry")
 set (SENSOR_SOURCE_DIR "${SOURCE_DIR}/sensor")
 set (VIDEO_SOURCE_DIR "${SOURCE_DIR}/video")
-set (VR_SOURCE_DIR "${SOURCE_DIR}/vr")
-set (VR_OGLES_SOURCE_DIR "${VR_SOURCE_DIR}/ogles")
 
 SET( SOURCES
 
@@ -44,11 +42,6 @@ SET( SOURCES
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_invert_filter.c
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_vignette_filter.c
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_effects_filter.c
-
-    # VR source dir.
-    ${VR_OGLES_SOURCE_DIR}/vr_ogles_engine.c
-    ${VR_OGLES_SOURCE_DIR}/vr_ogles_fov.c
-    ${VR_OGLES_SOURCE_DIR}/vr_ogles_viewport.c
 
     # Utils source dir.
     ${UTILS_SOURCE_DIR}/lib_loader.c
@@ -104,11 +97,6 @@ SET( HEADERS
 
      # Video source dir.
      ${VIDEO_SOURCE_DIR}/video_format.h
-
-     # Graphics source dir.
-     ${VR_OGLES_SOURCE_DIR}/vr_ogles_engine.h
-     ${VR_OGLES_SOURCE_DIR}/vr_ogles_fov.h
-     ${VR_OGLES_SOURCE_DIR}/vr_ogles_viewport.h
 
      # Graphics source dir.
      ${GRAPHICS_SOURCE_DIR}/gfx.h
