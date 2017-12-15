@@ -63,26 +63,26 @@ void camera_set_viewport(struct camera *camera, int width, int height)
 {
     if (camera->eye_type == EyeTypeLeft)
     {
-        camera->viewport_x = 0;
-        camera->viewport_y = 0;
-        camera->viewport_width = width >> 1;
-        camera->viewport_height = height;
+        camera->viewport.x = 0;
+        camera->viewport.y = 0;
+        camera->viewport.width = width >> 1;
+        camera->viewport.height = height;
         camera->aspect = width / height / 2.0f;
     }
     else if (camera->eye_type == EyeTypeRight)
     {
-        camera->viewport_x = width >> 1;
-        camera->viewport_y = 0;
-        camera->viewport_width = width >> 1;
-        camera->viewport_height = height;
+        camera->viewport.x = width >> 1;
+        camera->viewport.y = 0;
+        camera->viewport.width = width >> 1;
+        camera->viewport.height = height;
         camera->aspect = width / height / 2.0f;
     }
     else
     {
-        camera->viewport_x = 0;
-        camera->viewport_y = 0;
-        camera->viewport_width = width;
-        camera->viewport_height = height;
+        camera->viewport.x = 0;
+        camera->viewport.y = 0;
+        camera->viewport.width = width;
+        camera->viewport.height = height;
         camera->aspect = width / (float)height;
     }
 }

@@ -46,6 +46,11 @@ void ogles_eye_update(struct ogles_eye *ogles_eye)
     camera_update(&ogles_eye->camera);
 }
 
+void ogles_eye_apply_viewport(struct ogles_eye *ogles_eye)
+{
+    glViewport(ogles_eye->camera.viewport.x, ogles_eye->camera.viewport.y, ogles_eye->camera.viewport.width, ogles_eye->camera.viewport.height);
+}
+
 float ogles_eye_get_aspect(struct ogles_eye *ogles_eye)
 {
     return ogles_eye->camera.aspect;

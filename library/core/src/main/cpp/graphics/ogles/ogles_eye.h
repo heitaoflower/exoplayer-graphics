@@ -26,6 +26,8 @@ void ogles_eye_resize(struct ogles_eye *ogles_eye, GLint width, GLint height);
 
 void ogles_eye_update(struct ogles_eye *ogles_eye);
 
+void ogles_eye_apply_viewport(struct ogles_eye *ogles_eye);
+
 float ogles_eye_get_aspect(struct ogles_eye *ogles_eye);
 
 #endif //EXOGFX_GRAPHICS_OGLES_EYE_H

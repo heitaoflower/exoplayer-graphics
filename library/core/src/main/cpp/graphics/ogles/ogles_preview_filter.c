@@ -80,7 +80,7 @@ ogles_filter_resize(preview)
 ogles_filter_pre_draw(preview)
 (struct ogles_preview_filter *filter)
 {
-    //ogles_fbo_enable(filter->base.fbo);
+    ogles_fbo_enable(filter->base.fbo);
     if (filter->base.primitive != NULL)
     {
         (*filter->base.primitive->update)(filter->base.primitive);

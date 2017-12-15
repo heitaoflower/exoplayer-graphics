@@ -26,10 +26,11 @@ struct camera{
     mat4 view_mat;
     mat4 projection_mat;
     mat4 mvp_mat;
-    int32_t viewport_x;
-    int32_t viewport_y;
-    int32_t viewport_width;
-    int32_t viewport_height;
+    struct { int32_t x;
+             int32_t y;
+             int32_t width;
+             int32_t height;
+           } viewport;
     float aspect;
 };
 
