@@ -25,6 +25,14 @@ struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, u
 
 struct mesh *create_quad_mesh(float width, float height);
 
+struct mesh *create_distortion_mesh(float screen_width, float screen_height,
+                                    float x_eye_offset_screen, float y_eye_offset_screen,
+                                    float texture_width, float texture_height,
+                                    float x_eye_offset_texture, float y_eye_offset_texture,
+                                    float viewport_x_texture, float viewport_y_texture,
+                                    float viewport_width_texture, float viewport_height_texture,
+                                    float (*blue_distort_inverse)(float), float (*distortion_factor)(float));
+
 void destroy_mesh(struct mesh *mesh);
 
 #endif //EXOGFX_GEOMETRY_MESH_FACTORY_H

@@ -20,3 +20,9 @@ int signum(int value)
 {
     return ((value >> 31) - (-value >> 31));
 }
+
+float clamp(float value, float min, float max)
+{
+    float temp = value > min ? value : min;
+    return temp < max ? temp : max;
+}

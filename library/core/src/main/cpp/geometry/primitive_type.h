@@ -7,7 +7,7 @@
 
 typedef enum
 {
-    PrimitiveTypeNone = 0, PrimitiveTypeSphere = 1, PrimitiveTypeCube = 2, PrimitiveTypePlane = 3, PrimitiveTypeQuad = 4
+    PrimitiveTypeNone = 0, PrimitiveTypeSphere = 1, PrimitiveTypeCube = 2, PrimitiveTypePlane = 3, PrimitiveTypeQuad = 4, PrimitiveTypeDistortion = 5
 } primitive_type;
 
 #endif //EXOGFX_GEOMETRY_PRIMITIVE_TYPES_H

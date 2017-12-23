@@ -21,9 +21,9 @@ struct mesh *create_plane_mesh(float width, float height, uint32_t h_segments, u
     plane_mesh->uv_size = num_uvs * 2;
     plane_mesh->index_size = v_segments * h_segments * 6;
 
-    plane_mesh->vertices = (float *)malloc((size_t)(sizeof(float) * plane_mesh->vertice_size));
-    plane_mesh->uvs = (float *)malloc((size_t)(sizeof(float) * plane_mesh->uv_size));
-    plane_mesh->indices = (uint32_t *)malloc((size_t)(sizeof(uint32_t) * plane_mesh->index_size));
+    plane_mesh->vertices = (float *)malloc((sizeof(float) * plane_mesh->vertice_size));
+    plane_mesh->uvs = (float *)malloc((sizeof(float) * plane_mesh->uv_size));
+    plane_mesh->indices = (uint32_t *)malloc((sizeof(uint32_t) * plane_mesh->index_size));
 
     uint32_t vertex_counter = 0;
     uint32_t uv_counter = 0;
@@ -113,7 +113,7 @@ struct mesh *create_quad_mesh(float width, float height)
     quad_mesh->index_size = 6;
 
     quad_mesh->vertices = (float *)malloc(sizeof(vertices));
-    quad_mesh->uvs = (float *)malloc((size_t)(sizeof(uvs)));
+    quad_mesh->uvs = (float *)malloc((sizeof(uvs)));
     quad_mesh->indices = (uint32_t *)malloc(sizeof(indices));
 
     memcpy(quad_mesh->vertices, vertices, sizeof(vertices));
@@ -137,9 +137,9 @@ struct mesh *create_sphere_mesh(float radius, uint32_t h_segments, uint32_t v_se
     sphere_mesh->uv_size = num_uvs * 2;
     sphere_mesh->index_size = num_indices;
 
-    sphere_mesh->vertices = (float *)malloc((size_t)(sizeof(float) * sphere_mesh->vertice_size));
-    sphere_mesh->uvs = (float *)malloc((size_t)(sizeof(float) * sphere_mesh->uv_size));
-    sphere_mesh->indices = (uint32_t *)malloc((size_t)(sizeof(uint32_t) * sphere_mesh->index_size));
+    sphere_mesh->vertices = (float *)malloc((sizeof(float) * sphere_mesh->vertice_size));
+    sphere_mesh->uvs = (float *)malloc((sizeof(float) * sphere_mesh->uv_size));
+    sphere_mesh->indices = (uint32_t *)malloc((sizeof(uint32_t) * sphere_mesh->index_size));
 
     uint32_t vertex_counter = 0, index_counter = 0;
 
@@ -206,6 +206,97 @@ struct mesh *create_sphere_mesh(float radius, uint32_t h_segments, uint32_t v_se
     return sphere_mesh;
 }
 
+struct mesh *create_distortion_mesh(float screen_width, float screen_height,
+                                    float x_eye_offset_screen, float y_eye_offset_screen,
+                                    float texture_width, float texture_height,
+                                    float x_eye_offset_texture, float y_eye_offset_texture,
+                                    float viewport_x_texture, float viewport_y_texture,
+                                    float viewport_width_texture, float viewport_height_texture,
+                                    float (*blue_distort_inverse)(float), float (*distortion_factor)(float))
+{
+    struct mesh *distortion_mesh;
+    distortion_mesh = (struct mesh *)malloc(sizeof(struct mesh));
+    memset(distortion_mesh, 0, sizeof(struct mesh));
+
+    const float vignette_size_tan_angle = 0.05f;
+    uint32_t rows = 40;
+    uint32_t cols = 40;
+
+    distortion_mesh->vertice_size = rows * cols * 9;
+    distortion_mesh->vertices = (float*)malloc((sizeof(float) * distortion_mesh->vertice_size));
+    distortion_mesh->uv_size = 0;
+    distortion_mesh->uvs = NULL;
+
+    uint32_t  vertex_counter = 0;
+    for (uint32_t row = 0; row < rows; row++)
+    {
+        for (uint32_t col = 0; col < cols; col++)
+        {
+            const float u_texture_blue = col / 39.0f * (viewport_width_texture / texture_width) + viewport_x_texture / texture_width;
+            const float v_texture_blue = row / 39.0f * (viewport_height_texture / texture_height) + viewport_y_texture / texture_height;
+
+            const float x_texture = u_texture_blue * texture_width - x_eye_offset_texture;
+            const float y_texture = v_texture_blue * texture_height - y_eye_offset_texture;
+            const float r_texture = sqrtf(x_texture * x_texture + y_texture + y_texture);
+
+            const float texture_to_screen_blue = (r_texture > 0.0) ? blue_distort_inverse(r_texture) / r_texture : 1.0f;
+
+            const float x_screen = x_texture * texture_to_screen_blue;
+            const float y_screen = y_texture * texture_to_screen_blue;
+
+            const float u_screen = (x_screen + x_eye_offset_screen) / screen_width;
+            const float v_screen = (y_screen + y_eye_offset_screen) / screen_height;
+            const float r_screen = r_texture * texture_to_screen_blue;
+
+            const float screen_to_texture_green = (r_screen > 0.0f) ? distortion_factor(r_screen) : 1.0f;
+            const float u_texture_green = (x_screen * screen_to_texture_green + x_eye_offset_texture) / texture_width;
+            const float v_texture_green = (y_screen * screen_to_texture_green + y_eye_offset_texture) / texture_height;
+
+            const float screen_to_texture_red = (r_screen > 0.0f) ? distortion_factor(r_screen) : 1.0f;
+            const float u_texture_red = (x_screen * screen_to_texture_red + x_eye_offset_texture) / texture_width;
+            const float v_texture_red = (y_screen * screen_to_texture_red + y_eye_offset_texture) / texture_height;
+
+            const float vignette_size_texture = vignette_size_tan_angle / texture_to_screen_blue;
+
+            const float dx_texture = x_texture + x_eye_offset_texture - clamp(x_texture + x_eye_offset_texture, viewport_x_texture + vignette_size_texture, viewport_x_texture + viewport_width_texture - vignette_size_texture);
+            const float dy_texture = y_texture + y_eye_offset_texture - clamp(y_texture + y_eye_offset_texture, viewport_y_texture + vignette_size_texture, viewport_y_texture + viewport_height_texture - vignette_size_texture);
+            const float dr_texture = sqrtf(dx_texture * dx_texture + dy_texture * dy_texture);
+
+            float vignette = 1.0f - clamp(dr_texture / vignette_size_texture, 0.0f, 1.0f);
+
+            distortion_mesh->vertices[(vertex_counter + 0)] = 2.0f * u_screen - 1.0f;
+            distortion_mesh->vertices[(vertex_counter + 1)] = 2.0f * v_screen - 1.0f;
+            distortion_mesh->vertices[(vertex_counter + 2)] = vignette;
+            distortion_mesh->vertices[(vertex_counter + 3)] = u_texture_red;
+            distortion_mesh->vertices[(vertex_counter + 4)] = v_texture_red;
+            distortion_mesh->vertices[(vertex_counter + 5)] = u_texture_green;
+            distortion_mesh->vertices[(vertex_counter + 6)] = v_texture_green;
+            distortion_mesh->vertices[(vertex_counter + 7)] = u_texture_blue;
+            distortion_mesh->vertices[(vertex_counter + 8)] = v_texture_blue;
+
+            vertex_counter += 9;
+
+            distortion_mesh->index_size = (rows - 1) * (cols - 1) * 6;
+            distortion_mesh->indices = (uint32_t *)malloc((sizeof(uint32_t) * distortion_mesh->index_size));
+            uint32_t index_counter = 0;
+            for (uint32_t i = 0; i < rows - 1; ++i)
+            {
+                for (uint32_t j = 0; j < cols - 1; ++j)
+                {
+                    distortion_mesh->indices[index_counter++] = (j * cols + i);
+                    distortion_mesh->indices[index_counter++] = ((j + 1) * cols + i);
+                    distortion_mesh->indices[index_counter++] = ((j + 1) * cols + i + 1);
+
+                    distortion_mesh->indices[index_counter++] = (j * cols + i);
+                    distortion_mesh->indices[index_counter++] = ((j + 1) * cols + i + 1);
+                    distortion_mesh->indices[index_counter++] = (j * cols + i + 1);
+                }
+            }
+        }
+    }
+    return distortion_mesh;
+}
+
 struct mesh *create_cube_mesh(void)
 {
     return NULL;
@@ -213,8 +304,23 @@ struct mesh *create_cube_mesh(void)
 
 void destroy_mesh(struct mesh *mesh)
 {
-    free(mesh->vertices);
-    free(mesh->uvs);
-    free(mesh->indices);
-    free(mesh);
+    if (mesh != NULL)
+    {
+        if (mesh->vertices != NULL)
+        {
+            free(mesh->vertices);
+        }
+
+        if (mesh->uvs != NULL)
+        {
+            free(mesh->uvs);
+        }
+
+        if (mesh->indices != NULL)
+        {
+            free(mesh->indices);
+        }
+
+        free(mesh);
+    }
 }

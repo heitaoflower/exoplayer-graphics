@@ -43,4 +43,6 @@ float rad2deg(float rad);
 
 int signum(int value);
 
+float clamp(float value, float min, float max);
+
 #endif //EXOGFX_UTILS_MATH_UTIL_H
