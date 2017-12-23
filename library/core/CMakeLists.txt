@@ -41,6 +41,7 @@ SET( SOURCES
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_gray_filter.c
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_invert_filter.c
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_vignette_filter.c
+    ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_distortion_filter.c
     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_effects_filter.c
 
     # Utils source dir.
@@ -54,6 +55,7 @@ SET( SOURCES
     ${GEOMETRY_SOURCE_DIR}/plane.c
     ${GEOMETRY_SOURCE_DIR}/quad.c
     ${GEOMETRY_SOURCE_DIR}/sphere.c
+    ${GEOMETRY_SOURCE_DIR}/distortion.c
 
     # Math source dir.
     ${MATH_SOURCE_DIR}/camera.c
@@ -78,6 +80,7 @@ SET( HEADERS
      ${GEOMETRY_SOURCE_DIR}/plane.h
      ${GEOMETRY_SOURCE_DIR}/quad.h
      ${GEOMETRY_SOURCE_DIR}/sphere.h
+     ${GEOMETRY_SOURCE_DIR}/distortion.h
 
      # Math source dir.
      ${MATH_SOURCE_DIR}/camera.h
@@ -113,6 +116,7 @@ SET( HEADERS
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_gray_filter.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_invert_filter.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_vignette_filter.h
+     ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_distortion_filter.h
      ${GRAPHICS_OGLES_SOURCE_DIR}/ogles_effects_filter.h )
 
 #configure 3rdparty libs

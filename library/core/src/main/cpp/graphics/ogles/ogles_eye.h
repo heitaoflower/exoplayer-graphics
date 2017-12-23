@@ -10,9 +10,12 @@
 
 struct ogles_eye{
     struct camera camera;
+    struct primitive *primitive;
 };
 
 void ogles_eye_init(struct ogles_eye *ogles_eye, eye_type eye_type, projection_type projection_type);
+
+void ogles_eye_release(struct ogles_eye *ogles_eye);
 
 void ogles_eye_rotate_yaw(struct ogles_eye *ogles_eye, float angle);
 

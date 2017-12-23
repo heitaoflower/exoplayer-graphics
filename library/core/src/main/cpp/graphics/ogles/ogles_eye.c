@@ -3,10 +3,30 @@
 //
 
 #include "ogles_eye.h"
+#include "../../geometry/primitive.h"
 
 void ogles_eye_init(struct ogles_eye *ogles_eye, eye_type eye_type, projection_type projection_type)
 {
     camera_init(&ogles_eye->camera, eye_type, projection_type);
+
+    if (eye_type == EyeTypeLeft)
+    {
+        ogles_eye->primitive = create_primitive(PrimitiveTypeLeftDistortion);
+    }
+    else if (eye_type == EyeTypeRight)
+    {
+        ogles_eye->primitive = create_primitive(PrimitiveTypeRightDistortion);
+    }
+    else
+    {
+        ogles_eye->primitive = NULL;
+    }
+}
+
+void ogles_eye_release(struct ogles_eye *ogles_eye)
+{
+    safe_free_primitive(ogles_eye->primitive);
+    ogles_eye->primitive = NULL;
 }
 
 void ogles_eye_rotate_yaw(struct ogles_eye *ogles_eye, float angle)

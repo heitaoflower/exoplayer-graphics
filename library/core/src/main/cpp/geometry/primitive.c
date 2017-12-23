@@ -5,6 +5,7 @@
 #include "plane.h"
 #include "quad.h"
 #include "sphere.h"
+#include "distortion.h"
 #include "../utils/log_util.h"
 
 #include <malloc.h>
@@ -28,6 +29,14 @@ struct primitive *create_primitive(primitive_type type)
         case PrimitiveTypeQuad:
         {
             return primitive_quad_create();
+        }
+        case PrimitiveTypeLeftDistortion:
+        {
+            return primitive_distortion_left_create();
+        }
+        case PrimitiveTypeRightDistortion:
+        {
+            return primitive_distortion_right_create();
         }
         default:
         {

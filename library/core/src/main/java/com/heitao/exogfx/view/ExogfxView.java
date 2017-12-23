@@ -52,9 +52,9 @@ public class ExogfxView extends GLSurfaceView{
             }
         };
 
-        initializeVideoRenderer(context);
-
         initializeVideoPlayer(context);
+
+        initializeVideoRenderer(context);
 
         renderer.bindPlayer(player);
     }

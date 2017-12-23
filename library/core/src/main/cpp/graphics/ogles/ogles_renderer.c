@@ -96,8 +96,8 @@ static void draw(GLuint *texture, const float st_mat[], const int32_t display_ro
     }
 
     ogles_eye_apply_viewport(&both_ogles_eye);
-    ogles_effects_filter_draw(&effects_filter, texture);
-    ogles_present_filter_draw(&present_filter, texture);
+    //ogles_effects_filter_draw(&effects_filter, texture);
+    //ogles_present_filter_draw(&present_filter, texture);
 }
 
 static void destroy(void)

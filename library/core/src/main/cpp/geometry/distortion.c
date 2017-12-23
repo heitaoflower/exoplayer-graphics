@@ -78,7 +78,6 @@ static struct primitive *primitive_distortion_create(float x_eye_offset_screen, 
                                                           viewport_width_texture, viewport_height_texture,
                                                           blue_distort_inverse, distortion_factor);
 
-    primitive->type = PrimitiveTypeDistortion;
     primitive->vbo_vertices = createBuffer(GL_ARRAY_BUFFER, distortion_mesh->vertices, distortion_mesh->vertice_size * sizeof(float));
     primitive->vbo_indices = createBuffer(GL_ELEMENT_ARRAY_BUFFER, distortion_mesh->indices, distortion_mesh->index_size * sizeof(uint32_t));
     primitive->elements_count = distortion_mesh->index_size;
@@ -97,7 +96,9 @@ struct primitive *primitive_distortion_right_create()
     const float viewport_x_texture = 0;
     const float x_eye_offset_texture = 0.592283607f;
 
-    return primitive_distortion_create(x_eye_offset_screen, viewport_x_texture, x_eye_offset_texture);
+    struct primitive *primitive = primitive_distortion_create(x_eye_offset_screen, viewport_x_texture, x_eye_offset_texture);
+    primitive->type = PrimitiveTypeRightDistortion;
+    return primitive;
 }
 
 struct primitive *primitive_distortion_left_create()
@@ -106,5 +107,7 @@ struct primitive *primitive_distortion_left_create()
     const float x_eye_offset_texture = 2.27048278f;
     const float viewport_x_texture = 1.43138313f;
 
-    return primitive_distortion_create(x_eye_offset_screen, viewport_x_texture, x_eye_offset_texture);
+    struct primitive *primitive = primitive_distortion_create(x_eye_offset_screen, viewport_x_texture, x_eye_offset_texture);
+    primitive->type = PrimitiveTypeLeftDistortion;
+    return primitive;
 }
