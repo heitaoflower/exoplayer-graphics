@@ -78,8 +78,9 @@ ogles_filter_resize(preview)
 }
 
 ogles_filter_pre_draw(preview)
-(struct ogles_preview_filter *filter)
+(struct ogles_preview_filter *filter, struct ogles_eye *ogles_eye)
 {
+    ogles_eye_apply_viewport(ogles_eye);
     ogles_fbo_enable(filter->base.fbo);
     if (filter->base.primitive != NULL)
     {
@@ -88,14 +89,14 @@ ogles_filter_pre_draw(preview)
 }
 
 ogles_filter_draw(preview)
-(struct ogles_preview_filter *filter, GLuint *texture, mat4 *mvp_mat, const float st_mat[], float aspect)
+(struct ogles_preview_filter *filter, GLuint *texture, const float st_mat[], struct ogles_eye *ogles_eye)
 {
     ogles_preview_filter_use_program(filter);
-    ogles_preview_filter_pre_draw(filter);
+    ogles_preview_filter_pre_draw(filter, ogles_eye);
 
-    glUniformMatrix4fv(filter->uniforms.uMVPMatrix.location, 1, GL_FALSE, (const float*)mvp_mat);
+    glUniformMatrix4fv(filter->uniforms.uMVPMatrix.location, 1, GL_FALSE, (const float*)&ogles_eye->camera.mvp_mat);
     glUniformMatrix4fv(filter->uniforms.uSTMatrix.location, 1, GL_FALSE, st_mat);
-    glUniform1f(filter->uniforms.uAspect.location, aspect);
+    glUniform1f(filter->uniforms.uAspect.location, ogles_eye->camera.aspect);
 
     glBindBuffer(GL_ARRAY_BUFFER, filter->base.primitive->vbo_vertices);
     glEnableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
@@ -119,13 +120,16 @@ ogles_filter_draw(preview)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    ogles_preview_filter_post_draw(filter, texture);
+    ogles_preview_filter_post_draw(filter, texture, ogles_eye);
 }
 
 ogles_filter_post_draw(preview)
-(struct ogles_preview_filter *filter, GLuint *texture)
+(struct ogles_preview_filter *filter, GLuint *texture, struct ogles_eye *ogles_eye)
 {
-    *texture = filter->base.fbo->rendertexture;
+    if (ogles_eye->camera.eye_type != EyeTypeLeft)
+    {
+        *texture = filter->base.fbo->rendertexture;
+    }
 }
 
 ogles_filter_use_program(preview)

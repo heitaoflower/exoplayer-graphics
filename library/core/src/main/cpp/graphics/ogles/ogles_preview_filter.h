@@ -9,6 +9,7 @@
 #include "ogles_fbo.h"
 #include "ogles_filter.h"
 #include "../../math/mat4.h"
+#include "ogles_eye.h"
 
 struct ogles_preview_filter
 {
@@ -44,13 +45,13 @@ ogles_filter_resize(preview)
 (struct ogles_preview_filter *filter, GLint width, GLint height);
 
 ogles_filter_pre_draw(preview)
-(struct ogles_preview_filter *filter);
+(struct ogles_preview_filter *filter, struct ogles_eye *ogles_eye);
 
 ogles_filter_draw(preview)
-(struct ogles_preview_filter *filter, GLuint *texture, mat4 *mvp_mat, const float st_mat[], float aspect);
+(struct ogles_preview_filter *filter, GLuint *texture, const float st_mat[], struct ogles_eye *ogles_eye);
 
 ogles_filter_post_draw(preview)
-(struct ogles_preview_filter *filter, GLuint *texture);
+(struct ogles_preview_filter *filter, GLuint *texture, struct ogles_eye *ogles_eye);
 
 ogles_filter_use_program(preview)
 (struct ogles_preview_filter *filter);

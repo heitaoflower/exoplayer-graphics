@@ -56,13 +56,12 @@ public class ExogfxVideoRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        videoTexture.updateTexture();
         NativeLibrary.nativeOnSurfaceChanged(nativeRenderer, width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
-
+        videoTexture.updateTexture();
         NativeLibrary.nativeDrawFrame(nativeRenderer, videoTexture.getTexName(), videoTexture.getStMatrix(), display.getRotation());
     }
 

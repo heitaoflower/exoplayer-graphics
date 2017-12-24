@@ -6,7 +6,6 @@
 #include "ogles_preview_filter.h"
 #include "ogles_effects_filter.h"
 #include "ogles_present_filter.h"
-#include "../../math/camera.h"
 #include "../../context/context.h"
 #include "../../video/video_format.h"
 #include "../../sensor/head_tracker.h"
@@ -70,8 +69,8 @@ static void resize(GLsizei width, GLsizei height)
 
 static void draw_eye(struct ogles_eye *ogles_eye, GLuint *texture, const float st_mat[])
 {
-    ogles_eye_apply_viewport(ogles_eye);
-    ogles_preview_filter_draw(&preview_filter, texture, &ogles_eye->camera.mvp_mat, st_mat, ogles_eye_get_aspect(ogles_eye));
+    ogles_eye_update(ogles_eye);
+    ogles_preview_filter_draw(&preview_filter, texture, st_mat, ogles_eye);
 }
 
 static void draw(GLuint *texture, const float st_mat[], const int32_t display_rotation)
@@ -83,8 +82,6 @@ static void draw(GLuint *texture, const float st_mat[], const int32_t display_ro
     {
         mat4_copy(&head_view, &left_ogles_eye.camera.model_mat);
         mat4_copy(&head_view, &right_ogles_eye.camera.model_mat);
-        ogles_eye_update(&left_ogles_eye);
-        ogles_eye_update(&right_ogles_eye);
         draw_eye(&left_ogles_eye, texture, st_mat);
         draw_eye(&right_ogles_eye, texture, st_mat);
     }
@@ -96,8 +93,8 @@ static void draw(GLuint *texture, const float st_mat[], const int32_t display_ro
     }
 
     ogles_eye_apply_viewport(&both_ogles_eye);
-    //ogles_effects_filter_draw(&effects_filter, texture);
-    //ogles_present_filter_draw(&present_filter, texture);
+    ogles_effects_filter_draw(&effects_filter, texture);
+    ogles_present_filter_draw(&present_filter, texture);
 }
 
 static void destroy(void)

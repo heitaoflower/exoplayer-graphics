@@ -15,6 +15,8 @@
 #define glClear GL_FN(glClear)
 #define glClearColor GL_FN(glClearColor)
 #define glEnable GL_FN(glEnable)
+#define glFinish GL_FN(glFinish)
+#define glFlush GL_FN(glFlush)
 #define glViewport GL_FN(glViewport)
 #define glScissor GL_FN(glScissor)
 #define glActiveTexture GL_FN(glActiveTexture)
