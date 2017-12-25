@@ -9,22 +9,22 @@
 #define LINE(s) s "\n"
 static const char *vertex_shader_source =
         LINE("attribute vec4 aPosition;")
-                LINE("attribute vec4 aTextureCoord;")
-                LINE("varying highp vec2 vTextureCoord;")
-                LINE("void main() {")
-                LINE("gl_Position = aPosition;")
-                LINE("vTextureCoord = aTextureCoord.xy;")
-                LINE("}");
+        LINE("attribute vec4 aTextureCoord;")
+        LINE("varying highp vec2 vTextureCoord;")
+        LINE("void main() {")
+        LINE("gl_Position = aPosition;")
+        LINE("vTextureCoord = aTextureCoord.xy;")
+        LINE("}");
 
 
 static const char *fragment_shader_source =
         LINE("precision mediump float;")
-                LINE("varying vec2 vTextureCoord;")
-                LINE("uniform lowp sampler2D sTexture;")
-                LINE("void main() {")
-                LINE("lowp vec4 color = texture2D(sTexture, vTextureCoord);")
-                LINE("gl_FragColor = vec4((1.0 - color.rgb), color.w);")
-                LINE("}");
+        LINE("varying vec2 vTextureCoord;")
+        LINE("uniform lowp sampler2D sTexture;")
+        LINE("void main() {")
+        LINE("lowp vec4 color = texture2D(sTexture, vTextureCoord);")
+        LINE("gl_FragColor = vec4((1.0 - color.rgb), color.w);")
+        LINE("}");
 #undef LINE
 
 ogles_filter_create(invert)

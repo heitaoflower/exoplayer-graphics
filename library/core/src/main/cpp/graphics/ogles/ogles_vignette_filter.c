@@ -9,28 +9,28 @@
 #define LINE(s) s "\n"
 static const char *vertex_shader_source =
         LINE("attribute vec4 aPosition;")
-                LINE("attribute vec4 aTextureCoord;")
-                LINE("varying highp vec2 vTextureCoord;")
-                LINE("void main() {")
-                LINE("gl_Position = aPosition;")
-                LINE("vTextureCoord = aTextureCoord.xy;")
-                LINE("}");
+        LINE("attribute vec4 aTextureCoord;")
+        LINE("varying highp vec2 vTextureCoord;")
+        LINE("void main() {")
+        LINE("gl_Position = aPosition;")
+        LINE("vTextureCoord = aTextureCoord.xy;")
+        LINE("}");
 
 
 static const char *fragment_shader_source =
         LINE("precision mediump float;")
-                LINE("varying vec2 vTextureCoord;")
-                LINE("uniform lowp sampler2D sTexture;")
-                LINE("uniform lowp vec2 uVignetteCenter;")
-                LINE("uniform lowp vec3 uVignetteColor;")
-                LINE("uniform highp float uVignetteStart;")
-                LINE("uniform highp float uVignetteEnd;")
-                LINE("void main() {")
-                LINE("lowp vec3 rgb = texture2D(sTexture, vTextureCoord).rgb;")
-                LINE("lowp float d = distance(vTextureCoord, vec2(uVignetteCenter.x, uVignetteCenter.y));")
-                LINE("lowp float percent = smoothstep(uVignetteStart, uVignetteEnd, d);")
-                LINE("gl_FragColor = vec4(mix(rgb.x, uVignetteColor.x, percent), mix(rgb.y, uVignetteColor.y, percent), mix(rgb.z, uVignetteColor.z, percent), 1.0);")
-                LINE("}");
+        LINE("varying vec2 vTextureCoord;")
+        LINE("uniform lowp sampler2D sTexture;")
+        LINE("uniform lowp vec2 uVignetteCenter;")
+        LINE("uniform lowp vec3 uVignetteColor;")
+        LINE("uniform highp float uVignetteStart;")
+        LINE("uniform highp float uVignetteEnd;")
+        LINE("void main() {")
+        LINE("lowp vec3 rgb = texture2D(sTexture, vTextureCoord).rgb;")
+        LINE("lowp float d = distance(vTextureCoord, vec2(uVignetteCenter.x, uVignetteCenter.y));")
+        LINE("lowp float percent = smoothstep(uVignetteStart, uVignetteEnd, d);")
+        LINE("gl_FragColor = vec4(mix(rgb.x, uVignetteColor.x, percent), mix(rgb.y, uVignetteColor.y, percent), mix(rgb.z, uVignetteColor.z, percent), 1.0);")
+        LINE("}");
 #undef LINE
 
 ogles_filter_create(vignette)

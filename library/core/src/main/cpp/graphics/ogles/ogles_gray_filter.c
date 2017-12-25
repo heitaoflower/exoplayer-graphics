@@ -10,23 +10,23 @@
 #define LINE(s) s "\n"
 static const char *vertex_shader_source =
         LINE("attribute vec4 aPosition;")
-                LINE("attribute vec4 aTextureCoord;")
-                LINE("varying highp vec2 vTextureCoord;")
-                LINE("void main() {")
-                LINE("gl_Position = aPosition;")
-                LINE("vTextureCoord = aTextureCoord.xy;")
-                LINE("}");
+        LINE("attribute vec4 aTextureCoord;")
+        LINE("varying highp vec2 vTextureCoord;")
+        LINE("void main() {")
+        LINE("gl_Position = aPosition;")
+        LINE("vTextureCoord = aTextureCoord.xy;")
+        LINE("}");
 
 
 static const char *fragment_shader_source =
         LINE("precision mediump float;")
-                LINE("varying vec2 vTextureCoord;")
-                LINE("uniform lowp sampler2D sTexture;")
-                LINE("const highp vec3 weight = vec3(0.2125, 0.7154, 0.0721);")
-                LINE("void main() {")
-                LINE("float luminance = dot(texture2D(sTexture, vTextureCoord).rgb, weight);")
-                LINE("gl_FragColor = vec4(vec3(luminance), 1.0);")
-                LINE("}");
+        LINE("varying vec2 vTextureCoord;")
+        LINE("uniform lowp sampler2D sTexture;")
+        LINE("const highp vec3 weight = vec3(0.2125, 0.7154, 0.0721);")
+        LINE("void main() {")
+        LINE("float luminance = dot(texture2D(sTexture, vTextureCoord).rgb, weight);")
+        LINE("gl_FragColor = vec4(vec3(luminance), 1.0);")
+        LINE("}");
 #undef LINE
 
 ogles_filter_create(gray)

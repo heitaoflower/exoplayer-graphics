@@ -16,7 +16,7 @@ static struct ogles_eye right_ogles_eye;
 
 static enum video_format video_format = VideoFormat_Unknown;
 
-static bool vr_enabled = true;
+static bool vr_enabled = false;
 
 static struct ogles_preview_filter preview_filter = {
         .base = {.type = FILTER_TYPE_PREVIEW},
@@ -88,7 +88,6 @@ static void draw(GLuint *texture, const float st_mat[], const int32_t display_ro
     else
     {
         mat4_copy(&head_view, &both_ogles_eye.camera.model_mat);
-        ogles_eye_update(&both_ogles_eye);
         draw_eye(&both_ogles_eye, texture, st_mat);
     }
 
