@@ -16,7 +16,7 @@ struct ogles_invert_filter
 
     struct
     {
-        struct uniform sTexture;
+        struct uniform uTexture;
     } uniforms;
 
     struct

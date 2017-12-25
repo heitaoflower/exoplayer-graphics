@@ -21,10 +21,10 @@ static const char *vertex_shader_source =
 static const char *fragment_shader_source =
         LINE("precision mediump float;")
         LINE("varying vec2 vTextureCoord;")
-        LINE("uniform lowp sampler2D sTexture;")
+        LINE("uniform lowp sampler2D uTexture;")
         LINE("const highp vec3 weight = vec3(0.2125, 0.7154, 0.0721);")
         LINE("void main() {")
-        LINE("float luminance = dot(texture2D(sTexture, vTextureCoord).rgb, weight);")
+        LINE("float luminance = dot(texture2D(uTexture, vTextureCoord).rgb, weight);")
         LINE("gl_FragColor = vec4(vec3(luminance), 1.0);")
         LINE("}");
 #undef LINE
@@ -45,8 +45,8 @@ ogles_filter_create(gray)
     filter->base.program = 0;
     filter->base.vertex_shader = 0;
     filter->base.fragment_shader = 0;
-    filter->uniforms.sTexture.name = STR(sTexture);
-    filter->uniforms.sTexture.location = -1;
+    filter->uniforms.uTexture.name = STR(uTexture);
+    filter->uniforms.uTexture.location = -1;
     filter->attributes.aPosition.location = -1;
     filter->attributes.aPosition.name = STR(aPosition);
     filter->attributes.aTextureCoord.location = -1;
@@ -111,7 +111,7 @@ ogles_filter_draw(gray)
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, *texture);
-    glUniform1i(gray_filter->uniforms.sTexture.location, 0);
+    glUniform1i(gray_filter->uniforms.uTexture.location, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gray_filter->base.primitive->vbo_indices);
     glDrawElements(GL_TRIANGLES, gray_filter->base.primitive->elements_count, GL_UNSIGNED_INT, 0);
@@ -153,8 +153,8 @@ ogles_filter_register_handle(gray)
 (struct ogles_gray_filter *filter)
 {
     // Uniforms
-    filter->uniforms.sTexture.location = glGetUniformLocation(filter->base.program, filter->uniforms.sTexture.name);
-    if (filter->uniforms.sTexture.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.sTexture.name);}
+    filter->uniforms.uTexture.location = glGetUniformLocation(filter->base.program, filter->uniforms.uTexture.name);
+    if (filter->uniforms.uTexture.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.uTexture.name);}
 
     // Attributes
     filter->attributes.aPosition.location = glGetAttribLocation(filter->base.program, filter->attributes.aPosition.name);

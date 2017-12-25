@@ -28,9 +28,9 @@ static const char *fragment_shader_source =
         LINE("#extension GL_OES_EGL_image_external : require")
         LINE("precision mediump float;")
         LINE("varying highp vec2 vTextureCoord;")
-        LINE("uniform lowp samplerExternalOES sTexture;")
+        LINE("uniform lowp samplerExternalOES uTexture;")
         LINE("void main() {")
-        LINE("gl_FragColor = texture2D(sTexture, vTextureCoord);")
+        LINE("gl_FragColor = texture2D(uTexture, vTextureCoord);")
         LINE("}");
 #undef LINE
 
@@ -108,7 +108,7 @@ ogles_filter_draw(preview)
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(filter->target, *texture);
-    glUniform1i(filter->uniforms.sTexture.location, 0);
+    glUniform1i(filter->uniforms.uTexture.location, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, filter->base.primitive->vbo_indices);
     glDrawElements(GL_TRIANGLES, filter->base.primitive->elements_count, GL_UNSIGNED_INT, 0);
@@ -146,8 +146,8 @@ ogles_filter_register_handle(preview)
     if (filter->uniforms.uMVPMatrix.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.uMVPMatrix.name); }
     filter->uniforms.uSTMatrix.location = glGetUniformLocation(filter->base.program, filter->uniforms.uSTMatrix.name);
     if (filter->uniforms.uSTMatrix.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.uSTMatrix.name); }
-    filter->uniforms.sTexture.location = glGetUniformLocation(filter->base.program, filter->uniforms.sTexture.name);
-    if (filter->uniforms.sTexture.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.sTexture.name); }
+    filter->uniforms.uTexture.location = glGetUniformLocation(filter->base.program, filter->uniforms.uTexture.name);
+    if (filter->uniforms.uTexture.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.uTexture.name); }
     filter->uniforms.uAspect.location = glGetUniformLocation(filter->base.program, filter->uniforms.uAspect.name);
     if (filter->uniforms.uAspect.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.uAspect.name); }
 

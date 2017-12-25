@@ -15,20 +15,19 @@ struct ogles_distortion_filter
 {
     struct ogles_filter_base base;
 
-    GLuint target;
-
     struct
     {
-        struct uniform uMVPMatrix;
-        struct uniform uSTMatrix;
-        struct uniform sTexture;
-        struct uniform uAspect;
+        struct uniform uTextureCoordScale;
+        struct uniform uTexture;
     } uniforms;
 
     struct
     {
         struct attribute aPosition;
-        struct attribute aTextureCoord;
+        struct attribute aVignette;
+        struct attribute aRedTextureCoord;
+        struct attribute aGreenTextureCoord;
+        struct attribute aBlueTextureCoord;
     } attributes;
 };
 

@@ -21,7 +21,7 @@ struct ogles_preview_filter
     {
         struct uniform uMVPMatrix;
         struct uniform uSTMatrix;
-        struct uniform sTexture;
+        struct uniform uTexture;
         struct uniform uAspect;
     } uniforms;
 

@@ -12,6 +12,7 @@
 #define FILTER_TYPE_GRAY                0xF001
 #define FILTER_TYPE_INVERT              0xF002
 #define FILTER_TYPE_VIGNETTE            0xF003
+#define FILTER_TYPE_DISTORTION          0xFFFD
 #define FILTER_TYPE_EFFECTS             0xFFFE
 #define FILTER_TYPE_PRESENT             0xFFFF
 

@@ -20,13 +20,13 @@ static const char *vertex_shader_source =
 static const char *fragment_shader_source =
         LINE("precision mediump float;")
         LINE("varying vec2 vTextureCoord;")
-        LINE("uniform lowp sampler2D sTexture;")
+        LINE("uniform lowp sampler2D uTexture;")
         LINE("uniform lowp vec2 uVignetteCenter;")
         LINE("uniform lowp vec3 uVignetteColor;")
         LINE("uniform highp float uVignetteStart;")
         LINE("uniform highp float uVignetteEnd;")
         LINE("void main() {")
-        LINE("lowp vec3 rgb = texture2D(sTexture, vTextureCoord).rgb;")
+        LINE("lowp vec3 rgb = texture2D(uTexture, vTextureCoord).rgb;")
         LINE("lowp float d = distance(vTextureCoord, vec2(uVignetteCenter.x, uVignetteCenter.y));")
         LINE("lowp float percent = smoothstep(uVignetteStart, uVignetteEnd, d);")
         LINE("gl_FragColor = vec4(mix(rgb.x, uVignetteColor.x, percent), mix(rgb.y, uVignetteColor.y, percent), mix(rgb.z, uVignetteColor.z, percent), 1.0);")
@@ -48,8 +48,8 @@ ogles_filter_create(vignette)
     filter->base.program = 0;
     filter->base.vertex_shader = 0;
     filter->base.fragment_shader = 0;
-    filter->uniforms.sTexture.name = STR(sTexture);
-    filter->uniforms.sTexture.location = -1;
+    filter->uniforms.uTexture.name = STR(sTexture);
+    filter->uniforms.uTexture.location = -1;
     filter->uniforms.uVignetteCenter.name = STR(uVignetteCenter);
     filter->uniforms.uVignetteCenter.location = -1;
     filter->uniforms.uVignetteColor.name = STR(uVignetteColor);
@@ -130,7 +130,7 @@ ogles_filter_draw(vignette)
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, *texture);
-    glUniform1i(vignette_filter->uniforms.sTexture.location, 0);
+    glUniform1i(vignette_filter->uniforms.uTexture.location, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vignette_filter->base.primitive->vbo_indices);
     glDrawElements(GL_TRIANGLES, vignette_filter->base.primitive->elements_count, GL_UNSIGNED_INT, 0);
@@ -177,8 +177,8 @@ ogles_filter_register_handle(vignette)
 (struct ogles_vignette_filter *filter)
 {
     // Uniforms
-    filter->uniforms.sTexture.location = glGetUniformLocation(filter->base.program, filter->uniforms.sTexture.name);
-    if (filter->uniforms.sTexture.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.sTexture.name);}
+    filter->uniforms.uTexture.location = glGetUniformLocation(filter->base.program, filter->uniforms.uTexture.name);
+    if (filter->uniforms.uTexture.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.uTexture.name);}
     filter->uniforms.uVignetteCenter.location = glGetUniformLocation(filter->base.program, filter->uniforms.uVignetteCenter.name);
     if (filter->uniforms.uVignetteCenter.location == -1) { LOGE("could not get uniform location for %s", filter->uniforms.uVignetteCenter.name);}
     filter->uniforms.uVignetteColor.location = glGetUniformLocation(filter->base.program, filter->uniforms.uVignetteColor.name);

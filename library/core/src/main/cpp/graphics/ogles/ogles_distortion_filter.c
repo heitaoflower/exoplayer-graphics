@@ -3,6 +3,10 @@
 //
 
 #include "ogles_distortion_filter.h"
+#include "../../utils/ogles_util.h"
+#include "../../geometry/primitive.h"
+
+#include <malloc.h>
 
 #define LINE(s) s "\n"
 static const char *vertex_shader_source =
@@ -30,16 +34,23 @@ static const char *fragment_shader_source =
         LINE("varying vec2 vBlueTextureCoord;")
         LINE("varying vec2 vGreenTextureCoord;")
         LINE("varying float vVignette;")
-        LINE("uniform sampler2D uTextureSampler;")
+        LINE("uniform sampler2D uTexture;")
         LINE("void main() {")
-        LINE("gl_FragColor = vVignette * vec4(texture2D(uTextureSampler, vRedTextureCoord).r, texture2D(uTextureSampler, vGreenTextureCoord).g, texture2D(uTextureSampler, vBlueTextureCoord).b, 1.0);")
+        LINE("gl_FragColor = vVignette * vec4(texture2D(uTexture, vRedTextureCoord).r, texture2D(uTexture, vGreenTextureCoord).g, texture2D(uTexture, vBlueTextureCoord).b, 1.0);")
         LINE("}");
 #undef LINE
 
 ogles_filter_init(distortion)
 (struct ogles_distortion_filter *filter, primitive_type primitive_type, bool create_fbo, GLuint texture)
 {
+    ogles_distortion_filter_safe_release(filter);
 
+    filter->base.vertex_shader = loadShader(GL_VERTEX_SHADER, vertex_shader_source);
+    filter->base.fragment_shader = loadShader(GL_FRAGMENT_SHADER, fragment_shader_source);
+    filter->base.program = createProgram(filter->base.vertex_shader, filter->base.fragment_shader);
+    filter->base.primitive = create_primitive(primitive_type);;
+    filter->base.fbo = create_fbo ? malloc(sizeof(struct ogles_fbo)) : NULL;
+    ogles_distortion_filter_register_handle(filter);
 }
 
 ogles_filter_release(distortion)

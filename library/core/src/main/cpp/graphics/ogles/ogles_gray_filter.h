@@ -16,7 +16,7 @@ struct ogles_gray_filter
 
     struct
     {
-        struct uniform sTexture;
+        struct uniform uTexture;
     } uniforms;
 
     struct

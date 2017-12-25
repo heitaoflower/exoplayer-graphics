@@ -9,6 +9,7 @@
 #include "../../context/context.h"
 #include "../../video/video_format.h"
 #include "../../sensor/head_tracker.h"
+#include "ogles_distortion_filter.h"
 
 static struct ogles_eye both_ogles_eye;
 static struct ogles_eye left_ogles_eye;
@@ -20,7 +21,7 @@ static bool vr_enabled = false;
 
 static struct ogles_preview_filter preview_filter = {
         .base = {.type = FILTER_TYPE_PREVIEW},
-        .uniforms = {UNIFORM(uMVPMatrix), UNIFORM(uSTMatrix), UNIFORM(sTexture), UNIFORM(uAspect)},
+        .uniforms = {UNIFORM(uMVPMatrix), UNIFORM(uSTMatrix), UNIFORM(uTexture), UNIFORM(uAspect)},
         .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aTextureCoord)}
 };
 
@@ -28,9 +29,15 @@ static struct ogles_effects_filter effects_filter = {
         .base = {.type = FILTER_TYPE_EFFECTS}
 };
 
+static struct ogles_distortion_filter distortion_filter = {
+        .base = {.type = FILTER_TYPE_DISTORTION},
+        .uniforms = {UNIFORM(uTextureCoordScale), UNIFORM(uTexture)},
+        .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aVignette), ATTRIBUTE(aRedTextureCoord), ATTRIBUTE(aGreenTextureCoord), ATTRIBUTE(aBlueTextureCoord)}
+};
+
 static struct ogles_present_filter present_filter = {
         .base = {.type = FILTER_TYPE_PRESENT},
-        .uniforms = {UNIFORM(sTexture)},
+        .uniforms = {UNIFORM(uTexture)},
         .attributes = {ATTRIBUTE(aPosition), ATTRIBUTE(aTextureCoord)}
 };
 

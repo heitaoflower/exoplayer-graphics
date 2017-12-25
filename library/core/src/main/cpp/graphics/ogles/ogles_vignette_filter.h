@@ -16,7 +16,7 @@ struct ogles_vignette_filter
 
     struct
     {
-        struct uniform sTexture;
+        struct uniform uTexture;
         struct uniform uVignetteCenter;
         struct uniform uVignetteColor;
         struct uniform uVignetteStart;
