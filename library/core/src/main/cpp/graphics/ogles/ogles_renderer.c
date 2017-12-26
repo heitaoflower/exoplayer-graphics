@@ -49,11 +49,12 @@ static void create(GLuint texture)
     glDisable(GL_SCISSOR_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    ogles_preview_filter_init(&preview_filter, PrimitiveTypeSphere, true, texture);
+    ogles_preview_filter_init(&preview_filter, PrimitiveTypeQuad, true, texture);
     ogles_effects_filter_init(&effects_filter);
+    ogles_distortion_filter_init(&distortion_filter, PrimitiveTypeQuad, false);
     ogles_present_filter_init(&present_filter, PrimitiveTypeQuad, false);
 
-    ogles_eye_init(&both_ogles_eye, EyeTypeBoth, ProjectionTypePerspective);
+    ogles_eye_init(&both_ogles_eye, EyeTypeBoth, ProjectionTypeOrtho);
     ogles_eye_set_lookat_default(&both_ogles_eye);
 
     ogles_eye_init(&left_ogles_eye, EyeTypeLeft, ProjectionTypePerspective);
@@ -67,6 +68,7 @@ static void resize(GLsizei width, GLsizei height)
 {
     ogles_preview_filter_resize(&preview_filter, width, height);
     ogles_effects_filter_resize(&effects_filter, width, height);
+    ogles_distortion_filter_resize(&distortion_filter, width, height);
     ogles_present_filter_resize(&present_filter, width, height);
 
     ogles_eye_resize(&both_ogles_eye, width, height);

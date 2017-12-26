@@ -13,8 +13,6 @@ bool context_init(JNIEnv *env, jobject android_context, jobject class_loader)
 
     renderer = &ogles_renderer;
 
-    head_tracker_start();
-
     return true;
 }
 
@@ -23,6 +21,4 @@ void context_deinit(void)
     gfx_deinit();
 
     renderer = NULL;
-
-    head_tracker_stop();
 }

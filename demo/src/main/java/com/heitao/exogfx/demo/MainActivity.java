@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.heitao.exogfx.view.ExogfxView;
@@ -22,25 +20,9 @@ public class MainActivity extends Activity {
 
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.ALPHA_CHANGED);
-
         setContentView(R.layout.activity_main);
 
         initializeExogfxView();
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-
-        if (hasFocus) {
-            setFullscreenMode();
-        }
-    }
-
-    private void setFullscreenMode() {
-        getWindow().getDecorView().setSystemUiVisibility(5894);
     }
 
     @Override

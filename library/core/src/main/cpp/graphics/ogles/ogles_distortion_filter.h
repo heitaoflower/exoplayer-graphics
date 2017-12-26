@@ -15,6 +15,9 @@ struct ogles_distortion_filter
 {
     struct ogles_filter_base base;
 
+    struct primitive *left_eye_primitive;
+    struct primitive *right_eye_primitive;
+
     struct
     {
         struct uniform uTextureCoordScale;
@@ -32,7 +35,7 @@ struct ogles_distortion_filter
 };
 
 ogles_filter_init(distortion)
-(struct ogles_distortion_filter *filter, primitive_type primitive_type, bool create_fbo, GLuint texture);
+(struct ogles_distortion_filter *filter, primitive_type primitive_type, bool create_fbo);
 
 ogles_filter_release(distortion)
 (struct ogles_distortion_filter *filter);
@@ -47,7 +50,7 @@ ogles_filter_pre_draw(distortion)
 (struct ogles_distortion_filter *filter, struct ogles_eye *ogles_eye);
 
 ogles_filter_draw(distortion)
-(struct ogles_distortion_filter *filter, GLuint *texture, const float st_mat[], struct ogles_eye *ogles_eye);
+(struct ogles_distortion_filter *filter, GLuint *texture, struct ogles_eye *left_ogles_eye, struct ogles_eye *right_ogles_eye);
 
 ogles_filter_post_draw(distortion)
 (struct ogles_distortion_filter *filter, GLuint *texture, struct ogles_eye *ogles_eye);

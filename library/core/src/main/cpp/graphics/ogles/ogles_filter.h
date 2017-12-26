@@ -16,7 +16,9 @@
 #define FILTER_TYPE_EFFECTS             0xFFFE
 #define FILTER_TYPE_PRESENT             0xFFFF
 
-#define VERTICES_DATA_POSITION_SIZE 3
+#define VERTICES_DATA_POSITION_SIZE_1 1
+#define VERTICES_DATA_POSITION_SIZE_2 2
+#define VERTICES_DATA_POSITION_SIZE_3 3
 #define VERTICES_DATA_UV_SIZE 2
 
 #define ogles_filter_create(name) \

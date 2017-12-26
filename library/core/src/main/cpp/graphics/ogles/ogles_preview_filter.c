@@ -100,7 +100,7 @@ ogles_filter_draw(preview)
 
     glBindBuffer(GL_ARRAY_BUFFER, filter->base.primitive->vbo_vertices);
     glEnableVertexAttribArray((GLuint)filter->attributes.aPosition.location);
-    glVertexAttribPointer((GLuint)filter->attributes.aPosition.location, VERTICES_DATA_POSITION_SIZE, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer((GLuint)filter->attributes.aPosition.location, VERTICES_DATA_POSITION_SIZE_3, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, filter->base.primitive->vbo_uvs);
     glEnableVertexAttribArray((GLuint)filter->attributes.aTextureCoord.location);
