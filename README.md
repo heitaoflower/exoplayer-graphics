@@ -7,3 +7,6 @@
 [![Join the chat at https://gitter.im/exoplayer-graphics/Lobby](https://badges.gitter.im/exoplayer-graphics/exoplayer-graphics.svg)](https://gitter.im/exoplayer-graphics/Lobby)
 
 An native graphics extensible library for ExoPlayer, the project in the early stage.
+
+# screenshot
+![screenshot_01](./documents/screenshot_01.png "Screenshot01")
